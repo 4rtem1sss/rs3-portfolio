@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { openingState, shouldAnnounceChapter } from '../src/opening-sequence.mjs';
+import { openingState, shouldAnnounceChapter, PRELUDE, preludeProgress, storyProgress } from '../src/opening-sequence.mjs';
 
 test('the desk waits behind blank space, then emerges before the notebook opens', () => {
   assert.deepEqual(openingState(0), { sceneReveal: 0, notebookOpen: 0, pageFade: 0 });
@@ -34,4 +34,17 @@ test('chapter progress never interrupts the opening or the final chapter', () =>
   assert.equal(shouldAnnounceChapter(1, 7, true), true);
   assert.equal(shouldAnnounceChapter(6, 7, true), false);
   assert.equal(shouldAnnounceChapter(2, 7, false), false);
+});
+
+test('the questions play first, then the story starts from zero', () => {
+  assert.equal(preludeProgress(0), 0);
+  assert.equal(storyProgress(PRELUDE / 2), 0);
+  assert.equal(preludeProgress(PRELUDE), 1);
+  assert.equal(storyProgress(PRELUDE), 0);
+  assert.ok(storyProgress((1 + PRELUDE) / 2) > .49 && storyProgress((1 + PRELUDE) / 2) < .51);
+  assert.equal(storyProgress(1), 1);
+  for (const raw of [-1, 2]) {
+    assert.ok(preludeProgress(raw) >= 0 && preludeProgress(raw) <= 1);
+    assert.ok(storyProgress(raw) >= 0 && storyProgress(raw) <= 1);
+  }
 });

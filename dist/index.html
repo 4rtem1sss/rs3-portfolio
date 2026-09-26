@@ -27,7 +27,8 @@
     a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
     .skip{position:absolute;top:-100px;left:20px;padding:10px;background:#fff;color:#0f2b47;z-index:60}.skip:focus{top:10px}
     .wrap{max-width:1240px;margin:auto;padding:0 56px}
-    h1,h2,h3{font-weight:500;letter-spacing:-.03em;margin:0;color:var(--ink)}
+    h1,h2,h3{font-weight:500;letter-spacing:-.03em;margin:0;color:var(--ink);text-wrap:balance}
+    p{text-wrap:pretty}
     .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
     /* Furniture */
@@ -43,10 +44,12 @@
     .ticker-top b{color:var(--ink);font-weight:400}
     .sessions{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0;padding:0;list-style:none}
     .sessions a{position:relative;display:block;height:14px;background:#ffffff1c;border-radius:2px;overflow:hidden;text-decoration:none}
-    .sessions a span{position:absolute;inset:0;transform-origin:left;transform:scaleX(var(--p,0));background:var(--blue)}
-    .sessions a.done span{background:var(--green)}.sessions a.best span{background:var(--purple)}
+    /* the fill is clipped, not scaled, so a dark copy of the label inside it stays readable on yellow/green/purple */
+    .sessions a>span{position:absolute;inset:0;z-index:1;clip-path:inset(0 calc(100% - var(--p,0) * 100%) 0 0);background:var(--blue)}
+    .sessions a.done>span{background:var(--green)}.sessions a.best>span{background:var(--purple)}
     .sessions a:hover{outline:1px solid var(--blue)}
-    .sessions a i{position:absolute;left:5px;top:-1px;font:normal 9.5px/14px var(--mono);color:var(--ink);text-shadow:0 1px 2px #0008;white-space:nowrap}
+    .sessions a i{position:absolute;left:5px;top:-1px;font:normal 9.5px/14px var(--mono);color:var(--ink);white-space:nowrap}
+    .sessions a>span i{color:#0f2b47;font-weight:600}
     .view-mode{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px;font:12px var(--mono);cursor:pointer;color:var(--ink);white-space:nowrap}
     .view-mode:hover{border-color:var(--blue);color:var(--blue)}
     .toast{position:fixed;left:50%;top:calc(var(--head) + 14px);z-index:48;transform:translate(-50%,-20px);opacity:0;padding:8px 16px;border-radius:4px;background:var(--panel2);color:#fff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;transition:opacity .3s,transform .4s cubic-bezier(.3,1.5,.5,1);pointer-events:none;display:flex;gap:10px;align-items:center}
@@ -60,6 +63,7 @@
     .one{margin:14px 0 0;font-size:clamp(18px,1.7vw,22px);line-height:1.5;max-width:36ch}
     .muted{color:var(--muted)}
     .mark{background:linear-gradient(transparent 62%,#ffd24a73 62%,#ffd24a73 92%,transparent 92%);padding:0 2px}
+    .big .mark{background:linear-gradient(transparent 80%,#ffd24a8c 80%,#ffd24a8c 90%,transparent 90%);padding:0;-webkit-box-decoration-break:clone;box-decoration-break:clone}
     .tape{position:relative}
     .tape:before{content:'';position:absolute;top:-11px;left:50%;width:84px;height:22px;margin-left:-42px;background:#e9e1c4c4;box-shadow:0 1px 2px #24344322;transform:rotate(-2deg);z-index:3;pointer-events:none}
     .panel{background:var(--panel);color:var(--pale);border-radius:6px;box-shadow:0 0 0 1px var(--pline),8px 9px 0 #04101c99}
@@ -75,9 +79,20 @@
     .draw path,.draw circle,.draw rect{stroke-dasharray:1;stroke-dashoffset:var(--draw,0)}
 
     /* Photo slots: show the image once the file exists in dist/img, a labelled placeholder until then */
-    .photo{position:relative;margin:0;background:#fff;padding:10px 10px 34px;box-shadow:0 1px 0 #cfd6cf,0 18px 30px -16px #000a;transform:rotate(var(--r,0deg))}
-    .photo img{display:block;width:100%;aspect-ratio:var(--ar,4/3);object-fit:cover;background:#e3e7e3}
-    .photo figcaption{position:absolute;left:12px;right:12px;bottom:8px;font:italic 14px var(--hand);color:#55636b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .photo{position:relative;margin:0;background:#fff;padding:10px 10px 9px;box-shadow:0 1px 0 #cfd6cf,0 18px 30px -16px #000a;transform:rotate(var(--r,0deg))}
+    .photo img{display:block;width:100%;height:auto;aspect-ratio:var(--ar,4/3);object-fit:cover;background:#e3e7e3}
+    .photo figcaption{margin:7px 2px 0;font:italic 14px/1.25 var(--hand);color:#55636b;text-wrap:balance}
+    /* photos open full size */
+    .photo img[tabindex]{cursor:zoom-in}
+    .photo img[tabindex]:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+    .lightbox{max-width:min(92vw,1400px);max-height:92vh;padding:12px 12px 10px;border:0;background:#fff;box-shadow:0 30px 80px -20px #000;overflow:visible}
+    .lightbox::backdrop{background:#050e18d9}
+    .lightbox img{display:block;max-width:calc(min(92vw,1400px) - 24px);max-height:calc(92vh - 64px);width:auto;height:auto}
+    .lightbox p{margin:8px 2px 0;font:italic 15px var(--hand);color:#55636b}
+    .lightbox button{position:absolute;top:-14px;right:-14px;width:40px;height:40px;border:0;border-radius:50%;background:var(--blue);color:#0f2b47;font:600 20px/1 var(--mono);cursor:pointer}
+    .lightbox[open]{animation:lb-in .35s cubic-bezier(.22,1,.36,1)}
+    @keyframes lb-in{from{opacity:0;transform:scale(.96)}}
+    html:has(.lightbox[open]){overflow:hidden}
     .photo.empty img{display:none}
     .photo.empty:after{content:'';display:block;aspect-ratio:var(--ar,4/3);border:2px dashed #aab7ba;background:#eef2ef url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='none' stroke='%23889a9f' stroke-width='2'%3E%3Cpath d='M6 16h8l4-6h12l4 6h8v22H6z'/%3E%3Ccircle cx='24' cy='26' r='7'/%3E%3C/svg%3E") center 38%/44px no-repeat}
     .photo.empty .slot{display:block}
@@ -93,8 +108,8 @@
     .gantry{display:flex;gap:14px;padding:16px 22px;background:var(--panel2);border-radius:10px;width:max-content;box-shadow:0 18px 30px -18px #0009}
     .gantry i{width:44px;height:44px;border-radius:50%;background:#2a2f36;box-shadow:inset 0 0 0 4px #1b1f24}
     .gantry i.on{background:radial-gradient(circle at 40% 35%,#ff8a8f,var(--red) 55%,#8c1119);box-shadow:0 0 22px 4px #e0313b88,inset 0 0 0 4px #5c0f14}
-    .driver{display:grid;grid-template-columns:.75fr 1.25fr;gap:40px;align-items:center}
-    .driver .photo{--ar:4/5;--r:-2deg;max-width:300px}
+    .driver{display:grid;grid-template-columns:auto 1fr;gap:clamp(56px,7vw,112px);align-items:center}
+    .driver .photo{--ar:1000/1552;--r:-2deg;width:min(420px,calc((100vh - 210px) / 1.552))}
     .driver h1{font-size:clamp(52px,7.4vw,112px);line-height:.92;letter-spacing:-.055em}
     .driver h1 span{display:block}
     .meta{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:22px 0 0;font-size:15px}
@@ -102,34 +117,38 @@
     .meta dd{margin:0}.meta dd a{color:var(--blue);text-decoration:none;border-bottom:1px solid currentColor;font-family:var(--mono);font-size:14px}
     .car-no{margin:0 0 4px;font:italic 800 clamp(34px,4vw,54px)/1 var(--sans);letter-spacing:-.03em;color:transparent;-webkit-text-stroke:2px var(--red);transform:skewX(-8deg);transform-origin:left}
     .circuit .car-tag{fill:var(--red)}.circuit .car-tag-t{font:700 11px var(--mono);fill:#fff;text-anchor:middle}
-    .channels{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:2px}
-    .channels li{display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:baseline;padding:10px 12px;background:var(--panel2);border-radius:3px}
-    .channels span{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#7fa3b6}
-    .radio .channels a{margin:0;font:500 clamp(16px,1.8vw,20px) var(--sans);border-bottom-width:1px}
 
     /* S1 Practice */
-    .laps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:40px}
-    .lap{padding:22px 22px 20px;background:var(--card);border:1px solid var(--line);border-radius:8px}
+    .laps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-top:44px}
+    .laps:before{content:'';position:absolute;left:7px;right:0;top:7px;height:1.5px;background:linear-gradient(90deg,var(--blue),#ffd24a66 70%,transparent)}
+    .lap{position:relative;padding:34px 0 0}
+    .lap:before{content:'';position:absolute;left:0;top:0;width:15px;height:15px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 2px var(--blue)}
+    .lap:last-child:before{background:var(--blue)}
     .lap-no{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--muted)}
-    .lap-no b{font-weight:400;color:var(--green)}
-    .lap svg{width:100%;height:120px;margin:10px 0 6px}
+    .lap-no b{display:none}
+    .lap svg{width:190px;height:auto;margin:14px 0 10px -26px;display:block}
     .lap h3{font-size:24px;letter-spacing:-.03em}
-    .lap p{margin:6px 0 0;color:var(--muted);font-size:15px}
+    .lap p{margin:6px 0 0;color:var(--muted);font-size:15px;max-width:34ch}
 
     /* S2 Qualifying */
-    .quali{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+    .quali{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:center}
     .pos{font:700 clamp(110px,17vw,240px)/.85 var(--mono);letter-spacing:-.07em;margin:0;color:var(--ink);transition:color .3s}
     .pos.best{color:var(--purple)}
     .pos-label{font:12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
     .qrows{display:grid;gap:10px;margin-top:22px;max-width:520px}
-    .qrow{display:grid;grid-template-columns:62px 1fr;gap:14px;align-items:center;padding:12px 14px;background:var(--panel);box-shadow:0 0 0 1px var(--pline);color:var(--pale);border-radius:5px;border-left:4px solid #6b7a86}
+    .qrow{display:grid;grid-template-columns:62px 1fr;gap:14px;align-items:center;padding:12px 14px;background:var(--panel);box-shadow:0 0 0 1px var(--pline);color:var(--pale);border-radius:5px}
     .qrow b{font:700 20px var(--mono);color:#fff}
     .qrow p{margin:0;font-size:15px}
-    .qrow.q3{border-left-color:var(--purple)}.qrow.q3 b{color:#d6b8ff}
-    .quali .photo{--r:2.5deg;--ar:4/3}
+    .qrow.q3{background:#1c1838;box-shadow:0 0 0 1.5px var(--purple)}.qrow.q3 b{color:#d6b8ff}
+    .quali .photo{--r:2.5deg;--ar:1600/1089}
 
     /* S3 Race: WordFlow */
-    .race{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:center}
+    .race{display:grid;grid-template-columns:.85fr 1.15fr;grid-template-rows:repeat(6,auto) 1fr;column-gap:56px;align-items:start}
+    .race>div:first-child,.next>div:first-child{display:contents}
+    .race>div>.session-tag,.race>div>h2,.next>div>.session-tag,.next>div>h2{grid-column:1/-1}
+    .race>div>h2{font-size:clamp(44px,5.2vw,76px);margin-bottom:22px}
+    .race>div:last-child{grid-column:2;grid-row:3/-1}
+    .race .one{margin-top:0}
     .circuit{padding:20px 22px}
     .circuit svg{display:block;width:100%;height:auto}
     .circuit .track{fill:none;stroke:#3a5061;stroke-width:16;stroke-linecap:round;stroke-linejoin:round}
@@ -143,7 +162,7 @@
     .corner-read b{display:block;color:#fff;font-weight:500}
     .corner-read span{font-size:14px;color:#a9bdc8}
     .corner-read i{font:normal 11px var(--mono);color:var(--ice);margin-left:8px}
-    .race-shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;max-width:440px}.race-shots .photo{padding:7px 7px 26px}.race-shots .photo figcaption{font-size:12.5px;bottom:5px}
+    .race-shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;max-width:440px}.race-shots .photo{padding:7px 7px 6px}.race-shots .photo figcaption{font-size:12.5px;margin-top:5px}
     .race-shots .photo{--ar:16/10}
     .race-shots .photo:nth-child(1){--r:-2deg}.race-shots .photo:nth-child(2){--r:1.5deg}
     .flag{display:inline-flex;align-items:center;gap:10px;margin-top:18px;font:600 14px var(--mono)}
@@ -163,18 +182,18 @@
     .flash{display:none}
 
     /* S5 Results + workbench */
-    .podium-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:end}
+    .podium-wrap{display:grid;grid-template-columns:1.35fr .65fr;gap:48px;align-items:end}
     .podium{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;gap:10px;margin-top:30px}
     .step{display:flex;flex-direction:column;align-items:center;gap:12px}
-    .step .award{text-align:center}
+    .step .award{text-align:center;text-wrap:balance}
     .step .award b{display:block;font:700 26px var(--mono)}
-    .step .award span{display:block;font-size:13.5px;line-height:1.35;color:var(--muted);max-width:18ch;margin:auto}
+    .step .award span{display:block;font-size:13.5px;line-height:1.35;color:var(--muted);max-width:18ch;margin:auto;text-wrap:balance}
     .block{width:100%;display:grid;place-content:center;background:#1d4a73;border:1px solid #ffffff40;border-bottom:0;color:var(--ink);font:700 38px var(--mono);border-radius:6px 6px 0 0;transform-origin:bottom}
     .step.p1 .block{height:190px;background:linear-gradient(#2a6395,#1d4a73)}.step.p2 .block{height:140px}.step.p3 .block{height:100px}
     .step.p1 .award b{color:var(--yellow)}
-    .fastest{display:flex;gap:16px;align-items:center;padding:18px 20px;background:var(--panel2);border-radius:6px;color:#fff;border-left:6px solid var(--purple)}
-    .fastest b{font:700 34px var(--mono);color:#d6b8ff}
-    .fastest span{font-size:14px;color:#c3d3dc}
+    .fastest{display:flex;flex-direction:column;gap:10px;align-items:flex-start;padding:24px 26px;background:var(--panel2);border-radius:6px;color:#fff;box-shadow:inset 0 0 0 1.5px var(--purple)}
+    .fastest b{font:700 64px/1 var(--mono);letter-spacing:-.04em;color:#d6b8ff}
+    .fastest span{font-size:15px;color:#c3d3dc}
     .fastest em{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#d6b8ff;font-style:normal}
     .parc{margin-top:64px}
     .parc h3{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
@@ -183,66 +202,47 @@
     .setup b{display:block;font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
     .setup ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
     .setup li{padding:3px 8px;border-radius:3px;background:#ffffff14;font-size:13.5px}
-    .setup li small{font:10.5px var(--mono);color:var(--muted);margin-left:6px}
+    .setup li small{font:12px var(--mono);color:#c2d3de;margin-left:7px}
 
     /* S6 Next season */
-    .next{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+    .next{display:grid;grid-template-columns:1fr 1.05fr;grid-template-rows:repeat(5,auto) 1fr;column-gap:56px;align-items:start}
+    .next>div:first-child>h2{margin-bottom:22px}
+    .next>div:first-child>.one{margin-top:0}
+    .next>div:last-child{grid-column:2;grid-row:3/-1;padding-top:6px}
     .next .big{font-size:clamp(40px,5.6vw,80px)}
     .interests{list-style:none;margin:26px 0 0;padding:0}
-    .interests li{display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line);font-size:16px}
-    .interests li b{font-weight:500;min-width:13ch}
+    .interests{display:grid;grid-template-columns:max-content 1fr;column-gap:24px}
+    .interests li{display:grid;grid-column:1/-1;grid-template-columns:subgrid;align-items:baseline;padding:12px 0;border-top:1px solid var(--line);font-size:16px}
+    .interests li b{font-weight:500}
     .interests li span{color:var(--muted);font-size:15px}
-    .radio{margin-top:34px;padding:22px 24px;background:var(--panel);border-radius:6px;color:#fff}
-    .radio p{margin:0;font:12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#7fa3b6}
-    .radio a{display:inline-block;margin-top:6px;font:500 clamp(20px,2.4vw,28px) var(--sans);color:var(--blue);text-decoration:none;border-bottom:2px solid currentColor;overflow-wrap:anywhere}
-    /* Car study panel (moved from the old hero; 3D stage injected by car3d.js) */
-    .drawing{background:var(--panel);color:var(--pale);border-radius:6px;padding:22px 24px 20px;position:relative;box-shadow:0 0 0 1px var(--pline),8px 9px 0 #04101c99}
-    .drawing-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .drawing-title{font:500 20px var(--sans);letter-spacing:-.02em;color:#e5eef2}
-    .drawing-title small{display:block;margin-top:5px;font:12px var(--mono);color:#a2b3bd}
-    .cross{font-size:23px;line-height:1;color:#7a919f}
-    .diagram{width:100%;height:330px;display:block;margin:16px auto 0;overflow:visible}
-    .diagram .part{transition:transform .65s cubic-bezier(.16,1,.3,1),opacity .25s}
-    .diagram.exploded .front{transform:translateY(-28px)}.diagram.exploded .rear{transform:translateY(25px)}.diagram.exploded .wheel-left{transform:translateX(-27px)}.diagram.exploded .wheel-right{transform:translateX(27px)}
-    .diagram.exploded .annotation{opacity:.28}
-    .diagram.has-selection .part{opacity:.25}.diagram.has-selection .part.is-selected{opacity:1}.diagram.has-selection .annotation{opacity:.25}
-    .hotspot{cursor:pointer}.hotspot .hit{fill:transparent}.hotspot .ring{fill:#1a2835;stroke:#9ad7f2;stroke-width:1.5}.hotspot .plus{stroke:#e8f7ff;stroke-width:1.5;pointer-events:none}.hotspot:hover .ring,.hotspot[aria-pressed=true] .ring{fill:#397293}.focus-ring{fill:none;stroke:transparent}.hotspot:focus-visible .focus-ring{stroke:#e8f7ff;stroke-width:2}
-    .drawing-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
-    .drawing-bottom>span{font:12px var(--mono);color:#9bafba}
-    .mode{display:flex;background:var(--panel2);padding:3px;border-radius:3px}
-    .mode button{border:0;background:none;color:#b1c4cf;padding:7px 12px;min-height:40px;font:12px var(--mono);border-radius:2px;cursor:pointer}
-    .mode button[aria-pressed=true]{background:#b3d9ec;color:#152837}
-    .part-picker{display:flex;flex-wrap:wrap;gap:4px 14px;padding:12px 0 6px}
-    .part-picker button{color:#b9cdd8;background:none;border:0;border-bottom:1px solid transparent;padding:8px 0;min-height:40px;font:13px var(--mono);cursor:pointer}
-    .part-picker button:hover,.part-picker button[aria-pressed=true]{color:#e6f6ff;border-color:var(--ice)}
-    .readout{border-top:1px solid #40505c;padding-top:16px;min-height:130px}
-    .readout h3{font-size:18px;margin:0 0 6px;color:#f1f7fa}
-    .readout p{font-size:14px;line-height:1.65;color:#c3d3dc;margin:0;max-width:60ch}
-    .study-reference{display:inline-block;margin-top:10px;color:#aecbdd;font:12px var(--mono);text-decoration:none;border-bottom:1px solid #607988}
-    .figure-caption{display:flex;justify-content:space-between;gap:12px;margin-top:16px;font:12px var(--mono);color:var(--muted)}
-    .drawing.is-3d #car-diagram{display:none}
-    .stage3d{position:relative;height:380px;margin:14px -24px 0;background:radial-gradient(ellipse at 50% 38%,#24394a 0%,#1a2835 62%);border-block:1px solid var(--pline);overflow:hidden;touch-action:pan-y}
-    .stage3d canvas{display:block;width:100%;height:100%;cursor:grab}.stage3d canvas:active{cursor:grabbing}
-    .stage-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-    .stage3d{contain:paint}
-    .pin{position:absolute;left:0;top:0;pointer-events:auto;display:flex;align-items:center;gap:7px;background:none;border:0;padding:6px;margin:-15px 0 0 -15px;color:#cfe6f2;font:11px var(--mono);cursor:pointer;transition:opacity .25s;will-change:transform}
-    .pin-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--ice);background:#1a2835cc;display:grid;place-content:center;flex-shrink:0;transition:background .2s,transform .2s}
-    .pin-dot:after{content:'+';font:13px/1 var(--mono);color:#e8f7ff}
-    .pin-text{background:#101c26d9;padding:2px 7px;border-left:1px solid var(--ice);white-space:nowrap;opacity:0;transform:translateX(-4px);transition:opacity .2s,transform .2s}
-    .pin:hover .pin-text,.pin.is-active .pin-text{opacity:1;transform:none}
-    .pin:hover .pin-dot,.pin.is-active .pin-dot{background:#397293;transform:scale(1.15)}
-    .pin.is-behind{opacity:.25}
-    .stage-tools{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px}
-    .stage-tools button{width:36px;height:36px;border:1px solid #40505c;background:#111d27e6;color:#cfe6f2;font:16px var(--mono);border-radius:3px;cursor:pointer}
-    .stage-tools button:hover{background:#397293;border-color:var(--ice)}
-    .stage-skin{position:absolute;left:12px;top:12px;display:flex;background:#111d27e6;border:1px solid #40505c;border-radius:3px;padding:2px}
-    .stage-skin button{border:0;background:none;color:#b1c4cf;font:11px var(--mono);padding:6px 9px;min-height:32px;border-radius:2px;cursor:pointer}
-    .stage-skin button[aria-pressed=true]{background:#b3d9ec;color:#152837}
-    .stage-hint{position:absolute;left:14px;bottom:10px;margin:0;font:11px var(--mono);color:#8fa7b4;transition:opacity .6s;pointer-events:none}
-    .stage3d.touched .stage-hint{opacity:0}
-    .stage3d{contain:paint}
-    .stage-labels{overflow:hidden}
-    .drawing{margin:0}
+    /* Contact: an F1 broadcast team-radio panel. The message "transmits" once when it arrives on screen. */
+    .radio-card{position:relative;margin:0;background:linear-gradient(180deg,#0b1f33,#06131f 60%);border-radius:10px;color:#fff;box-shadow:0 0 0 1px #ffffff1c,0 34px 60px -28px #000d;overflow:hidden}
+    .rc-top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:16px 22px;background:#ffffff08;border-bottom:1px solid #ffffff14}
+    .rc-no{display:grid;place-content:center;min-width:66px;height:50px;padding:0 10px;border-radius:4px;background:var(--ice);color:#0f2b47;font:italic 800 26px/1 var(--sans);letter-spacing:-.02em}
+    .rc-label{margin:0;font:700 12px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--ice)}
+    .rc-name{margin:3px 0 0;font:700 25px/1.1 var(--sans);letter-spacing:.02em;text-transform:uppercase}
+    .rc-live{display:flex;align-items:center;gap:8px;margin:0;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#a7bdcd}
+    .rc-live i{width:9px;height:9px;border-radius:50%;background:var(--red);animation:rc-live 1.6s ease-out infinite}
+    @keyframes rc-live{0%{box-shadow:0 0 0 0 #e0313bb0}70%,100%{box-shadow:0 0 0 9px #e0313b00}}
+    .rc-body{padding:18px 24px 22px}
+    .rc-wave{display:flex;align-items:center;gap:3px;height:38px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 28%);mask-image:linear-gradient(90deg,transparent,#000 28%)}
+    .rc-wave span{flex:1;height:100%;border-radius:2px;background:var(--ice);transform:scaleY(.06);transition:transform 80ms linear}
+    .rc-quote{margin:14px 0 16px;font:600 clamp(20px,1.7vw,24px)/1.32 var(--sans);letter-spacing:-.01em;text-wrap:balance}
+    .rc-quote p{margin:0}
+    .rc-quote .w{opacity:.14;transition:opacity .18s}.rc-quote .w.on{opacity:1}
+    .rc-lines{margin:0}
+    .rc-lines div{display:grid;grid-template-columns:128px 1fr;align-items:center;gap:12px;min-height:46px;border-top:1px solid #ffffff17}
+    .rc-lines dt{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#a7bdcd}
+    .rc-lines dt b{display:inline-block;min-width:38px;color:var(--ice);font-weight:600}
+    .rc-lines dd{display:flex;align-items:baseline;gap:14px;margin:0;font:500 18px var(--sans);overflow-wrap:anywhere}
+    .rc-lines a,.rc-email{color:#fff;text-decoration:none;background:linear-gradient(var(--ice),var(--ice)) 0 100%/100% 2px no-repeat;padding-bottom:2px;transition:color .2s,background-size .25s cubic-bezier(.22,1,.36,1)}
+    .rc-lines a:hover,.rc-email:hover{color:#0f2b47;background-size:100% 100%}
+    /* the email address itself copies on click; the hint says so on hover and confirms after */
+    .rc-email{border:0;margin:0;padding:0 0 2px;font:inherit;cursor:copy}
+    .rc-email:focus-visible,.radio-card a:focus-visible{outline:2px solid var(--ice);outline-offset:3px}
+    .rc-hint{font:12px var(--mono);color:#a7bdcd;opacity:0;transition:opacity .2s;white-space:nowrap}
+    .rc-email:hover+.rc-hint,.rc-email:focus-visible+.rc-hint,.rc-hint.done{opacity:1}
+    .rc-hint.done{color:var(--ice)}
     .footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 0 40px;border-top:1px solid var(--line);font:12px var(--mono);color:var(--muted)}
     .footer a{text-decoration:none}
 
@@ -252,19 +252,20 @@
     .film .frame{position:sticky;top:0;height:100vh;padding:var(--head) 0 0;overflow:hidden;border:0!important;display:flex;align-items:center}
     .film .frame>.wrap{width:100%}
     .film .scene.free{height:auto}
-    .film .scene.free .frame{position:relative;height:auto;overflow:visible;display:block;padding:calc(var(--head) + 64px) 0 80px}
+    .film .scene.free .frame{position:relative;height:auto;overflow:visible;display:block;padding:calc(var(--head) + 40px) 0 48px}
     /* S0 layers: gantry then driver card */
     .film .shake{animation:shake .35s linear}
     @keyframes shake{20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-4px)}60%{transform:translate(-4px,-2px)}80%{transform:translate(3px,4px)}}
-    .film .track-x{display:flex;gap:6vw;padding:0 11vw;will-change:transform}
+    .film .track-x{display:flex;gap:6vw;padding:0 max(56px,calc((100vw - 1128px) / 2));will-change:transform}
     .film .stop{flex:0 0 min(78vw,1040px)}
-    .film .pit .wrap{max-width:none;padding:0}.film .pit-head{padding:0 56px}
+    .film .pit .wrap{max-width:none;padding:0}.film .pit-head{max-width:1240px;margin:0 auto 28px;padding:0 56px}
     .film .flash{display:block;position:absolute;inset:0;background:#fff;opacity:0;z-index:5;pointer-events:none}
     .film .block{transform:scaleY(var(--rise,1))}
 
     @media(max-width:1000px){
       .wrap{padding:0 30px}
       .grid-card,.driver,.quali,.race,.next,.podium-wrap{grid-template-columns:1fr;gap:28px}
+      .race,.next{grid-template-rows:none}.race>div:last-child,.next>div:last-child{grid-column:auto;grid-row:auto}
       .laps{grid-template-columns:1fr;gap:14px}
       .setup{grid-template-columns:1fr 1fr}
       .stop{grid-template-columns:1fr;gap:18px}
@@ -351,6 +352,8 @@
     .pw-curtain{position:absolute;inset:0;z-index:3;background:#050e18;pointer-events:none;opacity:1;will-change:opacity}
     .letterbox{position:absolute;left:0;right:0;height:var(--lb,11vh);background:#000;z-index:4;pointer-events:none}
     .letterbox.top{top:0}.letterbox.bottom{bottom:0}
+    .pw-prelude{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+    .pre{position:absolute;left:0;top:0;margin:0;font:500 clamp(40px,5vw,80px)/1.1 var(--sans);letter-spacing:-.03em;color:#fff;white-space:nowrap;opacity:0;will-change:transform,opacity}
     .pw-caps{position:absolute;left:0;right:0;bottom:50%;z-index:5;pointer-events:none}
     .cap{position:absolute;left:6vw;right:6vw;bottom:0;max-width:900px;margin:auto;text-align:center;font:500 clamp(22px,3vw,44px)/1.25 var(--sans);letter-spacing:-.02em;color:#fff;text-shadow:0 2px 20px #000c;opacity:0;text-wrap:balance}
     .cap small{display:block;margin-bottom:10px;font:600 clamp(10px,.9vw,13px) var(--mono);letter-spacing:.24em;color:#ffd24a}
@@ -361,8 +364,12 @@
     /* Inside the notebook: ring binding down the left edge */
     .binding{position:fixed;left:0;top:0;bottom:0;width:28px;z-index:40;pointer-events:none;opacity:0;transition:opacity .8s;background:radial-gradient(circle at 14px 18px,#07131f 0 4px,#ffffff70 4.5px 6.5px,transparent 7px) 0 0/28px 36px repeat-y,linear-gradient(90deg,#04101c99,transparent)}
     .in-notebook .binding,.page .binding{opacity:1}
+    .margin-line{transition:opacity .8s}.film:not(.in-notebook) .margin-line{opacity:0}
+    .cap{isolation:isolate}
+    .cap-title:before{display:none}
+    .cap:before{content:'';position:absolute;inset:-50% 6%;z-index:-1;background:radial-gradient(closest-side,#06121fc2,#06121f80 55%,transparent);pointer-events:none}
     @media(max-width:760px){.m2{display:none}.mon{width:38vw;bottom:33vh}.pw-headset{display:none}.pw-cup{left:auto;right:6vw;bottom:24vh}.pw-nb{left:74%;bottom:12vh;width:42vw}.cap{left:8vw;right:8vw;font-size:clamp(21px,6vw,34px)}.cap-title{font-size:clamp(48px,16vw,72px)}.pw-caps{bottom:52%}}
-    @media(prefers-reduced-motion:reduce){.trace,.mon .live,.m2 .cursor,.pw-hint i{animation:none}}
+    @media(prefers-reduced-motion:reduce){.trace,.mon .live,.m2 .cursor,.pw-hint i,.lightbox[open],.rc-live i{animation:none}}
   </style>
 </head>
 <body id="top">
@@ -374,17 +381,17 @@
 
   <header class="header">
     <div class="wrap">
-      <a href="#top" class="brand" aria-label="Rapeepat Sawek, back to curiosity"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M3 5h26v22H3zM10 5v22M3 12h26M3 20h26" stroke="currentColor"/><path d="m14 23 5-14 5 14m-8-5h6" stroke="currentColor" stroke-width="1.6"/></svg>Rapeepat Sawek.</a>
+      <a href="#top" class="brand" aria-label="Rapeepat Sawek, back to the start"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M3 5h26v22H3zM10 5v22M3 12h26M3 20h26" stroke="currentColor"/><path d="m14 23 5-14 5 14m-8-5h6" stroke="currentColor" stroke-width="1.6"/></svg>Rapeepat S.</a>
       <nav class="ticker" aria-label="Portfolio story chapters">
         <div class="ticker-top"><span>A curious mind</span><b class="now">01 / 07 · Curiosity</b></div>
         <ol class="sessions">
-          <li><a href="#pitwall" data-page-href="#driver" title="Curiosity: the opening question"><span></span><i>CURIOSITY</i></a></li>
-          <li><a href="#practice" title="Origin: where curiosity started"><span></span><i>ORIGIN</i></a></li>
-          <li><a href="#quali" title="Growth: learning from setbacks"><span></span><i>GROWTH</i></a></li>
-          <li><a href="#race" title="Purpose: building WordFlow"><span></span><i>PURPOSE</i></a></li>
-          <li><a href="#pit" title="Team: how I work with others"><span></span><i>TEAM</i></a></li>
-          <li><a href="#podium" title="Proof: results and tools"><span></span><i>PROOF</i></a></li>
-          <li><a href="#next" title="Future: where curiosity leads"><span></span><i>FUTURE</i></a></li>
+          <li><a href="#pitwall" data-page-href="#driver" title="Curiosity: the opening question"><span aria-hidden="true"><i>CURIOSITY</i></span><i>CURIOSITY</i></a></li>
+          <li><a href="#practice" title="Origin: where curiosity started"><span aria-hidden="true"><i>ORIGIN</i></span><i>ORIGIN</i></a></li>
+          <li><a href="#quali" title="Growth: learning from setbacks"><span aria-hidden="true"><i>GROWTH</i></span><i>GROWTH</i></a></li>
+          <li><a href="#race" title="Purpose: building WordFlow"><span aria-hidden="true"><i>PURPOSE</i></span><i>PURPOSE</i></a></li>
+          <li><a href="#pit" title="Team: how I work with others"><span aria-hidden="true"><i>TEAM</i></span><i>TEAM</i></a></li>
+          <li><a href="#podium" title="Proof: results and tools"><span aria-hidden="true"><i>PROOF</i></span><i>PROOF</i></a></li>
+          <li><a href="#next" title="Future: where curiosity leads"><span aria-hidden="true"><i>FUTURE</i></span><i>FUTURE</i></a></li>
         </ol>
       </nav>
       <button class="view-mode" type="button" aria-pressed="false">Read as page</button>
@@ -396,18 +403,18 @@
       .pw-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
       .has-3d .pw-world { visibility:hidden; }
       .has-3d .pw-caps { pointer-events:none; bottom:50%; }
-      .has-3d .cap-title { letter-spacing:-.03em; }
+      .cap.cap-title, .has-3d .cap.cap-title { font-size:clamp(64px,13vw,200px); letter-spacing:-.045em; line-height:1; bottom:-.5em; text-shadow:0 0 60px #000; }
       .has-3d .cap { font-size:clamp(22px,3vw,44px); text-shadow:0 2px 10px #06121f; }
       .has-3d .cap-title small { font-size:11px; }
       .has-3d .pw-vignette { opacity:.35; }
       .has-3d .pw-frame.shake { animation:none; }
-      #pitwall { --len:300vh; }
-      @media(max-width:700px) { #pitwall { --len:280vh; } }
-      @supports(height:100svh) { @media(max-width:700px) { #pitwall { --len:280svh; } } }
+      #pitwall { --len:420vh; }
+      @media(max-width:700px) { #pitwall { --len:390vh; } }
+      @supports(height:100svh) { @media(max-width:700px) { #pitwall { --len:390svh; } } }
       @media (prefers-reduced-motion:reduce) { .pw-canvas { display:none; } }
     </style>
     <!-- OPENING: curiosity reveals a personal bedroom desk, then the notebook. -->
-    <section class="scene pitwall" id="pitwall" data-title="Curiosity" aria-label="Opening story: curiosity reveals Rapeepat's slightly messy bedroom study desk and leads into his notebook.">
+    <section class="scene pitwall" id="pitwall" data-title="Curiosity" aria-label="Opening story: a few questions add up to curiosity, which reveals Rapeepat's slightly messy bedroom study desk and leads into his notebook.">
       <div class="frame pw-frame">
         <div class="pw-world" aria-hidden="true">
           <div class="pw-back">
@@ -436,6 +443,12 @@
         </div>
         <div class="pw-vignette" aria-hidden="true"></div>
         <div class="pw-curtain" aria-hidden="true"></div>
+        <div class="pw-prelude" aria-hidden="true">
+          <p class="pre" data-pre="0" data-spot=".22,.3">why?</p>
+          <p class="pre" data-pre=".2" data-spot=".74,.27">how does it work?</p>
+          <p class="pre" data-pre=".4" data-spot=".23,.73">what's inside?</p>
+          <p class="pre" data-pre=".6" data-spot=".72,.75">what if I change this?</p>
+        </div>
         <div class="pw-caps" aria-hidden="true">
           <p class="cap cap-title" data-cap="0,0,.14,.18">curiosity,</p>
           <p class="cap" data-cap=".17,.21,.34,.38">the need to look closer,</p>
@@ -452,13 +465,13 @@
       <div class="frame">
         <div class="wrap">
           <div class="driver">
-            <figure class="photo tape"><img src="img/portrait.jpg" alt="Portrait of Rapeepat Sawek in his school uniform" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/portrait.jpg</span><figcaption>that's me · #RS3</figcaption></figure>
+            <figure class="photo tape"><img src="img/portrait-ign.jpg" alt="Portrait of Rapeepat Sawek in his school uniform, standing in front of his in-game name, 4rtem1sss" width="1000" height="1552" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/portrait-ign.jpg</span><figcaption>that's me · #RS3</figcaption></figure>
             <div>
               <p class="session-tag"><b>p.01</b>about me</p>
               <p class="car-no" aria-label="Driver tag RS3">#RS3</p>
               <h1 id="name"><span>Rapeepat</span><span>Sawek.</span></h1>
               <p class="one">I take things apart to see how they work. Now I build things <span class="mark">people rely on</span>.</p>
-              <dl class="meta"><dt>IGN</dt><dd><a href="https://github.com/4rtem1sss" target="_blank" rel="noopener noreferrer">4rtem1sss</a></dd><dt>Team</dt><dd>Ratwinit Bangkaeo School · SMT programme</dd><dt>Focus</dt><dd>Networks · security · connected systems</dd><dt>Base</dt><dd>Bangkok, Thailand</dd></dl>
+              <dl class="meta"><dt>Team</dt><dd>Ratwinit Bangkaeo School · SMT programme</dd><dt>Focus</dt><dd>Networks · security · connected systems</dd><dt>Base</dt><dd>Bangkok, Thailand</dd></dl>
             </div>
           </div>
         </div>
@@ -614,61 +627,31 @@
               <p class="session-tag"><b>FUTURE</b>p.07 · where curiosity leads</p>
               <h2 class="big" id="next-title">Bigger systems. <span class="mark">Same curiosity.</span></h2>
               <p class="one">Devices, the networks between them, and the people who rely on them. That's where I'm heading next.</p>
-              <ul class="interests" aria-label="Off-season">
-                <li><b>Formula 1</b><span>the engineering: parts working as one machine →</span></li>
+              <ul class="interests" aria-label="What I do for fun">
+                <li><b>Formula 1</b><span>the engineering: thousands of parts working as one machine</span></li>
                 <li><b>CTF puzzles</b><span>how networks behave, and how they break</span></li>
                 <li><b>Taking things apart</b><span>if it works, I want to know how</span></li>
               </ul>
-              <div class="radio"><p>Say hello · open channel</p>
-                <ul class="channels">
-                  <li><span>Email</span><a href="mailto:rapeepatsawek@gmail.com">rapeepatsawek@gmail.com</a></li>
-                  <li><span>GitHub</span><a href="https://github.com/4rtem1sss" target="_blank" rel="noopener noreferrer">4rtem1sss</a></li>
-                  <li><span>Instagram</span><a href="https://www.instagram.com/thun._r3/" target="_blank" rel="noopener noreferrer">@thun._r3</a></li>
-                </ul>
-              </div>
             </div>
             <div>
-              <figure style="margin:0" id="car-study">
-              <div class="drawing">
-              <div class="drawing-top"><div class="drawing-title">On the workbench<small>Modelled on the RB19 (2023) / interactive study</small></div><span class="cross" aria-hidden="true">+</span></div>
-              <svg id="car-diagram" class="diagram" viewBox="0 0 440 355" role="group" aria-labelledby="car-title car-desc">
-              <title id="car-title">Conceptual single-seater engineering sketch</title><desc id="car-desc">Top view of an abstract racing car, with front wing, cockpit, suspension, and rear wing. Select any of four marked components to inspect it. Use the buttons below to separate or assemble the car.</desc>
-              <defs><pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#7694a4" stroke-opacity=".11"/></pattern><pattern id="tread" width="4" height="6" patternUnits="userSpaceOnUse"><path d="M0 0v6" stroke="#a6c3d2" stroke-opacity=".22"/></pattern></defs>
-              <rect width="440" height="355" fill="url(#grid)"/>
-              <g stroke="#91b3c6" stroke-width=".7" opacity=".45" fill="none"><path d="M220 20v320" stroke-dasharray="5 5"/><path d="M96 43v271m-4-271h8m-8 271h8M344 43v271m-4-271h8m-8 271h8"/><path d="M116 337h207m-207-4v8m207-8v8"/></g>
-              <g fill="none" stroke="#b3d8eb" stroke-width="1.3" stroke-linejoin="round">
-              <g class="part front" data-component="front"><path d="m220 43-8 45-3 54h22l-3-54z" fill="#21394b"/><path d="m154 47 66-8 66 8v15l-66-5-66 5z" fill="#1d3343"/><path d="m158 52 62-8 62 8m-123 5 61-7 60 7M154 43v23m132-23v23"/></g>
-              <g class="part wheel-left" data-component="suspension"><rect x="134" y="79" width="30" height="52" rx="6" fill="#172532"/><rect x="139" y="82" width="20" height="46" rx="3" fill="url(#tread)"/><path d="m165 92 42 22-42 7m0-13 44 13"/></g>
-              <g class="part wheel-right" data-component="suspension"><rect x="276" y="79" width="30" height="52" rx="6" fill="#172532"/><rect x="281" y="82" width="20" height="46" rx="3" fill="url(#tread)"/><path d="m275 92-42 22 42 7m0-13-44 13"/></g>
-              <g class="part wheel-left" data-component="suspension"><rect x="129" y="251" width="35" height="58" rx="6" fill="#172532"/><rect x="134" y="255" width="25" height="50" rx="3" fill="url(#tread)"/><path d="m165 260 41 9-41 25m0-15 42-2"/></g>
-              <g class="part wheel-right" data-component="suspension"><rect x="276" y="251" width="35" height="58" rx="6" fill="#172532"/><rect x="281" y="255" width="25" height="50" rx="3" fill="url(#tread)"/><path d="m275 260-41 9 41 25m0-15-42-2"/></g>
-              <g class="part body" data-component="cockpit"><path d="m209 123-22 33-13 33 7 50 19 26 7 33h26l7-33 19-26 7-50-13-33-22-33z" fill="#243c4d"/><path d="m193 164-7 29 10 51 11 11m40-91 7 29-10 51-11 11M207 207l-4 37 10 44h14l10-44-4-37"/><path d="m201 174 5-26h28l5 26-8 38h-22z" fill="#15232f"/><ellipse cx="220" cy="171" rx="12" ry="23"/><path d="M200 171q20-17 40 0m-20-11v36" stroke="#9ad7f2" stroke-width="3"/><path d="m189 182 8-7m54 7-8-7M181 221l15 18m63-18-15 18"/><path d="M207 130h26"/></g>
-              <g class="part rear" data-component="rear"><path d="M178 297h84v20h-84z" fill="#1d3343"/><path d="M181 303h78m-78 8h78m-83-18v28m88-28v28M212 289v9m16-9v9"/></g>
-              </g>
-              <g class="annotation" fill="none" stroke="#79aeca" stroke-width=".8"><path d="M153 51h-38l-15 19H27M239 170h65l18-17h90M257 229h46l17-19h91M182 306h-60l-13-17H26"/><g fill="#9ad7f2" stroke="none"><circle cx="153" cy="51" r="2"/><circle cx="239" cy="170" r="2"/><circle cx="257" cy="229" r="2"/><circle cx="182" cy="306" r="2"/></g></g>
-              <g class="annotation" fill="#b5cfdd" font-family="Consolas,monospace" font-size="11"><text x="27" y="63">Front wing</text><text x="329" y="146">Cockpit</text><text x="327" y="203">Sidepod</text><text x="26" y="282">Rear wing</text></g>
-              <g class="hotspot front-point" role="button" tabindex="0" data-inspect="front" aria-label="Inspect front wing" aria-controls="part-readout" aria-pressed="false"><g transform="translate(220 52)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
-              <g class="hotspot cockpit-point" role="button" tabindex="0" data-inspect="cockpit" aria-label="Inspect cockpit" aria-controls="part-readout" aria-pressed="false"><g transform="translate(220 178)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
-              <g class="hotspot suspension-point" role="button" tabindex="0" data-inspect="suspension" aria-label="Inspect suspension" aria-controls="part-readout" aria-pressed="false"><g transform="translate(149 105)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
-              <g class="hotspot rear-point" role="button" tabindex="0" data-inspect="rear" aria-label="Inspect rear wing" aria-controls="part-readout" aria-pressed="false"><g transform="translate(220 307)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
-              </svg>
-              <div class="drawing-bottom"><div class="mode" role="group" aria-label="Car diagram view"><button type="button" data-view="assembled" aria-pressed="true">Assembled</button><button type="button" data-view="exploded" aria-pressed="false">Exploded</button></div><span>Choose a part below</span></div>
-              
-              <div class="part-picker" role="group" aria-label="Inspect a component">
-              <button type="button" data-inspect="front" aria-pressed="false" aria-controls="part-readout">Front wing</button>
-              <button type="button" data-inspect="cockpit" aria-pressed="false" aria-controls="part-readout">Cockpit</button>
-              <button type="button" data-inspect="sidepods" aria-pressed="false" aria-controls="part-readout">Sidepods</button>
-              <button type="button" data-inspect="suspension" aria-pressed="false" aria-controls="part-readout">Suspension</button>
-              <button type="button" data-inspect="engine" aria-pressed="false" aria-controls="part-readout">Power unit</button>
-              <button type="button" data-inspect="rear" aria-pressed="false" aria-controls="part-readout">Rear wing</button>
-              <button type="button" data-inspect="floor" aria-pressed="false" aria-controls="part-readout">Floor</button>
-              </div>
-              <div class="readout" id="part-readout" role="status" aria-live="polite" aria-atomic="true"><h3 id="part-title">Start with a little curiosity.</h3><p id="part-description">Pick a marked part of the car to take a closer look. Switch to the exploded view to see the assembly come apart.</p></div>
-              <a class="study-reference" href="https://www.formula1.com/en/latest/article/f1-glossary-p-t.GBhLQtpeu9b8LrK5VM0F1" target="_blank" rel="noopener noreferrer">Explore the F1 glossary ↗</a>
-              
-              </div>
-              <figcaption class="figure-caption"><span>A small study in how things fit together</span><span>Not to scale</span></figcaption>
-              </figure>
+              <aside class="radio-card" aria-labelledby="contact-title" data-fx="rise" data-at=".45,.95">
+                <header class="rc-top">
+                  <span class="rc-no" aria-hidden="true">RS3</span>
+                  <div><p class="rc-label">Team radio</p><h3 class="rc-name" id="contact-title">Rapeepat Sawek</h3></div>
+                  <p class="rc-live"><i aria-hidden="true"></i>Channel open</p>
+                </header>
+                <div class="rc-body">
+                  <div class="rc-wave" aria-hidden="true"></div>
+                  <blockquote class="rc-quote"><p>“That's the notebook, start to finish. If you want to talk about any of it, the channel is open.”</p></blockquote>
+                  <dl class="rc-lines">
+                    <div><dt><b>CH 1</b>Email</dt><dd><button class="rc-email" type="button" data-copy="rapeepatsawek@gmail.com" aria-label="Copy email address, rapeepatsawek@gmail.com">rapeepatsawek@gmail.com</button><span class="rc-hint" aria-hidden="true">click to copy</span></dd></div>
+                    <div><dt><b>CH 2</b>GitHub</dt><dd><a href="https://github.com/4rtem1sss" target="_blank" rel="noopener noreferrer">4rtem1sss ↗</a></dd></div>
+                    <div><dt><b>CH 3</b>Instagram</dt><dd><a href="https://www.instagram.com/thun._r3/" target="_blank" rel="noopener noreferrer">@thun._r3 ↗</a></dd></div>
+                    <div><dt><b>BASE</b></dt><dd>Bangkok, Thailand</dd></div>
+                  </dl>
+                  <p class="sr" role="status" aria-live="polite"></p>
+                </div>
+              </aside>
             </div>
           </div>
         </div>
@@ -678,44 +661,6 @@
   <div class="wrap"><footer class="footer"><span>Rapeepat Sawek · curiosity in motion</span><span>#RS3</span><a href="#top">Back to curiosity ↑</a></footer></div>
 
   <script>
-    const diagram = document.querySelector('#car-diagram');
-    const viewButtons = document.querySelectorAll('[data-view]');
-    viewButtons.forEach(button => button.addEventListener('click', () => {
-      diagram.classList.toggle('exploded', button.dataset.view === 'exploded');
-      viewButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-      document.dispatchEvent(new CustomEvent('part:view', {detail: button.dataset.view}));
-    }));
-
-    const components = {
-      front: {title: 'Front wing', description: 'The front wing produces downforce and guides air around the car. Its shape affects the flow that reaches the parts behind it.'},
-      cockpit: {title: 'Cockpit', description: 'The driver sits at the centre of this study. In the drawing, the cockpit opening, steering area and protective halo fit tightly inside the body.'},
-      sidepods: {title: 'Sidepods', description: 'The sidepods house the radiators. The RB19 pairs a narrow letterbox inlet with a deep undercut beneath it, and its top surface ramps steeply down to push air towards the rear of the car.'},
-      suspension: {title: 'Suspension', description: 'These links connect the wheels to the car and manage the forces between the tyres and chassis. The RB19 uses pull-rods at the front and push-rods at the rear. Watch which way the diagonal rod runs at each end.'},
-      engine: {title: 'Power unit', description: 'Under the engine cover sits the power unit: a turbocharged engine working together with hybrid energy-recovery systems. The airbox above the driver feeds it air.'},
-      floor: {title: 'Floor', description: 'Since 2022 most of the downforce comes from underneath. Shaped tunnels under the floor speed the air up, lowering its pressure, and the diffuser at the back lets it expand again. This is called ground effect.'},
-      rear: {title: 'Rear wing', description: 'The rear wing contributes downforce at the back of the car. Its setup balances grip with the drag that comes from moving through the air.'}
-    };
-    const inspectButtons = document.querySelectorAll('[data-inspect]');
-    const partTitle = document.querySelector('#part-title');
-    const partDescription = document.querySelector('#part-description');
-    function inspectPart(key) {
-      const selected = components[key];
-      if (!selected) return;
-      diagram.classList.add('has-selection');
-      document.querySelectorAll('[data-component]').forEach(part => part.classList.toggle('is-selected', part.dataset.component === key));
-      inspectButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.inspect === key)));
-      partTitle.textContent = selected.title;
-      partDescription.textContent = selected.description;
-      document.dispatchEvent(new CustomEvent('part:inspect', {detail: key}));
-    }
-    window.inspectPart = inspectPart;
-    inspectButtons.forEach(button => {
-      button.addEventListener('click', () => inspectPart(button.dataset.inspect));
-      if (button.tagName.toLowerCase() === 'g') button.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); inspectPart(button.dataset.inspect); }
-      });
-    });
-
     /* ---------- Scroll-played personal story ---------- */
     const root = document.documentElement;
     const clamp = v => Math.min(1, Math.max(0, v));
@@ -824,6 +769,29 @@
         m.S2 = Math.max(f.width / nb.offsetWidth, f.height / nb.offsetHeight) * 1.18;
         m.V = [f.width / 2, f.height / 2];
       }
+      // Questions arrive one at a time in the centre; each steps aside and dims when the next arrives,
+      // then they all pull into the centre and become "curiosity,".
+      const pre = [...scene.querySelectorAll('.pre')].map(el => ({ el, at: +el.dataset.pre, spot: el.dataset.spot.split(',').map(Number) }));
+      const lerp = (a, b, t) => a + (b - a) * t;
+      let titleGate = 0;
+      function prelude(q) {
+        const fw = frame.clientWidth, fh = frame.clientHeight, head = parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64;
+        const cx = fw / 2, cy = fh / 2; // same centre as the "curiosity," title
+        const converge = ease(clamp((q - .8) / .14));
+        pre.forEach(({ el, at, spot }, i) => {
+          const shown = at === 0 ? 1 : ease(clamp((q - at) / .07));
+          const next = pre[i + 1];
+          const aside = next ? ease(clamp((q - next.at) / .1)) : 0;
+          const x = lerp(lerp(cx, spot[0] * fw, aside), cx, converge);
+          const y = lerp(lerp(cy, head + spot[1] * (fh - head), aside), cy, converge);
+          const scale = lerp(lerp(1, .5, aside), .15, converge);
+          el.style.opacity = (shown * lerp(lerp(1, .38, aside), 0, ease(clamp((q - .84) / .1)))).toFixed(3);
+          el.style.transform = `translate(${x.toFixed(1)}px,${(y + (1 - shown) * 18).toFixed(1)}px) translate(-50%,-50%) scale(${scale.toFixed(3)})`;
+          el.style.filter = converge > .02 ? `blur(${(converge * 6).toFixed(1)}px)` : 'none';
+        });
+        titleGate = ease(clamp((q - .88) / .12));
+        hint.style.opacity = (1 - clamp(q / .12)).toFixed(3);
+      }
       function update(p) {
         if (!m.V && !scene.classList.contains('has-3d')) measure();
         const state = OpeningSequence.openingState(p);
@@ -831,11 +799,11 @@
         // captions
         caps.forEach(({ el, t: [a, b, c, d] }) => {
           const tin = b <= a ? (p >= a ? 1 : 0) : clamp((p - a) / (b - a));
-          const o = ease(tin) * (1 - ease(clamp((p - c) / (d - c))));
+          const isTitle = el.classList.contains('cap-title');
+          const o = ease(tin) * (1 - ease(clamp((p - c) / (d - c)))) * (isTitle ? titleGate : 1);
           el.style.opacity = o.toFixed(3);
-          el.style.transform = `translateY(${((1 - ease(tin)) * 24).toFixed(1)}px)`;
+          el.style.transform = isTitle ? `scale(${(1.18 - .18 * titleGate).toFixed(3)})` : `translateY(${((1 - ease(tin)) * 24).toFixed(1)}px)`;
         });
-        hint.style.opacity = (1 - clamp(p / .08)).toFixed(3);
         // Three.js owns the camera and physical notebook when available.
         if (scene.classList.contains('has-3d')) return;
         // Illustrated fallback follows the same bedroom-desk-to-notebook journey.
@@ -853,7 +821,7 @@
         frame.style.opacity = (1 - state.pageFade).toFixed(3);
       }
       addEventListener('resize', () => { m.V = null; });
-      return { scene, update };
+      return { scene, update, prelude };
     })();
 
     // Read-as-page switch
@@ -942,7 +910,8 @@
         snapNext = false;
         effects.forEach(fx => { if (shown.has(fx.scene)) apply(fx, shown.get(fx.scene)); });
         if (shown.has(pw.scene)) {
-          const p = shown.get(pw.scene);
+          const raw = shown.get(pw.scene), p = OpeningSequence.storyProgress(raw);
+          pw.prelude(OpeningSequence.preludeProgress(raw));
           pw.update(p);
           // the Three.js opening paints this exact value, so camera, lights and captions stay in sync
           if (openingActive || openingWasActive) dispatchEvent(new CustomEvent('portfolio:opening-frame', {
@@ -951,9 +920,9 @@
         }
         // A navigation jump may leave the opening outside the cached scene range.
         if (!shown.has(pw.scene) && openingWasActive) dispatchEvent(new CustomEvent('portfolio:opening-frame', {
-          detail: { progress: sceneProgress(pw.scene), active: false, film, reducedMotion, snap: true }
+          detail: { progress: OpeningSequence.storyProgress(sceneProgress(pw.scene)), active: false, film, reducedMotion, snap: true }
         }));
-        root.classList.toggle('in-notebook', (shown.get(pw.scene) ?? sceneProgress(pw.scene)) >= .97);
+        root.classList.toggle('in-notebook', OpeningSequence.storyProgress(shown.get(pw.scene) ?? sceneProgress(pw.scene)) >= .97);
       } else {
         snapNext = true;
         dispatchEvent(new CustomEvent('portfolio:opening-frame', {
@@ -982,7 +951,7 @@
       // speed lines follow how fast the visitor is scrolling
       const t = performance.now(), v = Math.abs(scrollY - lastY) / Math.max(16, t - lastT);
       lastY = scrollY; lastT = t;
-      const notebookCloseup = openingActive && (shown.get(pw.scene) ?? 0) >= .6;
+      const notebookCloseup = openingActive && OpeningSequence.storyProgress(shown.get(pw.scene) ?? 0) >= .6;
       speedLevel = film && !notebookCloseup && timestamp - lastInput < 180
         ? Math.min(.12, speedLevel * Math.exp(-dt / .045) + Math.min(.06, v * .035)) : 0;
       if (speedLevel < .001) speedLevel = 0;
@@ -1005,15 +974,190 @@
       cancelAnimationFrame(rafId); queued = false; rafId = 0; lastFrame = 0; snapNext = true;
       if (!document.hidden) request();
     });
+    // One scroll, one move (Story mode). A wheel gesture, swipe or key press glides to the next resting
+    // point of the story instead of scrubbing a few pixels. Resting points are where each beat has
+    // fully arrived; the glide between them plays the animation. Read-as-page keeps native scrolling.
+    const stepper = (() => {
+      const PRE = OpeningSequence.PRELUDE, story = p => PRE + p * (1 - PRE);
+      const beats = {
+        // opening: each question once it has landed, the word, then each caption while it is held
+        pitwall: [
+          ...[...pw.scene.querySelectorAll('.pre')].map(el => +el.dataset.pre && Math.min(1, +el.dataset.pre + .08) * PRE), PRE,
+          ...[...pw.scene.querySelectorAll('.cap:not(.cap-title)')].map(el => { const [, b, c] = el.dataset.cap.split(',').map(Number); return story((b + c) / 2); })
+        ],
+        driver: [0],
+        practice: [0, .26, .48, .82],        // heading, then each step of the timeline, then the note
+        quali: [.18, .36, .74, .84],         // 2025, the photo, the count to P8, the note
+        race: [.2, .3, .45, .6, .77, .96],   // one turn of the data path per move, then the result
+        pit: [.178, .638, .96],              // one project per move (montage holds)
+        podium: [.05, .62, .84],             // heading, podium rises, workbench
+      };
+      const docTop = el => el.getBoundingClientRect().top + scrollY;
+      function stops() {
+        const max = root.scrollHeight - innerHeight, list = [];
+        scenes.forEach(sc => {
+          const top = docTop(sc), travel = sc.offsetHeight - innerHeight;
+          if (beats[sc.id]) beats[sc.id].forEach(p => list.push(top + p * Math.max(0, travel)));
+          else for (let y = top; y < top + sc.offsetHeight - innerHeight * .5; y += innerHeight * .85) list.push(y);
+        });
+        list.push(max);
+        return list.map(y => Math.round(Math.min(max, Math.max(0, y)))).sort((a, b) => a - b)
+          .filter((y, i, a) => !i || y - a[i - 1] > 8);
+      }
+      let anim = 0, lastWheel = 0, lastAbs = 0, touchY = null;
+      const active = () => isFilm() && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.querySelector('.lightbox[open]');
+      const inOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      function glide(to) {
+        const from = scrollY, dist = to - from;
+        if (Math.abs(dist) < 2) return;
+        const dur = 650 + Math.min(650, Math.abs(dist) / innerHeight * 300), t0 = performance.now();
+        cancelAnimationFrame(anim);
+        const frame = now => {
+          const t = Math.min(1, (now - t0) / dur);
+          scrollTo(0, from + dist * inOut(t));
+          anim = t < 1 ? requestAnimationFrame(frame) : 0;
+        };
+        anim = requestAnimationFrame(frame);
+      }
+      function step(dir) {
+        const list = stops(), y = scrollY;
+        const to = dir > 0 ? list.find(s => s > y + 2) : [...list].reverse().find(s => s < y - 2);
+        if (to !== undefined) glide(to);
+      }
+      addEventListener('wheel', e => {
+        if (!active() || e.ctrlKey || !e.deltaY) return;
+        e.preventDefault();
+        const now = performance.now(), abs = Math.abs(e.deltaY);
+        // a trackpad keeps firing during its momentum: only a pause or a fresh, harder flick starts a new move
+        const fresh = now - lastWheel > 220 || (abs > lastAbs * 2.5 && abs > 30);
+        lastWheel = now; lastAbs = abs;
+        if (!anim && fresh) step(Math.sign(e.deltaY));
+      }, { passive: false });
+      addEventListener('keydown', e => {
+        if (!active() || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+        const el = e.target, typing = el.closest?.('input,textarea,select,[contenteditable]');
+        const pressable = el.closest?.('button,a,summary,[role=button],[tabindex]');
+        let dir = 0;
+        if (e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey && !pressable)) dir = 1;
+        else if (e.key === 'ArrowUp' || e.key === 'PageUp' || (e.key === ' ' && e.shiftKey && !pressable)) dir = -1;
+        else if (e.key === 'Home' || e.key === 'End') { if (typing) return; e.preventDefault(); const l = stops(); glide(e.key === 'Home' ? l[0] : l[l.length - 1]); return; }
+        if (!dir || typing) return;
+        e.preventDefault();
+        if (!anim) step(dir);
+      });
+      addEventListener('touchstart', e => { touchY = e.touches.length === 1 ? e.touches[0].clientY : null; }, { passive: true });
+      addEventListener('touchmove', e => { if (active() && touchY !== null) e.preventDefault(); }, { passive: false });
+      addEventListener('touchend', e => {
+        if (!active() || touchY === null) return;
+        const dy = touchY - e.changedTouches[0].clientY; touchY = null;
+        if (Math.abs(dy) > 40 && !anim) step(Math.sign(dy));
+      }, { passive: true });
+      // grabbing the scrollbar or a link jump takes over from a running glide
+      addEventListener('mousedown', () => { cancelAnimationFrame(anim); anim = 0; });
+      return { stops, step };
+    })();
+    window.portfolioStops = stepper.stops;
+
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change', () => setMode(isFilm()));
     setMode(isFilm());
 
-    // The 3D car (about 550 KB) loads only as the last session approaches.
-    new IntersectionObserver((entries, obs) => {
-      if (!entries[0].isIntersecting) return;
-      obs.disconnect();
-      const s = document.createElement('script'); s.src = 'car3d.js'; document.body.append(s);
-    }, { rootMargin: '1200px 0px' }).observe(document.querySelector('#car-study'));
+    // Team radio: the waveform is a scrolling voice meter driven by a speech envelope. Each word of the
+    // message becomes syllable bursts (longer words, more syllables), with gaps between words and longer
+    // pauses at punctuation, plus jitter so no two bursts match; the word lights up in the transcript as
+    // its sound starts.
+    (() => {
+      const card = document.querySelector('.radio-card'), wave = card.querySelector('.rc-wave');
+      const BARS = 58, STEP = 42; // one new sample every 42 ms enters on the right
+      const bars = Array.from({ length: BARS }, () => wave.appendChild(document.createElement('span')));
+      const level = new Array(BARS).fill(0);
+      let syllables = [], talkUntil = 0, raf = 0, last = 0, acc = 0;
+      const rand = (a, b) => a + Math.random() * (b - a);
+      function speak(words, t) {
+        const starts = [];
+        for (const word of words) {
+          starts.push(t);
+          const letters = word.replace(/[^\p{L}\p{N}]/gu, '').length || 1;
+          const count = Math.max(1, Math.round(letters / rand(2.4, 3.4)));
+          for (let k = 0; k < count; k++) {
+            const d = rand(80, 210);
+            syllables.push({ a: t, b: t + d, peak: rand(.3, 1) * (k ? rand(.55, 1) : 1) });
+            t += d + rand(10, 45);
+          }
+          t += /[.,!?”]$/.test(word) ? rand(260, 420) : rand(40, 120);
+        }
+        talkUntil = Math.max(talkUntil, t);
+        return starts;
+      }
+      function envelope(t) {
+        let v = 0;
+        for (const s of syllables) {
+          if (t < s.a - 35 || t > s.b + 70) continue;
+          v = Math.max(v, s.peak * Math.min(1, (t - s.a + 35) / 35, (s.b + 70 - t) / 70));
+        }
+        return v * rand(.5, 1.12) + rand(0, .05); // voice jitter + a little line noise
+      }
+      const paint = () => bars.forEach((b, i) => { b.style.transform = `scaleY(${Math.max(.06, Math.min(1, level[i])).toFixed(3)})`; });
+      function loop(now) {
+        acc += now - (last || now); last = now;
+        while (acc >= STEP) { acc -= STEP; level.shift(); level.push(envelope(now)); }
+        syllables = syllables.filter(s => s.b + 120 > now);
+        paint();
+        if (now < talkUntil + BARS * STEP) raf = requestAnimationFrame(loop);
+        else { raf = 0; last = 0; acc = 0; }
+      }
+      const run = () => { if (!raf) raf = requestAnimationFrame(loop); };
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const quote = card.querySelector('.rc-quote p');
+      const words = quote.textContent.trim().split(/\s+/);
+      if (reduce) {
+        // a still snapshot of the message's voice shape instead of motion
+        speak(words.slice(0, 9), 0);
+        for (let i = 0; i < BARS; i++) level[i] = envelope(i * STEP);
+        paint(); syllables = []; talkUntil = 0;
+        return;
+      }
+      quote.textContent = '';
+      const spans = words.map((w, i) => { const el = document.createElement('span'); el.className = 'w'; el.textContent = w; quote.append(el, i < words.length - 1 ? ' ' : ''); return el; });
+      new IntersectionObserver((entries, obs) => {
+        if (!entries[0].isIntersecting) return;
+        obs.disconnect();
+        const t0 = performance.now() + 350;
+        speak(words, t0).forEach((at, i) => setTimeout(() => spans[i].classList.add('on'), at - performance.now()));
+        run();
+      }, { threshold: .6 }).observe(card);
+    })();
+
+    // Clicking the email address copies it.
+    document.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', async () => {
+      const hint = btn.nextElementSibling, note = btn.closest('.radio-card').querySelector('[role=status]');
+      try { await navigator.clipboard.writeText(btn.dataset.copy); hint.textContent = 'copied ✓'; note.textContent = 'Email address copied'; }
+      catch (e) { hint.textContent = 'select to copy'; getSelection().selectAllChildren(btn); }
+      hint.classList.add('done');
+      clearTimeout(btn.reset);
+      btn.reset = setTimeout(() => { hint.textContent = 'click to copy'; hint.classList.remove('done'); note.textContent = ''; }, 1800);
+    }));
+  </script>
+  <dialog class="lightbox" aria-label="Photo">
+    <form method="dialog"><button type="submit" aria-label="Close photo">×</button></form>
+    <img alt=""><p></p>
+  </dialog>
+  <script>
+    // Every taped photo opens full size; click the backdrop, the × or press Esc to close.
+    (() => {
+      const box = document.querySelector('.lightbox'), big = box.querySelector('img'), note = box.querySelector('p');
+      const open = img => {
+        big.src = img.currentSrc || img.src; big.alt = img.alt;
+        note.textContent = img.closest('figure').querySelector('figcaption')?.textContent || '';
+        box.showModal();
+      };
+      document.querySelectorAll('.photo img').forEach(img => {
+        img.tabIndex = 0; img.setAttribute('role', 'button');
+        img.setAttribute('aria-label', 'Enlarge photo: ' + img.alt);
+        img.addEventListener('click', () => open(img));
+        img.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(img); } });
+      });
+      box.addEventListener('click', e => { if (e.target === box) box.close(); });
+    })();
   </script>
   <script src="pitwall3d.js" defer></script>
 </body>

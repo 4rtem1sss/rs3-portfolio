@@ -8,11 +8,16 @@ Desktop narrative and visual direction are being finalized first. Mobile-specifi
 
 A Three.js opening begins in near-empty blue space with one word, “curiosity,” then reveals a slightly messy bedroom study desk at night and moves into the notebook. Warm lamplight, cool monitor light, an opened device, tools, books, notes, a bed edge, curtains and shelves make the room feel lived in. A small F1 model sits on a shelf as one personal interest. Scene source: `src/pitwall3d.js`; layout contract: `src/bedroom-layout.mjs`; story-state source: `src/opening-sequence.mjs`; build with `npm run build`. The CSS bedroom illustration remains as the WebGL fallback.
 
+**Redrawn 2026-09-26 (Claude Code) at real-world scale** (metres; floor y = 0, back wall z = -0.46): 1.7 m desk, 27" monitor, laptop, 44 cm keyboard. Rounded geometry, a RoomEnvironment for faint reflections, a warm lamp spotlight (on a stack of books) pooling over the teardown, moonlight entering only through a real window opening in the wall, and spotlights for screen spill (area lights were dropped: their lookup tables cost ~250 KB). Story props, each placed for a caption: opened device + lid + screws + screwdriver ("look closer"), System View screen whose nodes light up in sequence ("parts become one working system"), breadboard whose LED switches on ("build one myself"), notebook with #RS3 sticker whose first page uses the site's own navy grid and "P.01 ABOUT ME" tag so the landing dissolves straight into p.01. Room cues: moonlit city window, circuit-study poster, bed corner, pushed-back chair, shelf with books, a medal and a small F1 model. The opening word "curiosity," is poster scale (clamp 64–200px).
+
+**Prelude (added 2026-09-26):** the first 36% of the opening's scroll (`PRELUDE` in `src/opening-sequence.mjs`) plays four questions before the word: "why?", "how does it work?", "what's inside?", "what if I change this?". Each arrives alone in the centre, then steps aside and dims when the next arrives, so they pile up; then all of them pull into the centre, blurring out, as "curiosity," settles from 118% to full size. The scene is 420vh so the desk story keeps its original scroll distance. Beats below are *story* progress, i.e. `storyProgress(raw)`, which also drives the 3D camera.
+
 | Beat (scene progress) | What happens |
 |---|---|
 | 0–.12 | Blank deep-blue space holds “curiosity,” with only a quiet scroll cue. |
 | .12–.50 | The blank layer recedes and the bedroom desk emerges. The text continues: looking closer, understanding connected parts, and wanting to build. |
-| .18–.64 | Camera explores monitors labelled Questions, System View and Build Log, then turns across the desk. |
+| .18–.42 | Camera leans into the lamp-lit teardown. |
+| .42–.64 | Camera turns to the System View screen as its parts connect; the breadboard LED lights. |
 | .64–.79 | Camera approaches the engineering notebook. |
 | .78–.92 | The physical notebook cover opens around its spine. |
 | .96–1 | The notebook page fills the view and dissolves into page 01. |
@@ -27,7 +32,7 @@ Then p.01 introduces Rapeepat. Every chapter keeps a notebook page number. The o
 | PURPOSE | Why build? | WordFlow makes system accuracy matter to children, doctors and the team building it. |
 | TEAM | How do they work with others? | ZeiTop, SubTrack and DoCode show the role Rapeepat took in different teams. |
 | PROOF | What supports the story? | Results and tools provide concise evidence without interrupting the narrative. |
-| FUTURE | Where does this lead? | Connected systems, networks, security, contact, and the optional interactive F1 study. |
+| FUTURE | Where does this lead, and how do I reach him? | Connected systems, what he does for fun, and the contact card. |
 
 ## HUD and energy (each has a job)
 
@@ -41,9 +46,13 @@ Then p.01 introduces Rapeepat. Every chapter keeps a notebook page number. The o
 Dark blueprint blue (#0f2b47) with a fine 24px and a major 120px white grid.
 Headings pure white (#ffffff), body soft white (#e6eef4), labels muted blueprint grey (#a7bdcd).
 Accent is signal yellow (#ffd24a, F1 timing-graphics style): links, session-tag chips, ticker progress, telemetry toggles, focus ring, highlighter stroke, selection.
-Line sketches are white like real blueprint drawings. Dark data screens (circuit, timing rows, car panel) keep ice blue (#9ad7f2) so data reads differently from the story.
+Line sketches are white like real blueprint drawings. Dark data screens (circuit, timing rows) keep ice blue (#9ad7f2) so data reads differently from the story.
 Warm colours are reserved: red for #RS3 and stamps, purple for the qualifying personal best, gold for P1.
 Polaroid photos stay white paper with dark captions. The earlier cream text was dropped because warm cream clashed with the cool blue.
+
+## Contact card (2026-09-27)
+
+The interactive F1 car was removed from the last page (it did not answer a reader question there; F1 stays as one line in the interests list). The last page's right column is an F1 broadcast-style **team radio** panel in light blue (#9ad7f2, like the other dark data screens; user request): #RS3 number block, TEAM RADIO label, name, and a pulsing red "channel open" light; a yellow scrolling voice meter driven by a speech envelope (each word becomes syllable bursts, with gaps between words and longer pauses at punctuation, plus jitter) while the message transmits word by word the first time the panel is on screen; each word lights up as its sound starts; the channels as CH 1 Email (clicking the address copies it; a hint reads "click to copy" then "copied ✓"), CH 2 GitHub, CH 3 Instagram, then Base. Reduced motion shows the message at once with a still snapshot of its voice shape. The whole page fits one screen with the footer.
 
 ## University-agnostic (user request, 2026-09-26)
 
@@ -52,11 +61,16 @@ No university or programme is named anywhere (no KMITL, no IoT Engineering), so 
 ## Driver identity
 
 - Driver tag **#RS3** (user's choice) remains a small personal signature on the driver card, the WordFlow data-path marker, notebook cover and footer. It no longer structures the main navigation or opening story.
-- IGN **4rtem1sss** = the user's GitHub name: listed on the driver card and linked (github.com/4rtem1sss), plus GitHub in the team-radio contact panel alongside Email and Instagram (@thun._r3). As of 2026-09-26 the profile has 0 public repositories.
+- IGN **4rtem1sss** = the user's GitHub name. It is set into the portrait itself (`dist/img/portrait-ign.jpg`): the studio backdrop was extended upward, the name set in yellow Bahnschrift behind him with three fading outline echoes, and the background-removed figure composited on top so his hair overlaps the word. Built by `scratchpad imgtool/ign.cjs` (sharp + @imgly/background-removal-node). It is no longer a row in the info list; GitHub stays in the contact panel alongside Email and Instagram (@thun._r3).
+- Header brand reads "Rapeepat S." (user request). As of 2026-09-26 the profile has 0 public repositories.
 
 ## Photos
 
-Photo slots load from `dist/img/*.jpg` and show a labelled placeholder until the file exists. Do NOT use images from the application PDF (too blurry; user will supply originals). Slots: portrait, tctt, wordflow-game, wordflow-dashboard, zeitop, subtrack, docode.
+Photo slots load from `dist/img/*.jpg` and show a labelled placeholder until the file exists. Do NOT use images from the application PDF (too blurry; user will supply originals). Click any photo to open it full size (native `<dialog>`). Slots: portrait-ign, tctt, wordflow-game, wordflow-dashboard, zeitop, subtrack, docode.
+
+## One scroll, one move (2026-09-26, user request)
+
+In Story mode each wheel gesture, swipe, Arrow/Page key or Space glides once (650–1300 ms, cubic ease-in-out, longer for longer distances) to the next resting point, replacing the earlier native free scrolling. Resting points are where a beat has fully arrived: each prelude question, "curiosity,", each held caption, the top of p.01, each Origin step, Growth's 2025 row / photo / count to P8 / note, each turn of the WordFlow circuit, each Team project, Proof's podium and workbench, then viewport-sized steps through Future to the page end (`stepper` in `dist/index.html`; `window.portfolioStops()` lists them). Wheel events during a glide are swallowed, and a new move needs a 220 ms pause or a much harder flick, so trackpad momentum cannot skip beats. Scrollbar drags, ticker links and Home/End still work; Read-as-page and reduced motion keep native scrolling.
 
 ## Scroll smoothing (2026-09-26, Claude Code)
 

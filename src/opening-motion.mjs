@@ -1,13 +1,13 @@
 // Monotone cubic Hermite paths preserve continuous velocity without overshooting
 // the authored clearance points. No allocations in the per-frame sampler.
 const stops = [
-  { p: 0, pos: [0, 1.5, 1.6], aim: [0, 1.18, -.8] },
-  { p: .18, pos: [0, 1.5, 1.6], aim: [0, 1.18, -.8] },
-  { p: .42, pos: [-.48, 1.48, 1.43], aim: [-.55, 1, -.1] },
-  { p: .64, pos: [.05, 1.43, 1.3], aim: [.62, .9, .18] },
-  { p: .79, pos: [.76, 1.68, .94], aim: [.77, .81, .24] },
-  { p: .91, pos: [.77, 1.43, .34], aim: [.77, .81, .24] },
-  { p: 1, pos: [.77, .96, .26], aim: [.77, .81, .24] }
+  { p: 0, pos: [.05, 1.36, 1.85], aim: [.05, 1.06, -.3] },
+  { p: .18, pos: [.05, 1.36, 1.85], aim: [.05, 1.06, -.3] },
+  { p: .42, pos: [-.3, 1.12, .6], aim: [-.5, .8, .02] },
+  { p: .64, pos: [.02, 1.12, .5], aim: [0, 1.04, -.27] },
+  { p: .79, pos: [.4, 1.18, .5], aim: [.43, .77, .1] },
+  { p: .91, pos: [.43, 1.1, .15], aim: [.43, .765, .1] },
+  { p: 1, pos: [.43, .87, .105], aim: [.43, .765, .1] }
 ];
 function tangent(i, key, axis) {
   if (i === 0 || i === stops.length - 1) return 0;

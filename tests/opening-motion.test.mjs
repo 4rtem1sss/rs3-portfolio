@@ -10,9 +10,9 @@ function sample(p) {
 const knots = [0, .18, .42, .64, .79, .91, 1];
 
 test('journey begins at the desk and ends inside the notebook', () => {
-  assert.deepEqual(sample(0), [0, 1.5, 1.6, 0, 1.18, -.8]);
+  assert.deepEqual(sample(0), [.05, 1.36, 1.85, .05, 1.06, -.3]);
   assert.deepEqual(sample(.18), sample(0));
-  assert.deepEqual(sample(1), [.77, .96, .26, .77, .81, .24]);
+  assert.deepEqual(sample(1), [.43, .87, .105, .43, .765, .1]);
 });
 
 test('path stays within each segment bounds, with a safe camera/target separation', () => {
@@ -27,7 +27,7 @@ test('path stays within each segment bounds, with a safe camera/target separatio
         assert.ok(value <= Math.max(a[axis], b[axis]) + 1e-10);
       });
       assert.ok(Math.hypot(...values.slice(0, 3).map((v, j) => v - values[j + 3])) > .1);
-      assert.ok(values[1] >= .96 - 1e-10, 'camera remains above desk');
+      assert.ok(values[1] >= .87 - 1e-10, 'camera remains above desk');
     }
   }
 });

@@ -23,7 +23,7 @@ const common = {
 };
 Promise.all([
   esbuild.build({
-    ...common, entryPoints: ['src/car3d.js', 'src/pitwall3d.js'],
+    ...common, entryPoints: ['src/pitwall3d.js'], // src/car3d.js (F1 study) is no longer on the page
     outdir: path.join(root, 'dist'), plugins: [localResolver()]
   }),
   esbuild.build({

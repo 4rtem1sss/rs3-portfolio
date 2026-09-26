@@ -1,23 +1,25 @@
+// Real-world scale (metres). Floor is y = 0, the back wall is z = -0.46 and the visitor sits at +z.
 export const bedroomLayout = {
-  bounds: { x: [-4.5, 4.5], y: [-.7, 3.5], z: [-4.5, 2] },
-  desk: { x: 0, y: .74, z: -.3, width: 4.6, depth: 1.85 },
+  bounds: { x: [-2.2, 2.6], y: [0, 2.8], z: [-.46, 2.2] },
+  desk: { x: -.02, y: .75, z: -.08, width: 1.7, depth: .72 },
   anchors: {
-    window: { x: -1.75, y: 2.08, z: -4.12 },
-    bed: { x: -2.85, y: -.14, z: -2.1 },
-    shelf: { x: 2.25, y: 2.28, z: -4.05 },
-    lamp: { x: -1.83, y: .84, z: -.1 },
-    notebook: { x: .77, y: .795, z: .24 },
+    window: { x: -1.05, y: 1.58, z: -.45 },
+    bed: { x: 1.95, y: .45, z: .55 },
+    shelf: { x: .55, y: 1.5, z: -.35 },
+    lamp: { x: -.72, y: .87, z: -.3 },
+    notebook: { x: .43, y: .75, z: .1 },
   },
   monitors: [
-    { id: 'main', x: -.35, z: -.95, angle: .05, width: 1.38, type: 'SYSTEM VIEW' },
-    { id: 'side', x: 1.16, z: -.78, angle: -.32, width: .88, type: 'BUILD LOG' },
+    { id: 'main', x: -.04, z: -.27, angle: 0, width: .62, type: 'SYSTEM VIEW' },
+    { id: 'side', x: .62, z: -.16, angle: -.5, width: .32, type: 'BUILD LOG' },
   ],
   clutter: [
-    { id: 'opened-device', x: -1.38, y: .8, z: .22 },
-    { id: 'screwdriver', x: -1.02, y: .81, z: .46 },
-    { id: 'books', x: 1.72, y: .8, z: -.35 },
-    { id: 'coffee', x: 1.72, y: .8, z: .18 },
-    { id: 'sticky-notes', x: .15, y: .8, z: .46 },
+    { id: 'opened-device', x: -.5, y: .755, z: .03 },
+    { id: 'screwdriver', x: -.3, y: .761, z: .18 },
+    { id: 'breadboard', x: -.36, y: .755, z: -.15 },
+    { id: 'books', x: -.72, y: .75, z: -.3 },
+    { id: 'coffee', x: .73, y: .75, z: .12 },
+    { id: 'sticky-notes', x: -.28, y: .93, z: -.25 },
   ],
 };
 

@@ -4,11 +4,11 @@ A portfolio template for Rapeepat Sawek combining a paper notebook with an inter
 
 Open `dist/index.html` in a browser. It works without installing anything or an internet connection.
 
-## The 3D car
+## The 3D opening
 
-The workbench car is a real-time 3D model (Three.js) whose shape follows the 2023 Red Bull RB19. It uses real proportions, no logos, bundled into `dist/car3d.js` so it still works offline and straight from the file. Drag to orbit, use the + / − / ⟲ buttons to zoom or reset, and tap a part (or its pin) to inspect it. Assembled / Exploded pulls the parts apart in 3D. Blueprint / Livery switches between the site's technical palette and the RB19's navy, red and yellow. If a browser has no WebGL, the original SVG drawing shows instead.
+The opening is a real-time Three.js scene of a bedroom study desk at night that the camera moves into until it lands on the notebook's first page. It is bundled into `dist/pitwall3d.js`; if a browser has no WebGL, an illustrated version shows instead. (The earlier interactive F1 car, `src/car3d.js`, is no longer on the page or in the build.)
 
-The model's source is `src/car3d.js`. After editing it, rebuild with:
+The scene's source is `src/pitwall3d.js`. After editing it, rebuild with:
 
 ```
 npm install
@@ -23,8 +23,6 @@ npm run build
 - About entries are the three `article.nb-entry` pages in the notebook. Add more entries together with a matching tab button.
 - Turn the contact placeholders into real links when your public contact details are ready.
 - Adjust the colors in `:root` near the top of the file.
-
-The racing car is an original conceptual model built from simple shapes, not a technical specification. Its Assembled and Exploded buttons and seven component selectors work with keyboard and touch. Select a marked component or its label to highlight it and read its explanation. The notebook and folded F1 note use native open/close disclosure controls. All motion respects reduced-motion settings.
 
 The only personal prose added is the confirmed interest in F1 engineering inside the folded note. Other biography, project, and contact copy stays editable placeholder text. The component explanations link to the official F1 glossary for further reading.
 
