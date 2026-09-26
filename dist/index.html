@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Rapeepat Sawek: a curious builder who takes things apart, learns from setbacks, and builds systems people can rely on.">
+  <title>Rapeepat Sawek — Curiosity in motion</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231a2835'/%3E%3Cpath d='M16 18h32M16 32h23M16 46h32M23 12v40' fill='none' stroke='%2384c8ee' stroke-width='4'/%3E%3C/svg%3E">
+  <script src="opening-sequence.js"></script>
+  <script>
+    // Race mode (scroll plays the weekend) unless reduced motion is preferred or the visitor chose "Read as page".
+    (function () {
+      var film = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      try { var saved = localStorage.getItem('viewMode'); if (saved) film = film && saved === 'film'; } catch (e) {}
+      document.documentElement.classList.add('js', film ? 'film' : 'page');
+    })();
+  </script>
+  <style>
+    /* A race engineer's notebook: paper for the story, dark timing screens for data.
+       Base CSS is the readable page; .film pins each session and lets scrolling play it. */
+    :root{--paper:#0f2b47;--card:#ffffff08;--ink:#ffffff;--text:#e6eef4;--muted:#a7bdcd;--blue:#ffd24a;--line:#ffffff2e;--panel:#081a2c;--panel2:#06131f;--pline:#274866;--ice:#9ad7f2;--pale:#d6e4eb;--red:#e0313b;--purple:#b98bff;--green:#2fbf71;--yellow:#f2c230;--stamp:#ff6b5f;--mono:'Cascadia Code','Consolas',monospace;--sans:'Bahnschrift','Aptos','Segoe UI',sans-serif;--hand:Georgia,serif;--head:64px}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}html.film{scroll-behavior:auto}
+    body{margin:0;color:var(--text);font:16px/1.6 var(--sans);background-color:var(--paper);background-image:linear-gradient(#ffffff1c 1px,transparent 1px),linear-gradient(90deg,#ffffff1c 1px,transparent 1px),linear-gradient(#ffffff0b 1px,transparent 1px),linear-gradient(90deg,#ffffff0b 1px,transparent 1px);background-size:120px 120px,120px 120px,24px 24px,24px 24px;overflow-x:hidden}
+    a{color:inherit}button{font:inherit}
+    ::selection{background:#ffd24a;color:#0f2b47}
+    a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+    .skip{position:absolute;top:-100px;left:20px;padding:10px;background:#fff;color:#0f2b47;z-index:60}.skip:focus{top:10px}
+    .wrap{max-width:1240px;margin:auto;padding:0 56px}
+    h1,h2,h3{font-weight:500;letter-spacing:-.03em;margin:0;color:var(--ink)}
+    .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+    /* Furniture */
+    .margin-line{position:fixed;top:0;bottom:0;left:36px;width:1px;background:#ffffff1f;z-index:1;pointer-events:none}
+    .speed{position:fixed;inset:0;z-index:44;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,transparent 0 23px,#ffffff14 23px 24px,transparent 24px 61px,#ffd24a1f 61px 62px);will-change:opacity}
+    .header{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--head);background:#0f2b47e8;backdrop-filter:blur(8px);border-bottom:1.5px solid var(--line)}
+    .header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:100%}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:17px;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+    .brand svg{width:24px;height:24px}
+    /* Session ticker: navigation + progress in one */
+    .ticker{flex:1;max-width:620px;display:grid;gap:5px}
+    .ticker-top{display:flex;justify-content:space-between;font:11px var(--mono);color:var(--muted)}
+    .ticker-top b{color:var(--ink);font-weight:400}
+    .sessions{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0;padding:0;list-style:none}
+    .sessions a{position:relative;display:block;height:14px;background:#ffffff1c;border-radius:2px;overflow:hidden;text-decoration:none}
+    .sessions a span{position:absolute;inset:0;transform-origin:left;transform:scaleX(var(--p,0));background:var(--blue)}
+    .sessions a.done span{background:var(--green)}.sessions a.best span{background:var(--purple)}
+    .sessions a:hover{outline:1px solid var(--blue)}
+    .sessions a i{position:absolute;left:5px;top:-1px;font:normal 9.5px/14px var(--mono);color:var(--ink);text-shadow:0 1px 2px #0008;white-space:nowrap}
+    .view-mode{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px;font:12px var(--mono);cursor:pointer;color:var(--ink);white-space:nowrap}
+    .view-mode:hover{border-color:var(--blue);color:var(--blue)}
+    .toast{position:fixed;left:50%;top:calc(var(--head) + 14px);z-index:48;transform:translate(-50%,-20px);opacity:0;padding:8px 16px;border-radius:4px;background:var(--panel2);color:#fff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;transition:opacity .3s,transform .4s cubic-bezier(.3,1.5,.5,1);pointer-events:none;display:flex;gap:10px;align-items:center}
+    .toast:before{content:'';width:10px;height:10px;border-radius:2px;background:var(--purple)}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    /* Shared bits */
+    .session-tag{display:inline-flex;align-items:center;gap:10px;margin:0 0 12px;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+    .session-tag b{padding:3px 8px;border-radius:3px;background:var(--blue);color:var(--paper);font-weight:600}
+    .big{font-size:clamp(44px,6.4vw,96px);line-height:.98;letter-spacing:-.05em}
+    .one{margin:14px 0 0;font-size:clamp(18px,1.7vw,22px);line-height:1.5;max-width:36ch}
+    .muted{color:var(--muted)}
+    .mark{background:linear-gradient(transparent 62%,#ffd24a73 62%,#ffd24a73 92%,transparent 92%);padding:0 2px}
+    .tape{position:relative}
+    .tape:before{content:'';position:absolute;top:-11px;left:50%;width:84px;height:22px;margin-left:-42px;background:#e9e1c4c4;box-shadow:0 1px 2px #24344322;transform:rotate(-2deg);z-index:3;pointer-events:none}
+    .panel{background:var(--panel);color:var(--pale);border-radius:6px;box-shadow:0 0 0 1px var(--pline),8px 9px 0 #04101c99}
+    .stamp{display:inline-block;padding:6px 12px 4px;border:3px solid var(--stamp);border-radius:6px;color:var(--stamp);font:700 22px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;transform:rotate(-8deg);text-shadow:0 0 12px #ff6b5f55}
+    .stamp small{display:block;font:600 10px var(--mono);letter-spacing:.06em;margin-top:3px}
+    .chip{display:inline-block;padding:3px 9px;border:1px solid var(--line);border-radius:3px;font:12px var(--mono);color:var(--muted);background:var(--card)}
+    .telemetry{margin-top:18px;max-width:52ch}
+    .telemetry summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;font:12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--blue);padding:6px 0;border-bottom:1px dashed var(--blue)}
+    .telemetry summary::-webkit-details-marker{display:none}
+    .telemetry summary:before{content:'▸';transition:transform .2s}.telemetry[open] summary:before{transform:rotate(90deg)}
+    .telemetry p{margin:10px 0 0;font-size:15px;line-height:1.6;color:var(--muted)}
+    svg.sketch{fill:none;stroke:var(--text);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .draw path,.draw circle,.draw rect{stroke-dasharray:1;stroke-dashoffset:var(--draw,0)}
+
+    /* Photo slots: show the image once the file exists in dist/img, a labelled placeholder until then */
+    .photo{position:relative;margin:0;background:#fff;padding:10px 10px 34px;box-shadow:0 1px 0 #cfd6cf,0 18px 30px -16px #000a;transform:rotate(var(--r,0deg))}
+    .photo img{display:block;width:100%;aspect-ratio:var(--ar,4/3);object-fit:cover;background:#e3e7e3}
+    .photo figcaption{position:absolute;left:12px;right:12px;bottom:8px;font:italic 14px var(--hand);color:#55636b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .photo.empty img{display:none}
+    .photo.empty:after{content:'';display:block;aspect-ratio:var(--ar,4/3);border:2px dashed #aab7ba;background:#eef2ef url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='none' stroke='%23889a9f' stroke-width='2'%3E%3Cpath d='M6 16h8l4-6h12l4 6h8v22H6z'/%3E%3Ccircle cx='24' cy='26' r='7'/%3E%3C/svg%3E") center 38%/44px no-repeat}
+    .photo.empty .slot{display:block}
+    .photo .slot{display:none;position:absolute;left:10px;right:10px;top:calc(50% + 8px);text-align:center;font:600 11px var(--mono);letter-spacing:.06em;color:#6d8086;text-transform:uppercase}
+
+    /* Scenes: page layout first */
+    .scene{position:relative}
+    .frame{padding:calc(var(--head) + 72px) 0 72px}
+    .scene+.scene .frame{border-top:1px solid var(--line)}
+
+    /* S0 Opening question */
+    .grid-card{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+    .gantry{display:flex;gap:14px;padding:16px 22px;background:var(--panel2);border-radius:10px;width:max-content;box-shadow:0 18px 30px -18px #0009}
+    .gantry i{width:44px;height:44px;border-radius:50%;background:#2a2f36;box-shadow:inset 0 0 0 4px #1b1f24}
+    .gantry i.on{background:radial-gradient(circle at 40% 35%,#ff8a8f,var(--red) 55%,#8c1119);box-shadow:0 0 22px 4px #e0313b88,inset 0 0 0 4px #5c0f14}
+    .driver{display:grid;grid-template-columns:.75fr 1.25fr;gap:40px;align-items:center}
+    .driver .photo{--ar:4/5;--r:-2deg;max-width:300px}
+    .driver h1{font-size:clamp(52px,7.4vw,112px);line-height:.92;letter-spacing:-.055em}
+    .driver h1 span{display:block}
+    .meta{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:22px 0 0;font-size:15px}
+    .meta dt{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+    .meta dd{margin:0}.meta dd a{color:var(--blue);text-decoration:none;border-bottom:1px solid currentColor;font-family:var(--mono);font-size:14px}
+    .car-no{margin:0 0 4px;font:italic 800 clamp(34px,4vw,54px)/1 var(--sans);letter-spacing:-.03em;color:transparent;-webkit-text-stroke:2px var(--red);transform:skewX(-8deg);transform-origin:left}
+    .circuit .car-tag{fill:var(--red)}.circuit .car-tag-t{font:700 11px var(--mono);fill:#fff;text-anchor:middle}
+    .channels{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:2px}
+    .channels li{display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:baseline;padding:10px 12px;background:var(--panel2);border-radius:3px}
+    .channels span{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#7fa3b6}
+    .radio .channels a{margin:0;font:500 clamp(16px,1.8vw,20px) var(--sans);border-bottom-width:1px}
+
+    /* S1 Practice */
+    .laps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:40px}
+    .lap{padding:22px 22px 20px;background:var(--card);border:1px solid var(--line);border-radius:8px}
+    .lap-no{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--muted)}
+    .lap-no b{font-weight:400;color:var(--green)}
+    .lap svg{width:100%;height:120px;margin:10px 0 6px}
+    .lap h3{font-size:24px;letter-spacing:-.03em}
+    .lap p{margin:6px 0 0;color:var(--muted);font-size:15px}
+
+    /* S2 Qualifying */
+    .quali{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+    .pos{font:700 clamp(110px,17vw,240px)/.85 var(--mono);letter-spacing:-.07em;margin:0;color:var(--ink);transition:color .3s}
+    .pos.best{color:var(--purple)}
+    .pos-label{font:12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .qrows{display:grid;gap:10px;margin-top:22px;max-width:520px}
+    .qrow{display:grid;grid-template-columns:62px 1fr;gap:14px;align-items:center;padding:12px 14px;background:var(--panel);box-shadow:0 0 0 1px var(--pline);color:var(--pale);border-radius:5px;border-left:4px solid #6b7a86}
+    .qrow b{font:700 20px var(--mono);color:#fff}
+    .qrow p{margin:0;font-size:15px}
+    .qrow.q3{border-left-color:var(--purple)}.qrow.q3 b{color:#d6b8ff}
+    .quali .photo{--r:2.5deg;--ar:4/3}
+
+    /* S3 Race: WordFlow */
+    .race{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:center}
+    .circuit{padding:20px 22px}
+    .circuit svg{display:block;width:100%;height:auto}
+    .circuit .track{fill:none;stroke:#3a5061;stroke-width:16;stroke-linecap:round;stroke-linejoin:round}
+    .circuit .kerb{fill:none;stroke:#9ad7f255;stroke-width:1.5;stroke-dasharray:6 8}
+    .circuit .turn circle{fill:var(--panel2);stroke:#6b8596;stroke-width:2;transition:fill .25s,stroke .25s}
+    .circuit .turn.mine circle{stroke:var(--ice)}
+    .circuit .turn.on circle{fill:var(--ice);stroke:#fff}
+    .circuit .turn text{font:600 11px var(--mono);fill:#cfe6f2}
+    .circuit .car{fill:var(--red);stroke:#fff;stroke-width:2}
+    .corner-read{min-height:74px;margin-top:12px;padding-top:12px;border-top:1px solid var(--pline)}
+    .corner-read b{display:block;color:#fff;font-weight:500}
+    .corner-read span{font-size:14px;color:#a9bdc8}
+    .corner-read i{font:normal 11px var(--mono);color:var(--ice);margin-left:8px}
+    .race-shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;max-width:440px}.race-shots .photo{padding:7px 7px 26px}.race-shots .photo figcaption{font-size:12.5px;bottom:5px}
+    .race-shots .photo{--ar:16/10}
+    .race-shots .photo:nth-child(1){--r:-2deg}.race-shots .photo:nth-child(2){--r:1.5deg}
+    .flag{display:inline-flex;align-items:center;gap:10px;margin-top:18px;font:600 14px var(--mono)}
+    .flag i{width:26px;height:18px;background:conic-gradient(#06131f 25%,#fff 0 50%,#06131f 0 75%,#fff 0) 0 0/9px 9px;border:1px solid #fff}
+
+    /* S4 Pit wall */
+    .pit-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:28px}
+    .counter{font:13px var(--mono);color:var(--muted);white-space:nowrap}.counter b{font-size:28px;color:var(--ink);font-weight:400}
+    .track-x{display:grid;gap:36px}
+    .stop{display:grid;grid-template-columns:.9fr 1.1fr;gap:36px;align-items:center;padding:30px;background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:4px 6px 0 #04101c99}
+    .stop .photo{--ar:16/10;--r:-1.5deg}
+    .stop .kind{font:12px var(--mono);color:var(--muted)}
+    .stop h3{font-size:clamp(40px,5vw,68px);letter-spacing:-.05em;line-height:1;margin:6px 0 10px}
+    .stop .job{margin:0;font-size:17px;line-height:1.5}
+    .stop .job b{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+    .stop .stamp{margin-top:18px}
+    .flash{display:none}
+
+    /* S5 Results + workbench */
+    .podium-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:end}
+    .podium{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;gap:10px;margin-top:30px}
+    .step{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .step .award{text-align:center}
+    .step .award b{display:block;font:700 26px var(--mono)}
+    .step .award span{display:block;font-size:13.5px;line-height:1.35;color:var(--muted);max-width:18ch;margin:auto}
+    .block{width:100%;display:grid;place-content:center;background:#1d4a73;border:1px solid #ffffff40;border-bottom:0;color:var(--ink);font:700 38px var(--mono);border-radius:6px 6px 0 0;transform-origin:bottom}
+    .step.p1 .block{height:190px;background:linear-gradient(#2a6395,#1d4a73)}.step.p2 .block{height:140px}.step.p3 .block{height:100px}
+    .step.p1 .award b{color:var(--yellow)}
+    .fastest{display:flex;gap:16px;align-items:center;padding:18px 20px;background:var(--panel2);border-radius:6px;color:#fff;border-left:6px solid var(--purple)}
+    .fastest b{font:700 34px var(--mono);color:#d6b8ff}
+    .fastest span{font-size:14px;color:#c3d3dc}
+    .fastest em{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#d6b8ff;font-style:normal}
+    .parc{margin-top:64px}
+    .parc h3{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+    .setup{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .setup div{padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+    .setup b{display:block;font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .setup ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+    .setup li{padding:3px 8px;border-radius:3px;background:#ffffff14;font-size:13.5px}
+    .setup li small{font:10.5px var(--mono);color:var(--muted);margin-left:6px}
+
+    /* S6 Next season */
+    .next{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+    .next .big{font-size:clamp(40px,5.6vw,80px)}
+    .interests{list-style:none;margin:26px 0 0;padding:0}
+    .interests li{display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line);font-size:16px}
+    .interests li b{font-weight:500;min-width:13ch}
+    .interests li span{color:var(--muted);font-size:15px}
+    .radio{margin-top:34px;padding:22px 24px;background:var(--panel);border-radius:6px;color:#fff}
+    .radio p{margin:0;font:12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#7fa3b6}
+    .radio a{display:inline-block;margin-top:6px;font:500 clamp(20px,2.4vw,28px) var(--sans);color:var(--blue);text-decoration:none;border-bottom:2px solid currentColor;overflow-wrap:anywhere}
+    /* Car study panel (moved from the old hero; 3D stage injected by car3d.js) */
+    .drawing{background:var(--panel);color:var(--pale);border-radius:6px;padding:22px 24px 20px;position:relative;box-shadow:0 0 0 1px var(--pline),8px 9px 0 #04101c99}
+    .drawing-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .drawing-title{font:500 20px var(--sans);letter-spacing:-.02em;color:#e5eef2}
+    .drawing-title small{display:block;margin-top:5px;font:12px var(--mono);color:#a2b3bd}
+    .cross{font-size:23px;line-height:1;color:#7a919f}
+    .diagram{width:100%;height:330px;display:block;margin:16px auto 0;overflow:visible}
+    .diagram .part{transition:transform .65s cubic-bezier(.16,1,.3,1),opacity .25s}
+    .diagram.exploded .front{transform:translateY(-28px)}.diagram.exploded .rear{transform:translateY(25px)}.diagram.exploded .wheel-left{transform:translateX(-27px)}.diagram.exploded .wheel-right{transform:translateX(27px)}
+    .diagram.exploded .annotation{opacity:.28}
+    .diagram.has-selection .part{opacity:.25}.diagram.has-selection .part.is-selected{opacity:1}.diagram.has-selection .annotation{opacity:.25}
+    .hotspot{cursor:pointer}.hotspot .hit{fill:transparent}.hotspot .ring{fill:#1a2835;stroke:#9ad7f2;stroke-width:1.5}.hotspot .plus{stroke:#e8f7ff;stroke-width:1.5;pointer-events:none}.hotspot:hover .ring,.hotspot[aria-pressed=true] .ring{fill:#397293}.focus-ring{fill:none;stroke:transparent}.hotspot:focus-visible .focus-ring{stroke:#e8f7ff;stroke-width:2}
+    .drawing-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+    .drawing-bottom>span{font:12px var(--mono);color:#9bafba}
+    .mode{display:flex;background:var(--panel2);padding:3px;border-radius:3px}
+    .mode button{border:0;background:none;color:#b1c4cf;padding:7px 12px;min-height:40px;font:12px var(--mono);border-radius:2px;cursor:pointer}
+    .mode button[aria-pressed=true]{background:#b3d9ec;color:#152837}
+    .part-picker{display:flex;flex-wrap:wrap;gap:4px 14px;padding:12px 0 6px}
+    .part-picker button{color:#b9cdd8;background:none;border:0;border-bottom:1px solid transparent;padding:8px 0;min-height:40px;font:13px var(--mono);cursor:pointer}
+    .part-picker button:hover,.part-picker button[aria-pressed=true]{color:#e6f6ff;border-color:var(--ice)}
+    .readout{border-top:1px solid #40505c;padding-top:16px;min-height:130px}
+    .readout h3{font-size:18px;margin:0 0 6px;color:#f1f7fa}
+    .readout p{font-size:14px;line-height:1.65;color:#c3d3dc;margin:0;max-width:60ch}
+    .study-reference{display:inline-block;margin-top:10px;color:#aecbdd;font:12px var(--mono);text-decoration:none;border-bottom:1px solid #607988}
+    .figure-caption{display:flex;justify-content:space-between;gap:12px;margin-top:16px;font:12px var(--mono);color:var(--muted)}
+    .drawing.is-3d #car-diagram{display:none}
+    .stage3d{position:relative;height:380px;margin:14px -24px 0;background:radial-gradient(ellipse at 50% 38%,#24394a 0%,#1a2835 62%);border-block:1px solid var(--pline);overflow:hidden;touch-action:pan-y}
+    .stage3d canvas{display:block;width:100%;height:100%;cursor:grab}.stage3d canvas:active{cursor:grabbing}
+    .stage-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .stage3d{contain:paint}
+    .pin{position:absolute;left:0;top:0;pointer-events:auto;display:flex;align-items:center;gap:7px;background:none;border:0;padding:6px;margin:-15px 0 0 -15px;color:#cfe6f2;font:11px var(--mono);cursor:pointer;transition:opacity .25s;will-change:transform}
+    .pin-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--ice);background:#1a2835cc;display:grid;place-content:center;flex-shrink:0;transition:background .2s,transform .2s}
+    .pin-dot:after{content:'+';font:13px/1 var(--mono);color:#e8f7ff}
+    .pin-text{background:#101c26d9;padding:2px 7px;border-left:1px solid var(--ice);white-space:nowrap;opacity:0;transform:translateX(-4px);transition:opacity .2s,transform .2s}
+    .pin:hover .pin-text,.pin.is-active .pin-text{opacity:1;transform:none}
+    .pin:hover .pin-dot,.pin.is-active .pin-dot{background:#397293;transform:scale(1.15)}
+    .pin.is-behind{opacity:.25}
+    .stage-tools{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px}
+    .stage-tools button{width:36px;height:36px;border:1px solid #40505c;background:#111d27e6;color:#cfe6f2;font:16px var(--mono);border-radius:3px;cursor:pointer}
+    .stage-tools button:hover{background:#397293;border-color:var(--ice)}
+    .stage-skin{position:absolute;left:12px;top:12px;display:flex;background:#111d27e6;border:1px solid #40505c;border-radius:3px;padding:2px}
+    .stage-skin button{border:0;background:none;color:#b1c4cf;font:11px var(--mono);padding:6px 9px;min-height:32px;border-radius:2px;cursor:pointer}
+    .stage-skin button[aria-pressed=true]{background:#b3d9ec;color:#152837}
+    .stage-hint{position:absolute;left:14px;bottom:10px;margin:0;font:11px var(--mono);color:#8fa7b4;transition:opacity .6s;pointer-events:none}
+    .stage3d.touched .stage-hint{opacity:0}
+    .stage3d{contain:paint}
+    .stage-labels{overflow:hidden}
+    .drawing{margin:0}
+    .footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 0 40px;border-top:1px solid var(--line);font:12px var(--mono);color:var(--muted)}
+    .footer a{text-decoration:none}
+
+    /* ---------- RACE MODE ---------- */
+    .film [data-fx]:focus-within,.film a[data-fx]:focus-visible{opacity:1!important;transform:none!important}
+    .film .scene{height:var(--len,100vh)}
+    .film .frame{position:sticky;top:0;height:100vh;padding:var(--head) 0 0;overflow:hidden;border:0!important;display:flex;align-items:center}
+    .film .frame>.wrap{width:100%}
+    .film .scene.free{height:auto}
+    .film .scene.free .frame{position:relative;height:auto;overflow:visible;display:block;padding:calc(var(--head) + 64px) 0 80px}
+    /* S0 layers: gantry then driver card */
+    .film .shake{animation:shake .35s linear}
+    @keyframes shake{20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-4px)}60%{transform:translate(-4px,-2px)}80%{transform:translate(3px,4px)}}
+    .film .track-x{display:flex;gap:6vw;padding:0 11vw;will-change:transform}
+    .film .stop{flex:0 0 min(78vw,1040px)}
+    .film .pit .wrap{max-width:none;padding:0}.film .pit-head{padding:0 56px}
+    .film .flash{display:block;position:absolute;inset:0;background:#fff;opacity:0;z-index:5;pointer-events:none}
+    .film .block{transform:scaleY(var(--rise,1))}
+
+    @media(max-width:1000px){
+      .wrap{padding:0 30px}
+      .grid-card,.driver,.quali,.race,.next,.podium-wrap{grid-template-columns:1fr;gap:28px}
+      .laps{grid-template-columns:1fr;gap:14px}
+      .setup{grid-template-columns:1fr 1fr}
+      .stop{grid-template-columns:1fr;gap:18px}
+      .film .pit-head{padding:0 30px}
+      .ticker-top span:first-child{display:none}
+      .film .laps{gap:10px;margin-top:18px}.film .lap{padding:12px 16px;display:grid;grid-template-columns:90px 1fr;gap:4px 14px;align-items:center}.film .lap svg{grid-row:span 3;height:70px;margin:0}.film .lap h3{font-size:19px}.film .lap p{font-size:13.5px}
+      .film .driver .photo{max-width:170px}.film .driver{gap:16px}
+      .film .quali .photo{display:none}
+      .film .race-shots{display:none}
+      .film .stop .photo{max-width:420px}
+      .film .podium-wrap{gap:18px}.film .block{font-size:26px}.film .step.p1 .block{height:120px}.film .step.p2 .block{height:90px}.film .step.p3 .block{height:66px}
+    }
+    @media(max-width:640px){
+      :root{--head:96px}
+      .wrap{padding:0 20px}
+      .header .wrap{flex-wrap:wrap;align-content:center;gap:8px 12px}
+      .brand{font-size:15px}.ticker{order:3;flex-basis:100%;max-width:none}
+      .margin-line{left:9px}
+      .sessions a i{display:none}
+      .gantry{gap:8px;padding:10px 12px}.gantry i{width:34px;height:34px}
+      .film .driver h1{font-size:46px}.film .driver .photo{max-width:130px;padding:6px 6px 22px}.film .meta{font-size:13.5px;margin-top:12px}.film .one{font-size:16px}
+      .film .pos{font-size:110px}.film .qrow{padding:9px 12px;grid-template-columns:50px 1fr}.film .qrow p{font-size:13.5px}
+      .film .race .one{display:none}.film .circuit{padding:14px}
+      .film .stop{flex-basis:86vw;padding:18px}.film .track-x{padding:0 7vw;gap:4vw}.stop h3{font-size:36px}.film .stop .job{font-size:15px}.film .pit-head{padding:0 20px;margin-bottom:14px}
+      .step .award span{font-size:12px}.step .award b{font-size:18px}
+      .setup{grid-template-columns:1fr}
+      .film .big{font-size:40px}
+      .film .telemetry{display:none}
+      .film .parc{margin-top:16px}.film .parc h3{margin-bottom:8px;font-size:10.5px}.film .setup{grid-template-columns:1fr 1fr;gap:8px}.film .setup div{padding:8px 10px}.film .setup b{font-size:9.5px;margin-bottom:5px}.film .setup li{font-size:11.5px;padding:2px 6px}
+      .film .setup li small{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+      .film .podium{margin-top:14px}.film .fastest{padding:12px 14px}.film .fastest b{font-size:26px}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.speed{display:none}}
+    /* OPENING: a quiet question reveals a bedroom study desk, then moves into the notebook. */
+    html:not(.film) .pitwall{display:none}
+    .film .pw-frame{padding:0;display:block;background:#050e18}
+    .pw-world{position:absolute;inset:0;overflow:hidden}
+    .pw-back,.pw-front{position:absolute;inset:0;transform-origin:0 0;will-change:transform}
+    .pw-back{background:linear-gradient(90deg,#1e2933,#293640 63%,#202a34);box-shadow:inset 0 -22vh 50vh #050b13}
+    .pw-back:after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 16% 62%,#ffb5582b,transparent 32%),radial-gradient(circle at 70% 30%,#75b7ea16,transparent 38%);pointer-events:none}
+    .pw-window{position:absolute;left:8vw;top:12vh;width:28vw;height:32vh;border:9px solid #3d2b22;background:linear-gradient(#07101d,#194064);box-shadow:0 0 50px #75b7ea24}
+    .pw-window:before{content:'';position:absolute;left:49%;top:0;bottom:0;border-left:5px solid #3d2b22}
+    .pw-window:after{content:'';position:absolute;left:0;right:0;top:49%;border-top:5px solid #3d2b22}
+    .pw-curtains{position:absolute;left:4vw;top:8vh;width:36vw;height:43vh;background:linear-gradient(100deg,#334350 0 17%,transparent 18% 81%,#334350 82%);filter:drop-shadow(0 8px 10px #0009)}
+    .pw-shelf{position:absolute;right:7vw;top:17vh;width:25vw;height:4vh;border-bottom:9px solid #4b3428;background:linear-gradient(90deg,#b64c45 0 6%,transparent 6% 9%,#315f7a 9% 15%,transparent 15% 18%,#c69a4b 18% 24%,transparent 24%);box-shadow:0 38vh 0 -1vh #4b3428}
+    .pw-model{position:absolute;right:12vw;top:19vh;width:8vw;height:1.5vh;background:#d72d43;border-radius:45% 25% 18% 20%;box-shadow:-2vw .6vh 0 -.2vh #ffd24a}
+    .pw-bed{position:absolute;left:-4vw;bottom:8vh;width:34vw;height:18vh;background:linear-gradient(#d2d1cb 0 22%,#27425c 23% 62%,#3d2b22 63%);border-radius:3vh 2vh 0 0;box-shadow:0 15px 45px #0009}
+    .pw-desk{position:absolute;left:-6vw;right:-6vw;bottom:0;height:36vh;background:linear-gradient(#6a4329 0 4%,#40291f 5% 10%,#111923 11%);border-top:2px solid #9a6841;box-shadow:0 -24px 50px #0009;filter:blur(var(--dof,0))}
+    .pw-desk span{position:absolute;left:9vw;bottom:3vh;font:600 clamp(9px,.8vw,12px) var(--mono);letter-spacing:.2em;color:#ffffff40}
+    .mon{position:absolute;bottom:34vh;width:clamp(150px,17vw,300px);aspect-ratio:16/10;padding:clamp(6px,.8vw,12px);background:#030b14;border:3px solid #1d3346;border-radius:6px;box-shadow:0 0 34px #8fd0f01f;color:#9ad7f2;font:clamp(8px,.72vw,12px)/1.5 var(--mono);overflow:hidden;filter:blur(var(--dof,0))}
+    .mon:after{content:'';position:absolute}
+    .mon b{display:block;font-weight:700;letter-spacing:.14em;color:#ffd24a;margin-bottom:4px}
+    .m1{left:29vw;width:clamp(220px,25vw,400px)}.m2{right:19vw;width:clamp(150px,16vw,250px);transform:rotateY(-12deg)}
+    .mon ol{list-style:none;margin:0;padding:0}
+    .mon li{display:grid;grid-template-columns:3.2em 1fr auto;gap:6px;border-bottom:1px solid #9ad7f21f}
+    .mon li i{font-style:normal;color:#ffffff99}.mon li em{font-style:normal;color:#2fbf71}
+    .mon .live{color:#e0313b;animation:blink 1s steps(2) infinite}
+    .mon p{margin:0}
+    .mon svg{display:block;width:100%;height:auto}
+    .m1 svg{height:55%}
+    .trace{fill:none;stroke:#9ad7f2;stroke-width:2;stroke-dasharray:380;animation:trace 2.4s linear infinite}
+    @keyframes trace{from{stroke-dashoffset:380}to{stroke-dashoffset:0}}
+    .m1 p{font-size:1.5em;color:#fff}.m2 p{color:#d6e4eb}.m2 .cursor{animation:blink 1s steps(2) infinite}
+    .mini-track{fill:none;stroke:#274866;stroke-width:14}.mini-car{fill:#e0313b}
+    @keyframes blink{50%{opacity:.2}}
+    .pw-headset{position:absolute;right:4vw;bottom:9vh;width:clamp(60px,8vw,130px);filter:blur(var(--dof,0))}
+    .pw-cup{position:absolute;left:50vw;bottom:15vh;width:clamp(26px,3vw,48px);height:clamp(32px,3.6vw,58px);background:linear-gradient(90deg,#d9dde0,#f4f8fb 40%,#b9c0c6);border-radius:3px 3px 10px 10px;filter:blur(var(--dof,0))}
+    .pw-cup:after{content:'';position:absolute;right:-30%;top:22%;width:40%;height:44%;border:3px solid #cfd5da;border-left:0;border-radius:0 10px 10px 0}
+    .pw-lamp{position:absolute;left:9vw;bottom:34vh;width:12vw;height:27vh;border-left:5px solid #697681;transform:skewX(-8deg);filter:drop-shadow(0 0 18px #ffb55888)}
+    .pw-lamp:after{content:'';position:absolute;left:-3.7vw;top:-2vh;width:8vw;height:7vh;background:#b8793f;clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);transform:skewX(8deg) rotate(-8deg)}
+    .pw-device{position:absolute;left:13vw;bottom:10vh;width:12vw;height:8vh;border:4px solid #1a2730;background:repeating-linear-gradient(90deg,#295a46 0 8px,#406b55 8px 10px);transform:rotate(-5deg);box-shadow:-5vw 2vh 0 -1vh #202c35}
+    .pw-tool{position:absolute;left:25vw;bottom:11vh;width:13vw;height:1.2vh;background:linear-gradient(90deg,#d72d43 0 35%,#7e8991 36%);border-radius:1vh;transform:rotate(-12deg)}
+    .pw-books{position:absolute;right:9vw;bottom:12vh;width:12vw;height:2vh;background:#b64c45;box-shadow:.4vw -2.2vh #315f7a,.1vw -4.4vh #c69a4b;transform:rotate(2deg)}
+    .pw-notes{position:absolute;left:49vw;bottom:8vh;width:3.4vw;height:3.4vw;background:#e8c85a;box-shadow:4vw 1vh #d98b6e,7vw -.5vh #7bb8ae;transform:rotate(-7deg)}
+    .pw-nb{position:absolute;left:68%;bottom:5vh;width:clamp(220px,24vw,420px);aspect-ratio:1.45;transform:translateX(-50%) rotate(var(--nbr,-4deg));perspective:1600px;transform-style:preserve-3d}
+    .pw-page{position:absolute;inset:0;border-radius:3px;background-color:#0f2b47;background-image:linear-gradient(#ffffff1c 1px,transparent 1px),linear-gradient(90deg,#ffffff1c 1px,transparent 1px),linear-gradient(#ffffff0b 1px,transparent 1px),linear-gradient(90deg,#ffffff0b 1px,transparent 1px);background-size:40px 40px,40px 40px,8px 8px,8px 8px;box-shadow:0 18px 30px -12px #000c,inset 10px 0 18px -10px #0008}
+    .pw-page span{position:absolute;right:8px;bottom:6px;font:9px var(--mono);color:#ffffff66}
+    .pw-cover{position:absolute;inset:0;border-radius:3px 9px 9px 3px;transform-origin:left center;background:repeating-linear-gradient(45deg,#15181c 0 3px,#1c2026 3px 6px);box-shadow:0 22px 34px -12px #000d,inset 0 0 0 1px #ffffff14;display:flex;flex-direction:column;justify-content:center;padding:0 12%;backface-visibility:hidden}
+    .pw-cover p{margin:0;font:700 clamp(10px,1.1vw,18px)/1.25 var(--mono);letter-spacing:.2em;color:#e9eef2}
+    .pw-cover b{position:absolute;right:16%;top:14%;font:italic 800 clamp(14px,1.8vw,30px) var(--sans);color:transparent;-webkit-text-stroke:1.5px #e0313b;transform:rotate(-8deg)}
+    .pw-cover small{margin-top:10%;font:clamp(7px,.6vw,10px) var(--mono);letter-spacing:.14em;color:#ffffff73}
+    .pw-band{position:absolute;right:9%;top:0;bottom:0;width:clamp(4px,.45vw,8px);background:#e0313b;box-shadow:0 0 0 1px #0006}
+    .pw-vignette{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 55%,#000b)}
+    .pw-curtain{position:absolute;inset:0;z-index:3;background:#050e18;pointer-events:none;opacity:1;will-change:opacity}
+    .letterbox{position:absolute;left:0;right:0;height:var(--lb,11vh);background:#000;z-index:4;pointer-events:none}
+    .letterbox.top{top:0}.letterbox.bottom{bottom:0}
+    .pw-caps{position:absolute;left:0;right:0;bottom:50%;z-index:5;pointer-events:none}
+    .cap{position:absolute;left:6vw;right:6vw;bottom:0;max-width:900px;margin:auto;text-align:center;font:500 clamp(22px,3vw,44px)/1.25 var(--sans);letter-spacing:-.02em;color:#fff;text-shadow:0 2px 20px #000c;opacity:0;text-wrap:balance}
+    .cap small{display:block;margin-bottom:10px;font:600 clamp(10px,.9vw,13px) var(--mono);letter-spacing:.24em;color:#ffd24a}
+    .cap-title{font-size:clamp(52px,8vw,96px);letter-spacing:-.03em}
+    .pw-hint{position:absolute;left:50%;bottom:6vh;z-index:5;margin:0;display:flex;transform:translateX(-50%);flex-direction:column;align-items:center;gap:6px;font:11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#ffffff99;pointer-events:none;white-space:nowrap}
+    .pw-hint i{width:1.5px;height:30px;background:linear-gradient(#ffd24a,transparent);animation:drip 1.6s ease-in-out infinite}
+    @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+    /* Inside the notebook: ring binding down the left edge */
+    .binding{position:fixed;left:0;top:0;bottom:0;width:28px;z-index:40;pointer-events:none;opacity:0;transition:opacity .8s;background:radial-gradient(circle at 14px 18px,#07131f 0 4px,#ffffff70 4.5px 6.5px,transparent 7px) 0 0/28px 36px repeat-y,linear-gradient(90deg,#04101c99,transparent)}
+    .in-notebook .binding,.page .binding{opacity:1}
+    @media(max-width:760px){.m2{display:none}.mon{width:38vw;bottom:33vh}.pw-headset{display:none}.pw-cup{left:auto;right:6vw;bottom:24vh}.pw-nb{left:74%;bottom:12vh;width:42vw}.cap{left:8vw;right:8vw;font-size:clamp(21px,6vw,34px)}.cap-title{font-size:clamp(48px,16vw,72px)}.pw-caps{bottom:52%}}
+    @media(prefers-reduced-motion:reduce){.trace,.mon .live,.m2 .cursor,.pw-hint i{animation:none}}
+  </style>
+</head>
+<body id="top">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="margin-line" aria-hidden="true"></div>
+  <div class="binding" aria-hidden="true"></div>
+  <div class="speed" aria-hidden="true"></div>
+  <p class="toast" role="status" aria-live="polite"></p>
+
+  <header class="header">
+    <div class="wrap">
+      <a href="#top" class="brand" aria-label="Rapeepat Sawek, back to curiosity"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M3 5h26v22H3zM10 5v22M3 12h26M3 20h26" stroke="currentColor"/><path d="m14 23 5-14 5 14m-8-5h6" stroke="currentColor" stroke-width="1.6"/></svg>Rapeepat Sawek.</a>
+      <nav class="ticker" aria-label="Portfolio story chapters">
+        <div class="ticker-top"><span>A curious mind</span><b class="now">01 / 07 · Curiosity</b></div>
+        <ol class="sessions">
+          <li><a href="#pitwall" data-page-href="#driver" title="Curiosity: the opening question"><span></span><i>CURIOSITY</i></a></li>
+          <li><a href="#practice" title="Origin: where curiosity started"><span></span><i>ORIGIN</i></a></li>
+          <li><a href="#quali" title="Growth: learning from setbacks"><span></span><i>GROWTH</i></a></li>
+          <li><a href="#race" title="Purpose: building WordFlow"><span></span><i>PURPOSE</i></a></li>
+          <li><a href="#pit" title="Team: how I work with others"><span></span><i>TEAM</i></a></li>
+          <li><a href="#podium" title="Proof: results and tools"><span></span><i>PROOF</i></a></li>
+          <li><a href="#next" title="Future: where curiosity leads"><span></span><i>FUTURE</i></a></li>
+        </ol>
+      </nav>
+      <button class="view-mode" type="button" aria-pressed="false">Read as page</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <style>
+      .pw-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+      .has-3d .pw-world { visibility:hidden; }
+      .has-3d .pw-caps { pointer-events:none; bottom:50%; }
+      .has-3d .cap-title { letter-spacing:-.03em; }
+      .has-3d .cap { font-size:clamp(22px,3vw,44px); text-shadow:0 2px 10px #06121f; }
+      .has-3d .cap-title small { font-size:11px; }
+      .has-3d .pw-vignette { opacity:.35; }
+      .has-3d .pw-frame.shake { animation:none; }
+      #pitwall { --len:300vh; }
+      @media(max-width:700px) { #pitwall { --len:280vh; } }
+      @supports(height:100svh) { @media(max-width:700px) { #pitwall { --len:280svh; } } }
+      @media (prefers-reduced-motion:reduce) { .pw-canvas { display:none; } }
+    </style>
+    <!-- OPENING: curiosity reveals a personal bedroom desk, then the notebook. -->
+    <section class="scene pitwall" id="pitwall" data-title="Curiosity" aria-label="Opening story: curiosity reveals Rapeepat's slightly messy bedroom study desk and leads into his notebook.">
+      <div class="frame pw-frame">
+        <div class="pw-world" aria-hidden="true">
+          <div class="pw-back">
+            <div class="pw-window"></div>
+            <div class="pw-curtains"></div>
+            <div class="pw-shelf"></div>
+            <div class="pw-model"></div>
+            <div class="pw-bed"></div>
+          </div>
+          <div class="pw-front">
+            <div class="pw-desk"><span>STUDY DESK · R. SAWEK</span></div>
+            <div class="pw-lamp"></div>
+            <div class="mon m1"><b>SYSTEM VIEW</b><svg viewBox="0 0 200 60" preserveAspectRatio="none"><path class="trace" d="M0 40 20 18 40 14 48 42 60 44 80 20 100 14 108 36 120 38 140 16 170 10 178 44 200 40"/></svg><p>parts → system</p></div>
+            <div class="mon m2"><b>BUILD LOG</b><p>» observe</p><p>» take it apart</p><p>» test</p><p class="cursor">» rebuild_</p></div>
+            <div class="pw-device"></div>
+            <div class="pw-tool"></div>
+            <div class="pw-books"></div>
+            <div class="pw-notes"></div>
+            <svg class="pw-headset" viewBox="0 0 120 90"><path d="M18 60c0-30 18-50 42-50s42 20 42 50" fill="none" stroke="#2b3f52" stroke-width="8" stroke-linecap="round"/><rect x="6" y="52" width="24" height="32" rx="8" fill="#1d2d3c"/><rect x="90" y="52" width="24" height="32" rx="8" fill="#1d2d3c"/><path d="M20 80c10 8 26 8 34 2" stroke="#2b3f52" stroke-width="3" fill="none"/><circle cx="56" cy="82" r="4" fill="#e0313b"/></svg>
+            <div class="pw-cup"></div>
+            <div class="pw-nb">
+              <div class="pw-page"><span>p.01</span></div>
+              <div class="pw-cover"><span class="pw-band"></span><p>ENGINEERING<br>NOTEBOOK</p><b>#RS3</b><small>VOL. 01 · R. SAWEK</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="pw-vignette" aria-hidden="true"></div>
+        <div class="pw-curtain" aria-hidden="true"></div>
+        <div class="pw-caps" aria-hidden="true">
+          <p class="cap cap-title" data-cap="0,0,.14,.18">curiosity,</p>
+          <p class="cap" data-cap=".17,.21,.34,.38">the need to look closer,</p>
+          <p class="cap" data-cap=".38,.42,.56,.6">to understand how separate parts become one working system,</p>
+          <p class="cap" data-cap=".61,.65,.74,.78">and eventually, to build one myself.</p>
+          <p class="cap" data-cap=".81,.85,.92,.95">this is where the questions led.</p>
+        </div>
+        <p class="pw-hint" aria-hidden="true">scroll to explore<i></i></p>
+      </div>
+    </section>
+
+    <!-- PAGE 01: the driver (who is this?) -->
+    <section class="scene" id="driver" style="--len:130vh" data-title="Driver" aria-labelledby="name">
+      <div class="frame">
+        <div class="wrap">
+          <div class="driver">
+            <figure class="photo tape"><img src="img/portrait.jpg" alt="Portrait of Rapeepat Sawek in his school uniform" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/portrait.jpg</span><figcaption>that's me · #RS3</figcaption></figure>
+            <div>
+              <p class="session-tag"><b>p.01</b>about me</p>
+              <p class="car-no" aria-label="Driver tag RS3">#RS3</p>
+              <h1 id="name"><span>Rapeepat</span><span>Sawek.</span></h1>
+              <p class="one">I take things apart to see how they work. Now I build things <span class="mark">people rely on</span>.</p>
+              <dl class="meta"><dt>IGN</dt><dd><a href="https://github.com/4rtem1sss" target="_blank" rel="noopener noreferrer">4rtem1sss</a></dd><dt>Team</dt><dd>Ratwinit Bangkaeo School · SMT programme</dd><dt>Focus</dt><dd>Networks · security · connected systems</dd><dt>Base</dt><dd>Bangkok, Thailand</dd></dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FP1 PRACTICE: why this field? -->
+    <section class="scene" id="practice" style="--len:220vh" data-title="Origin" aria-labelledby="fp1-title">
+      <div class="frame">
+        <div class="wrap">
+          <p class="session-tag"><b>ORIGIN</b>p.02 · where curiosity started</p>
+          <h2 class="big" id="fp1-title">Learning by taking things apart.</h2>
+          <div class="laps">
+            <article class="lap" data-fx="rise" data-at=".08,.24">
+              <p class="lap-no"><span>01 · BEGINNING</span><b>look closer</b></p>
+              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true" data-fx="draw" data-at=".1,.3"><rect pathLength="1" x="40" y="50" width="140" height="74" rx="6"/><path pathLength="1" d="M34 40l150-20m-150 20 6 10m144-30-4 30"/><circle pathLength="1" cx="110" cy="87" r="20"/><circle pathLength="1" cx="110" cy="87" r="7"/></svg>
+              <h3>Take it apart.</h3><p>Days spent opening things up to see how the parts worked together.</p>
+            </article>
+            <article class="lap" data-fx="rise" data-at=".3,.46">
+              <p class="lap-no"><span>02 · DISCOVERY</span><b>ask why</b></p>
+              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true" data-fx="draw" data-at=".32,.52"><rect pathLength="1" x="50" y="22" width="120" height="78" rx="4"/><path pathLength="1" d="M90 118h40m-20-18v18M66 40h60M66 56h88M66 72h50"/></svg>
+              <h3>Meet the computer.</h3><p>How do people build something this complex? I wanted to find out.</p>
+            </article>
+            <article class="lap" data-fx="rise" data-at=".52,.68">
+              <p class="lap-no"><span>03 · FIRST TOOLS</span><b>try it</b></p>
+              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true" data-fx="draw" data-at=".54,.74"><path pathLength="1" d="M70 40 40 70l30 30m80-60 30 30-30 30M124 30 96 110"/></svg>
+              <h3>Write the code.</h3><p>Programming, then the SMT programme: real projects, real competitions.</p>
+            </article>
+          </div>
+          <details class="telemetry" data-fx="fade" data-at=".72,.8"><summary>Notebook note: why engineering</summary><p>Taking things apart taught me how parts work together. Programming and networks showed me how devices talk. WordFlow showed me that people depend on that data being right. Building systems where all three meet is what I want to keep learning.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUALIFYING: will they grow? -->
+    <section class="scene" id="quali" style="--len:240vh" data-title="Growth" aria-labelledby="q-title">
+      <div class="frame">
+        <div class="wrap">
+          <div class="quali">
+            <div>
+              <p class="session-tag"><b>GROWTH</b>p.03 · <span id="q-title">learning from setbacks · TCTT</span></p>
+              <p class="pos" data-fx="count" data-from="62" data-to="8" data-prefix="P" data-at=".3,.66" data-best aria-label="From 62nd in 2025 to 8th in 2026">P8</p>
+              <div class="qrows">
+                <div class="qrow" data-fx="rise" data-at=".04,.16"><b>2025</b><p>P62. Out of my depth, with very little background.</p></div>
+                <div class="qrow q3" data-fx="rise" data-at=".62,.72"><b>2026</b><p>P8 after one focused week of prep. <strong>+54 places.</strong></p></div>
+              </div>
+              <details class="telemetry" data-fx="fade" data-at=".74,.82"><summary>Notebook note: what I do in the team</summary><p>Network, cryptography and web security challenges: packet captures (PCAP) and DNS data, encrypted messages, how websites send data and control access. When one of us is stuck, we swap problems for a fresh view. 2026: 8th nationally, 4th in the Central region (team qualifying round).</p></details>
+            </div>
+            <figure class="photo tape" data-fx="rise" data-at=".2,.34"><img src="img/tctt.jpg" alt="Thailand Cyber Top Talent 2026 junior scoreboard: team KKMtuajing ranked 4th in the Central, Eastern and Western region" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/tctt.jpg</span><figcaption>TCTT 2026 · our team, 4th in the region</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RACE: what have they built? -->
+    <section class="scene" id="race" style="--len:280vh" data-title="Purpose" aria-labelledby="race-title">
+      <div class="frame">
+        <div class="wrap">
+          <div class="race">
+            <div>
+              <p class="session-tag"><b>PURPOSE</b>p.04 · WordFlow · team lead</p>
+              <h2 class="big" id="race-title">Building something people rely on.</h2>
+              <p class="one">Thai reading practice for children with learning disabilities. Every score has to reach their doctor, correct.</p>
+              <p class="flag" data-fx="fade" data-at=".9,.96"><i aria-hidden="true"></i>Funded · 28th National Software Contest</p>
+              <div class="race-shots">
+                <figure class="photo tape" data-fx="rise" data-at=".1,.2"><img src="img/wordflow-game.jpg" alt="The WordFlow team presenting the project to judges at the National Software Contest 2026" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/wordflow-game.jpg</span><figcaption>presenting WordFlow · NSC 2026</figcaption></figure>
+                <figure class="photo tape" data-fx="rise" data-at=".8,.9"><img src="img/wordflow-dashboard.jpg" alt="WordFlow clinician dashboard screenshot" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/wordflow-dashboard.jpg</span><figcaption>the dashboard I built</figcaption></figure>
+              </div>
+              <details class="telemetry"><summary>Notebook note: what I did</summary><p>Led the team. Built the Next.js dashboard and the Unity user accounts, helped build the backend linking each child to their doctor, aligned field names, API routes and data structures across every part, and wrote end-to-end tests from starting a game to reading results back from Firestore. Clinical advice from RainyKids Clinic; testing with Chakri Naruebodindra Medical Institute (Ramathibodi) is being arranged.</p></details>
+            </div>
+            <div>
+              <div class="panel circuit">
+                <svg viewBox="0 0 520 300" aria-label="WordFlow's data path drawn as a race circuit with five turns">
+                  <path id="circuit-path" class="track" d="M70 230 C40 230 30 190 50 160 L120 70 C140 44 180 40 200 64 L250 124 C266 144 296 146 314 128 L380 60 C404 36 450 44 462 78 C476 118 450 150 420 168 L330 222 C300 240 270 250 230 250 L70 250 Z"/>
+                  <path class="kerb" d="M70 230 C40 230 30 190 50 160 L120 70 C140 44 180 40 200 64 L250 124 C266 144 296 146 314 128 L380 60 C404 36 450 44 462 78 C476 118 450 150 420 168 L330 222 C300 240 270 250 230 250 L70 250 Z"/>
+                  <g class="turn mine" data-t=".08"><circle cx="72" cy="140" r="12"/><text x="92" y="136">T1 GAME</text></g>
+                  <g class="turn" data-t=".27"><circle cx="190" cy="52" r="12"/><text x="210" y="40">T2 SPEECH MODEL</text></g>
+                  <g class="turn mine" data-t=".45"><circle cx="300" cy="140" r="12"/><text x="244" y="172">T3 BACKEND</text></g>
+                  <g class="turn mine" data-t=".62"><circle cx="455" cy="66" r="12"/><text x="380" y="30">T4 DATABASE</text></g>
+                  <g class="turn mine" data-t=".82"><circle cx="330" cy="222" r="12"/><text x="344" y="276">T5 DASHBOARD</text></g>
+                  <g class="car-g" data-fx="lap" data-at=".05,.9"><circle class="car" r="9" cx="0" cy="0"/><rect class="car-tag" x="12" y="-24" width="42" height="17" rx="3"/><text class="car-tag-t" x="33" y="-12">RS3</text></g>
+                </svg>
+                <div class="corner-read" aria-live="polite"><b>T1 · Game app<i>my part</i></b><span>A child plays and reads aloud. I built the accounts.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PIT WALL: my job on each crew -->
+    <section class="scene pit" id="pit" style="--len:280vh" data-title="Team" aria-labelledby="pit-title">
+      <div class="frame">
+        <div class="flash" aria-hidden="true"></div>
+        <div class="wrap">
+          <div class="pit-head">
+            <div><p class="session-tag"><b>TEAM</b>p.05 · how I work with others</p><h2 class="big" id="pit-title" style="font-size:clamp(34px,4.4vw,60px)">I build better with other people.</h2></div>
+            <p class="counter" aria-hidden="true">PROJECT <b class="count-now">1</b> / 3</p>
+          </div>
+          <div class="track-x" data-fx="montage" data-at=".04,.96">
+            <article class="stop" id="zeitop">
+              <figure class="photo tape"><img src="img/zeitop.jpg" alt="The ZeiTop team on stage with their medals at SK Robotics Playground 2025" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/zeitop.jpg</span><figcaption>ZeiTop · SK Robotics 2025</figcaption></figure>
+              <div><span class="kind">Open-source app · SK Robotics Playground 2025</span><h3>ZeiTop</h3><p class="muted">Old Android phone → PC control surface.</p><p class="job"><b>My job</b>UX/UI and the interactive web controller.</p><span class="stamp">Gold<small>3rd runner-up</small></span></div>
+            </article>
+            <article class="stop" id="subtrack">
+              <figure class="photo tape"><img src="img/subtrack.jpg" alt="The SubTrack team on stage at the L@UNCHL4B AI startup hackathon" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/subtrack.jpg</span><figcaption>SubTrack · 12 hours, 1st place</figcaption></figure>
+              <div><span class="kind">L@UNCHL4B AI Startup Hackathon · 12 hours</span><h3>SubTrack</h3><p class="muted">Finds forgotten subscriptions in your inbox.</p><p class="job"><b>My job</b>Solution design, user flow, and the pitch.</p><span class="stamp">1st<small>10,000 THB</small></span></div>
+            </article>
+            <article class="stop" id="docode">
+              <figure class="photo tape"><img src="img/docode.jpg" alt="Homepage of a client website built by DoCode for S.R. Service Express, a crane and hoist service company" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/docode.jpg</span><figcaption>DoCode · a client site</figcaption></figure>
+              <div><span class="kind">Co-founded web &amp; SEO service</span><h3>DoCode</h3><p class="muted">Websites for real clients.</p><p class="job"><b>My job</b>Co-founder and frontend: page structure and UX/UI.</p><span class="stamp">Live<small>real clients</small></span></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PODIUM: results + setup -->
+    <section class="scene" id="podium" style="--len:200vh" data-title="Proof" aria-labelledby="podium-title">
+      <div class="frame">
+        <div class="wrap">
+          <div class="podium-wrap">
+            <div>
+              <p class="session-tag"><b>PROOF</b>p.06 · results and tools</p>
+              <h2 class="big" id="podium-title" style="font-size:clamp(38px,5vw,72px)">What the work added up to.</h2>
+              <div class="podium" data-fx="podium" data-at=".1,.6">
+                <div class="step p2"><div class="award"><b>GOLD</b><span>SK Robotics 2025 · ZeiTop</span></div><div class="block">2</div></div>
+                <div class="step p1"><div class="award"><b>1ST</b><span>L@UNCHL4B Hackathon · SubTrack</span></div><div class="block">1</div></div>
+                <div class="step p3"><div class="award"><b>FUNDED</b><span>NSC 28 · WordFlow</span></div><div class="block">3</div></div>
+              </div>
+            </div>
+            <div class="fastest" data-fx="rise" data-at=".6,.7"><b>+54</b><div><em>Growth through reflection</em><span>TCTT: P62 (2025) → P8 nationally (2026)</span></div></div>
+          </div>
+          <div class="parc" data-fx="rise" data-at=".7,.82">
+            <h3>Inside the workbench · tools I've actually used</h3>
+            <div class="setup">
+              <div><b>Web</b><ul><li>Next.js<small>WordFlow</small></li><li>HTML/CSS/JS<small>ZeiTop</small></li><li>UX/UI<small>DoCode</small></li></ul></div>
+              <div><b>Backend &amp; data</b><ul><li>FastAPI<small>WordFlow</small></li><li>Firestore<small>WordFlow</small></li><li>Gmail API<small>SubTrack</small></li></ul></div>
+              <div><b>Networks &amp; security</b><ul><li>PCAP · DNS<small>TCTT</small></li><li>Crypto · web sec<small>TCTT</small></li><li>WebSocket<small>ZeiTop</small></li></ul></div>
+              <div><b>Apps &amp; team</b><ul><li>Unity · C#<small>WordFlow</small></li><li>E2E tests<small>WordFlow</small></li><li>Team lead<small>WordFlow</small></li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT SEASON: what's next, what they're like, contact -->
+    <section class="scene free" id="next" data-title="Future" aria-labelledby="next-title">
+      <div class="frame">
+        <div class="wrap">
+          <div class="next">
+            <div>
+              <p class="session-tag"><b>FUTURE</b>p.07 · where curiosity leads</p>
+              <h2 class="big" id="next-title">Bigger systems. <span class="mark">Same curiosity.</span></h2>
+              <p class="one">Devices, the networks between them, and the people who rely on them. That's where I'm heading next.</p>
+              <ul class="interests" aria-label="Off-season">
+                <li><b>Formula 1</b><span>the engineering: parts working as one machine →</span></li>
+                <li><b>CTF puzzles</b><span>how networks behave, and how they break</span></li>
+                <li><b>Taking things apart</b><span>if it works, I want to know how</span></li>
+              </ul>
+              <div class="radio"><p>Say hello · open channel</p>
+                <ul class="channels">
+                  <li><span>Email</span><a href="mailto:rapeepatsawek@gmail.com">rapeepatsawek@gmail.com</a></li>
+                  <li><span>GitHub</span><a href="https://github.com/4rtem1sss" target="_blank" rel="noopener noreferrer">4rtem1sss</a></li>
+                  <li><span>Instagram</span><a href="https://www.instagram.com/thun._r3/" target="_blank" rel="noopener noreferrer">@thun._r3</a></li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <figure style="margin:0" id="car-study">
+              <div class="drawing">
+              <div class="drawing-top"><div class="drawing-title">On the workbench<small>Modelled on the RB19 (2023) / interactive study</small></div><span class="cross" aria-hidden="true">+</span></div>
+              <svg id="car-diagram" class="diagram" viewBox="0 0 440 355" role="group" aria-labelledby="car-title car-desc">
+              <title id="car-title">Conceptual single-seater engineering sketch</title><desc id="car-desc">Top view of an abstract racing car, with front wing, cockpit, suspension, and rear wing. Select any of four marked components to inspect it. Use the buttons below to separate or assemble the car.</desc>
+              <defs><pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#7694a4" stroke-opacity=".11"/></pattern><pattern id="tread" width="4" height="6" patternUnits="userSpaceOnUse"><path d="M0 0v6" stroke="#a6c3d2" stroke-opacity=".22"/></pattern></defs>
+              <rect width="440" height="355" fill="url(#grid)"/>
+              <g stroke="#91b3c6" stroke-width=".7" opacity=".45" fill="none"><path d="M220 20v320" stroke-dasharray="5 5"/><path d="M96 43v271m-4-271h8m-8 271h8M344 43v271m-4-271h8m-8 271h8"/><path d="M116 337h207m-207-4v8m207-8v8"/></g>
+              <g fill="none" stroke="#b3d8eb" stroke-width="1.3" stroke-linejoin="round">
+              <g class="part front" data-component="front"><path d="m220 43-8 45-3 54h22l-3-54z" fill="#21394b"/><path d="m154 47 66-8 66 8v15l-66-5-66 5z" fill="#1d3343"/><path d="m158 52 62-8 62 8m-123 5 61-7 60 7M154 43v23m132-23v23"/></g>
+              <g class="part wheel-left" data-component="suspension"><rect x="134" y="79" width="30" height="52" rx="6" fill="#172532"/><rect x="139" y="82" width="20" height="46" rx="3" fill="url(#tread)"/><path d="m165 92 42 22-42 7m0-13 44 13"/></g>
+              <g class="part wheel-right" data-component="suspension"><rect x="276" y="79" width="30" height="52" rx="6" fill="#172532"/><rect x="281" y="82" width="20" height="46" rx="3" fill="url(#tread)"/><path d="m275 92-42 22 42 7m0-13-44 13"/></g>
+              <g class="part wheel-left" data-component="suspension"><rect x="129" y="251" width="35" height="58" rx="6" fill="#172532"/><rect x="134" y="255" width="25" height="50" rx="3" fill="url(#tread)"/><path d="m165 260 41 9-41 25m0-15 42-2"/></g>
+              <g class="part wheel-right" data-component="suspension"><rect x="276" y="251" width="35" height="58" rx="6" fill="#172532"/><rect x="281" y="255" width="25" height="50" rx="3" fill="url(#tread)"/><path d="m275 260-41 9 41 25m0-15-42-2"/></g>
+              <g class="part body" data-component="cockpit"><path d="m209 123-22 33-13 33 7 50 19 26 7 33h26l7-33 19-26 7-50-13-33-22-33z" fill="#243c4d"/><path d="m193 164-7 29 10 51 11 11m40-91 7 29-10 51-11 11M207 207l-4 37 10 44h14l10-44-4-37"/><path d="m201 174 5-26h28l5 26-8 38h-22z" fill="#15232f"/><ellipse cx="220" cy="171" rx="12" ry="23"/><path d="M200 171q20-17 40 0m-20-11v36" stroke="#9ad7f2" stroke-width="3"/><path d="m189 182 8-7m54 7-8-7M181 221l15 18m63-18-15 18"/><path d="M207 130h26"/></g>
+              <g class="part rear" data-component="rear"><path d="M178 297h84v20h-84z" fill="#1d3343"/><path d="M181 303h78m-78 8h78m-83-18v28m88-28v28M212 289v9m16-9v9"/></g>
+              </g>
+              <g class="annotation" fill="none" stroke="#79aeca" stroke-width=".8"><path d="M153 51h-38l-15 19H27M239 170h65l18-17h90M257 229h46l17-19h91M182 306h-60l-13-17H26"/><g fill="#9ad7f2" stroke="none"><circle cx="153" cy="51" r="2"/><circle cx="239" cy="170" r="2"/><circle cx="257" cy="229" r="2"/><circle cx="182" cy="306" r="2"/></g></g>
+              <g class="annotation" fill="#b5cfdd" font-family="Consolas,monospace" font-size="11"><text x="27" y="63">Front wing</text><text x="329" y="146">Cockpit</text><text x="327" y="203">Sidepod</text><text x="26" y="282">Rear wing</text></g>
+              <g class="hotspot front-point" role="button" tabindex="0" data-inspect="front" aria-label="Inspect front wing" aria-controls="part-readout" aria-pressed="false"><g transform="translate(220 52)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
+              <g class="hotspot cockpit-point" role="button" tabindex="0" data-inspect="cockpit" aria-label="Inspect cockpit" aria-controls="part-readout" aria-pressed="false"><g transform="translate(220 178)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
+              <g class="hotspot suspension-point" role="button" tabindex="0" data-inspect="suspension" aria-label="Inspect suspension" aria-controls="part-readout" aria-pressed="false"><g transform="translate(149 105)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
+              <g class="hotspot rear-point" role="button" tabindex="0" data-inspect="rear" aria-label="Inspect rear wing" aria-controls="part-readout" aria-pressed="false"><g transform="translate(220 307)"><circle class="hit" r="24"/><circle class="focus-ring" r="19"/><circle class="ring" r="10"/><path class="plus" d="M-4 0H4M0-4V4"/></g></g>
+              </svg>
+              <div class="drawing-bottom"><div class="mode" role="group" aria-label="Car diagram view"><button type="button" data-view="assembled" aria-pressed="true">Assembled</button><button type="button" data-view="exploded" aria-pressed="false">Exploded</button></div><span>Choose a part below</span></div>
+              
+              <div class="part-picker" role="group" aria-label="Inspect a component">
+              <button type="button" data-inspect="front" aria-pressed="false" aria-controls="part-readout">Front wing</button>
+              <button type="button" data-inspect="cockpit" aria-pressed="false" aria-controls="part-readout">Cockpit</button>
+              <button type="button" data-inspect="sidepods" aria-pressed="false" aria-controls="part-readout">Sidepods</button>
+              <button type="button" data-inspect="suspension" aria-pressed="false" aria-controls="part-readout">Suspension</button>
+              <button type="button" data-inspect="engine" aria-pressed="false" aria-controls="part-readout">Power unit</button>
+              <button type="button" data-inspect="rear" aria-pressed="false" aria-controls="part-readout">Rear wing</button>
+              <button type="button" data-inspect="floor" aria-pressed="false" aria-controls="part-readout">Floor</button>
+              </div>
+              <div class="readout" id="part-readout" role="status" aria-live="polite" aria-atomic="true"><h3 id="part-title">Start with a little curiosity.</h3><p id="part-description">Pick a marked part of the car to take a closer look. Switch to the exploded view to see the assembly come apart.</p></div>
+              <a class="study-reference" href="https://www.formula1.com/en/latest/article/f1-glossary-p-t.GBhLQtpeu9b8LrK5VM0F1" target="_blank" rel="noopener noreferrer">Explore the F1 glossary ↗</a>
+              
+              </div>
+              <figcaption class="figure-caption"><span>A small study in how things fit together</span><span>Not to scale</span></figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="wrap"><footer class="footer"><span>Rapeepat Sawek · curiosity in motion</span><span>#RS3</span><a href="#top">Back to curiosity ↑</a></footer></div>
+
+  <script>
+    const diagram = document.querySelector('#car-diagram');
+    const viewButtons = document.querySelectorAll('[data-view]');
+    viewButtons.forEach(button => button.addEventListener('click', () => {
+      diagram.classList.toggle('exploded', button.dataset.view === 'exploded');
+      viewButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      document.dispatchEvent(new CustomEvent('part:view', {detail: button.dataset.view}));
+    }));
+
+    const components = {
+      front: {title: 'Front wing', description: 'The front wing produces downforce and guides air around the car. Its shape affects the flow that reaches the parts behind it.'},
+      cockpit: {title: 'Cockpit', description: 'The driver sits at the centre of this study. In the drawing, the cockpit opening, steering area and protective halo fit tightly inside the body.'},
+      sidepods: {title: 'Sidepods', description: 'The sidepods house the radiators. The RB19 pairs a narrow letterbox inlet with a deep undercut beneath it, and its top surface ramps steeply down to push air towards the rear of the car.'},
+      suspension: {title: 'Suspension', description: 'These links connect the wheels to the car and manage the forces between the tyres and chassis. The RB19 uses pull-rods at the front and push-rods at the rear. Watch which way the diagonal rod runs at each end.'},
+      engine: {title: 'Power unit', description: 'Under the engine cover sits the power unit: a turbocharged engine working together with hybrid energy-recovery systems. The airbox above the driver feeds it air.'},
+      floor: {title: 'Floor', description: 'Since 2022 most of the downforce comes from underneath. Shaped tunnels under the floor speed the air up, lowering its pressure, and the diffuser at the back lets it expand again. This is called ground effect.'},
+      rear: {title: 'Rear wing', description: 'The rear wing contributes downforce at the back of the car. Its setup balances grip with the drag that comes from moving through the air.'}
+    };
+    const inspectButtons = document.querySelectorAll('[data-inspect]');
+    const partTitle = document.querySelector('#part-title');
+    const partDescription = document.querySelector('#part-description');
+    function inspectPart(key) {
+      const selected = components[key];
+      if (!selected) return;
+      diagram.classList.add('has-selection');
+      document.querySelectorAll('[data-component]').forEach(part => part.classList.toggle('is-selected', part.dataset.component === key));
+      inspectButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.inspect === key)));
+      partTitle.textContent = selected.title;
+      partDescription.textContent = selected.description;
+      document.dispatchEvent(new CustomEvent('part:inspect', {detail: key}));
+    }
+    window.inspectPart = inspectPart;
+    inspectButtons.forEach(button => {
+      button.addEventListener('click', () => inspectPart(button.dataset.inspect));
+      if (button.tagName.toLowerCase() === 'g') button.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); inspectPart(button.dataset.inspect); }
+      });
+    });
+
+    /* ---------- Scroll-played personal story ---------- */
+    const root = document.documentElement;
+    const clamp = v => Math.min(1, Math.max(0, v));
+    const ease = t => t * t * (3 - 2 * t);
+    const scenes = [...document.querySelectorAll('.scene')];
+    const effects = [...document.querySelectorAll('[data-fx]')].map(el => ({
+      el, type: el.dataset.fx, scene: el.closest('.scene'),
+      at: (el.dataset.at || '0,1').split(',').map(Number),
+      out: el.dataset.out ? el.dataset.out.split(',').map(Number) : null
+    }));
+    const windowT = (p, [a, b]) => b <= a ? (p >= a ? 1 : 0) : clamp((p - a) / (b - a));
+    function sceneProgress(scene) {
+      const r = scene.getBoundingClientRect(), len = r.height - innerHeight;
+      return len <= 0 ? (r.top <= 0 ? 1 : clamp(1 - r.top / innerHeight)) : clamp(-r.top / len);
+    }
+
+    // Race circuit: the car follows the real path; each turn lights up as it passes.
+    const path = document.getElementById('circuit-path');
+    const pathLen = path.getTotalLength();
+    const turns = [...document.querySelectorAll('.circuit .turn')];
+    const read = document.querySelector('.corner-read');
+    const corners = [
+      ['T1 · Game app', 'my part', 'A child plays and reads aloud. I built the accounts.'],
+      ['T2 · Speech model', 'team', 'Breaks Thai speech into sounds (IPA).'],
+      ['T3 · Backend API', 'my part', 'FastAPI links each child to their doctor.'],
+      ['T4 · Database', 'my part', 'One shared structure so every value means the same thing.'],
+      ['T5 · Dashboard', 'my part', 'Next.js. Doctors follow progress over time.']
+    ];
+    let lastCorner = -1;
+    function setCorner(i) {
+      if (i === lastCorner) return; lastCorner = i;
+      const [t, who, line] = corners[i];
+      read.innerHTML = `<b>${t}<i>${who}</i></b><span>${line}</span>`;
+    }
+
+    function apply(fx, p) {
+      const { el, type } = fx;
+      const raw = windowT(p, fx.at), t = ease(raw);
+      const o = fx.out ? 1 - ease(windowT(p, fx.out)) : 1;
+      switch (type) {
+        case 'fade': el.style.opacity = t * o; break;
+        case 'rise': el.style.opacity = t * o; el.style.transform = `translateY(${(1 - t) * 40 - (1 - o) * 30}px)`; break;
+        case 'draw': el.style.setProperty('--draw', (1 - t).toFixed(4)); break;
+        case 'count': {
+          const v = Math.round(+el.dataset.from + (+el.dataset.to - +el.dataset.from) * t);
+          el.textContent = (el.dataset.prefix || '') + v;
+          if (el.hasAttribute('data-best')) el.classList.toggle('best', t >= 1);
+          break;
+        }
+        case 'lap': {
+          const pt = path.getPointAtLength(pathLen * raw);
+          el.setAttribute('transform', `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)})`);
+          let current = 0;
+          turns.forEach((g, i) => { const on = raw >= +g.dataset.t; g.classList.toggle('on', on); if (on) current = i; });
+          setCorner(current);
+          break;
+        }
+        case 'montage': montage(el, raw); break;
+        case 'podium': [...el.children].forEach((step, i) => {
+          const order = [1, 0, 2][i]; // P1 rises first, then P2, then P3
+          const s = ease(clamp((raw - order * .25) / .45));
+          step.querySelector('.block').style.setProperty('--rise', s.toFixed(3));
+          const a = step.querySelector('.award'); a.style.opacity = s > .85 ? 1 : 0; a.style.transform = `translateY(${(1 - clamp((s - .85) / .15)) * -30}px)`;
+        }); break;
+      }
+    }
+
+    // PIT WALL: hold on each stop, then speed-ramp to the next with blur and a flash.
+    function montage(track, t) {
+      const stops = [...track.children], n = stops.length;
+      const q = t * (n - 1), seg = Math.min(n - 2, Math.floor(q)), f = q - seg;
+      const ramp = f < .6 ? 0 : ease((f - .6) / .4);
+      const pos = t >= 1 ? n - 1 : seg + ramp;
+      const step = stops[1].offsetLeft - stops[0].offsetLeft;
+      const blur = Math.sin(Math.PI * ramp);
+      track.style.transform = `translateX(${-pos * step}px) skewX(${-blur * 4}deg)`;
+      track.style.filter = blur > .05 ? `blur(${(blur * 5).toFixed(1)}px)` : 'none';
+      const frame = track.closest('.frame');
+      frame.querySelector('.flash').style.opacity = (Math.max(0, blur - .55) * 1.4).toFixed(3);
+      const current = Math.round(pos);
+      frame.querySelector('.count-now').textContent = current + 1;
+      stops.forEach((stop, k) => {
+        const stamp = stop.querySelector('.stamp');
+        const hold = k === seg + (ramp > .5 ? 1 : 0) ? (k === seg ? clamp(f / .22) : 1) : (k < current ? 1 : 0);
+        const e = ease(hold);
+        stamp.style.opacity = e > .05 ? 1 : 0;
+        stamp.style.transform = `rotate(-8deg) scale(${1 + (1 - e) * 2.4})`;
+        stop.style.opacity = 1 - Math.min(.55, Math.abs(pos - k) * .55);
+      });
+    }
+
+    // OPENING: a single thought reveals the bedroom desk, then the camera enters the notebook.
+    const pw = (() => {
+      const scene = document.getElementById('pitwall');
+      const frame = scene.querySelector('.pw-frame');
+      const back = scene.querySelector('.pw-back'), front = scene.querySelector('.pw-front');
+      const nb = scene.querySelector('.pw-nb'), cover = scene.querySelector('.pw-cover');
+      const caps = [...scene.querySelectorAll('.cap')].map(el => ({ el, t: el.dataset.cap.split(',').map(Number) }));
+      const curtain = scene.querySelector('.pw-curtain'), hint = scene.querySelector('.pw-hint');
+      const m = { C: [0, 0], S: 4, S2: 8 };
+      function measure() {
+        front.style.transform = ''; nb.style.setProperty('--nbr', '-4deg');
+        const f = frame.getBoundingClientRect(), r = nb.getBoundingClientRect();
+        m.C = [r.left - f.left + r.width / 2, r.top - f.top + r.height / 2];
+        m.S = Math.min(.84 * f.width / nb.offsetWidth, .78 * f.height / nb.offsetHeight);
+        m.S2 = Math.max(f.width / nb.offsetWidth, f.height / nb.offsetHeight) * 1.18;
+        m.V = [f.width / 2, f.height / 2];
+      }
+      function update(p) {
+        if (!m.V && !scene.classList.contains('has-3d')) measure();
+        const state = OpeningSequence.openingState(p);
+        curtain.style.opacity = (1 - state.sceneReveal).toFixed(3);
+        // captions
+        caps.forEach(({ el, t: [a, b, c, d] }) => {
+          const tin = b <= a ? (p >= a ? 1 : 0) : clamp((p - a) / (b - a));
+          const o = ease(tin) * (1 - ease(clamp((p - c) / (d - c))));
+          el.style.opacity = o.toFixed(3);
+          el.style.transform = `translateY(${((1 - ease(tin)) * 24).toFixed(1)}px)`;
+        });
+        hint.style.opacity = (1 - clamp(p / .08)).toFixed(3);
+        // Three.js owns the camera and physical notebook when available.
+        if (scene.classList.contains('has-3d')) return;
+        // Illustrated fallback follows the same bedroom-desk-to-notebook journey.
+        const z = ease(clamp((p - .2) / .59));
+        const x = ease(clamp((p - .91) / .07));
+        const s = x > 0 ? m.S + (m.S2 - m.S) * x : 1 + (m.S - 1) * z;
+        const L = [m.V[0] + (m.C[0] - m.V[0]) * z, m.V[1] + (m.C[1] - m.V[1]) * z];
+        front.style.transform = `translate(${(m.V[0] - s * L[0]).toFixed(1)}px,${(m.V[1] - s * L[1]).toFixed(1)}px) scale(${s.toFixed(4)})`;
+        const sb = 1 + (s - 1) * .3, Lb = [m.V[0] + (m.C[0] - m.V[0]) * z * .5, m.V[1] + (m.C[1] - m.V[1]) * z * .5];
+        back.style.transform = `translate(${(m.V[0] - sb * Lb[0]).toFixed(1)}px,${(m.V[1] - sb * Lb[1]).toFixed(1)}px) scale(${sb.toFixed(4)})`;
+        back.style.filter = z > .02 ? `blur(${(z * 6).toFixed(1)}px)` : 'none';
+        front.style.setProperty('--dof', `${(z * 3 / s).toFixed(2)}px`);
+        nb.style.setProperty('--nbr', `${(-4 * (1 - z)).toFixed(2)}deg`);
+        cover.style.transform = `rotateY(${(-170 * state.notebookOpen).toFixed(1)}deg)`;
+        frame.style.opacity = (1 - state.pageFade).toFixed(3);
+      }
+      addEventListener('resize', () => { m.V = null; });
+      return { scene, update };
+    })();
+
+    // Read-as-page switch
+    const modeBtn = document.querySelector('.view-mode');
+    const isFilm = () => root.classList.contains('film');
+    function clearEffects() {
+      effects.forEach(({ el }) => el.removeAttribute('style'));
+      document.querySelectorAll('.stop, .stop .stamp, .flash, .step .award, .step .block').forEach(e => e.removeAttribute('style'));
+      document.querySelectorAll('.circuit .turn').forEach(g => g.classList.remove('on'));
+      document.querySelectorAll('[data-fx="count"]').forEach(e => { e.textContent = (e.dataset.prefix || '') + e.dataset.to; e.classList.add('best'); });
+      document.querySelector('.circuit .car-g').setAttribute('transform', 'translate(330 222)');
+      setCorner(4);
+    }
+    function setMode(film) {
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      film = film && !reduced;
+      cancelAnimationFrame(rafId); rafId = 0; queued = false;
+      snapNext = true; lastFrame = 0; shown.clear();
+      root.classList.toggle('film', film); root.classList.toggle('page', !film);
+      modeBtn.textContent = reduced ? 'Reduced motion · Page view' : film ? 'Read as page' : 'Story mode ▶';
+      modeBtn.disabled = reduced;
+      modeBtn.setAttribute('aria-pressed', String(!film));
+      try { localStorage.setItem('viewMode', film ? 'film' : 'page'); } catch (e) {}
+      if (!film) { clearEffects(); root.classList.remove('in-notebook'); }
+      mapSessions();
+      snapNext = true;
+      tick();
+    }
+    modeBtn.addEventListener('click', () => {
+      let anchor = scenes.find(s => s.getBoundingClientRect().bottom > innerHeight * .4);
+      if (isFilm() && anchor === pw.scene) anchor = document.getElementById('driver');
+      setMode(!isFilm());
+      if (anchor) anchor.scrollIntoView({ behavior: 'instant' });
+    });
+
+    // Session ticker, sector toasts and speed lines
+    const sessionLinks = [...document.querySelectorAll('.sessions a')];
+    let sessionScenes = [];
+    function mapSessions() {
+      const film = isFilm();
+      sessionLinks.forEach(a => { if (a.dataset.pageHref) { a.dataset.filmHref ||= a.getAttribute('href'); a.setAttribute('href', film ? a.dataset.filmHref : a.dataset.pageHref); } });
+      sessionScenes = sessionLinks.map(a => document.querySelector(a.getAttribute('href')));
+    }
+    const tickerNow = document.querySelector('.ticker .now');
+    const toast = document.querySelector('.toast');
+    const speed = document.querySelector('.speed');
+    const doneSet = new Set();
+    let toastTimer, lastY = scrollY, lastT = performance.now(), speedLevel = 0;
+    function sectorToast(i) {
+      toast.textContent = `Chapter ${i + 1} complete · ${sessionScenes[i].dataset.title}`;
+      toast.classList.add('show'); clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
+    }
+
+    // Scrolling stays native; what's smoothed is each scene's *displayed* progress.
+    // It glides toward the real scroll position with a 70ms time constant (frame-rate independent),
+    // so wheel notches become short glides instead of jumps. Big jumps (links, scrollbar drags) cut instead of playing through.
+    const SMOOTH_TAU = .07, JUMP = .25;
+    const shown = new Map();
+    let queued = false, rafId = 0, lastFrame = 0, snapNext = true, lastInput = 0, lastDirection = 0;
+    let openingWasActive = false;
+    const snap = () => { snapNext = true; request(); };
+    function tick(timestamp = performance.now()) {
+      queued = false; rafId = 0;
+      if (document.hidden) { snapNext = true; return; }
+      const film = isFilm();
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const dt = Math.min(.05, Math.max(1 / 240, (timestamp - (lastFrame || timestamp - 16.67)) / 1000));
+      lastFrame = timestamp;
+      const openingRect = pw.scene.getBoundingClientRect();
+      const openingActive = film && openingRect.bottom > 0 && openingRect.top < innerHeight;
+      const shouldSnap = snapNext;
+      let settling = false;
+      if (film) {
+        const alpha = 1 - Math.exp(-dt / SMOOTH_TAU);
+        scenes.forEach(s => {
+          const r = s.getBoundingClientRect();
+          if (!(r.bottom > -innerHeight && r.top < innerHeight * 2)) { shown.delete(s); return; }
+          const target = sceneProgress(s);
+          let p = shown.has(s) && !snapNext ? shown.get(s) : target;
+          p = target === 0 || target === 1 || timestamp - lastInput >= 180 || Math.abs(target - p) > JUMP
+            ? target : p + (target - p) * alpha;
+          if (Math.abs(target - p) < .001) p = target; else settling = true;
+          shown.set(s, p);
+        });
+        snapNext = false;
+        effects.forEach(fx => { if (shown.has(fx.scene)) apply(fx, shown.get(fx.scene)); });
+        if (shown.has(pw.scene)) {
+          const p = shown.get(pw.scene);
+          pw.update(p);
+          // the Three.js opening paints this exact value, so camera, lights and captions stay in sync
+          if (openingActive || openingWasActive) dispatchEvent(new CustomEvent('portfolio:opening-frame', {
+            detail: { progress: p, active: openingActive, film, reducedMotion, snap: shouldSnap }
+          }));
+        }
+        // A navigation jump may leave the opening outside the cached scene range.
+        if (!shown.has(pw.scene) && openingWasActive) dispatchEvent(new CustomEvent('portfolio:opening-frame', {
+          detail: { progress: sceneProgress(pw.scene), active: false, film, reducedMotion, snap: true }
+        }));
+        root.classList.toggle('in-notebook', (shown.get(pw.scene) ?? sceneProgress(pw.scene)) >= .97);
+      } else {
+        snapNext = true;
+        dispatchEvent(new CustomEvent('portfolio:opening-frame', {
+          detail: { progress: 0, active: false, film, reducedMotion, snap: true }
+        }));
+      }
+      openingWasActive = openingActive;
+      let current = 0;
+      sessionScenes.forEach((s, i) => {
+        const r = s.getBoundingClientRect();
+        const atEnd = innerHeight + scrollY >= root.scrollHeight - 4;
+        const p = atEnd ? 1 : r.height > innerHeight ? clamp(-r.top / (r.height - innerHeight)) : clamp((innerHeight * .5 - r.top) / r.height);
+        sessionLinks[i].style.setProperty('--p', p.toFixed(3));
+        if (r.top <= innerHeight * .45) current = i;
+        const done = p >= .999;
+        if (done && !doneSet.has(i)) {
+          doneSet.add(i);
+          if (OpeningSequence.shouldAnnounceChapter(i, sessionScenes.length, film)) sectorToast(i);
+        }
+        if (!done) doneSet.delete(i);
+        sessionLinks[i].classList.toggle('done', done);
+        sessionLinks[i].classList.toggle('best', done && i === 2); // qualifying: the personal best
+        sessionLinks[i].setAttribute('aria-current', String(i === current));
+      });
+      tickerNow.textContent = `${String(current + 1).padStart(2, '0')} / ${String(sessionScenes.length).padStart(2, '0')} · ${sessionScenes[current].dataset.title}`;
+      // speed lines follow how fast the visitor is scrolling
+      const t = performance.now(), v = Math.abs(scrollY - lastY) / Math.max(16, t - lastT);
+      lastY = scrollY; lastT = t;
+      const notebookCloseup = openingActive && (shown.get(pw.scene) ?? 0) >= .6;
+      speedLevel = film && !notebookCloseup && timestamp - lastInput < 180
+        ? Math.min(.12, speedLevel * Math.exp(-dt / .045) + Math.min(.06, v * .035)) : 0;
+      if (speedLevel < .001) speedLevel = 0;
+      speed.style.opacity = speedLevel.toFixed(3);
+      if (speedLevel > 0) settling = true;
+      if (settling) request(); // keep gliding until every scene has caught up, then go idle
+    }
+    function request() { if (!queued && !document.hidden) { queued = true; rafId = requestAnimationFrame(tick); } }
+    let inputY = scrollY;
+    addEventListener('scroll', () => {
+      const direction = Math.sign(scrollY - inputY);
+      if (direction && lastDirection && direction !== lastDirection) snapNext = true;
+      if (direction) lastDirection = direction;
+      inputY = scrollY; lastInput = performance.now(); request();
+    }, { passive: true });
+    addEventListener('resize', snap);
+    addEventListener('hashchange', snap);
+    addEventListener('portfolio:opening-sync', snap);
+    document.addEventListener('visibilitychange', () => {
+      cancelAnimationFrame(rafId); queued = false; rafId = 0; lastFrame = 0; snapNext = true;
+      if (!document.hidden) request();
+    });
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change', () => setMode(isFilm()));
+    setMode(isFilm());
+
+    // The 3D car (about 550 KB) loads only as the last session approaches.
+    new IntersectionObserver((entries, obs) => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      const s = document.createElement('script'); s.src = 'car3d.js'; document.body.append(s);
+    }, { rootMargin: '1200px 0px' }).observe(document.querySelector('#car-study'));
+  </script>
+  <script src="pitwall3d.js" defer></script>
+</body>
+</html>

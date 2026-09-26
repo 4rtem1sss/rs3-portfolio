@@ -1,0 +1,7 @@
+.sites-runtime/
+node_modules/
+
+# local tool state, never commit
+.vercel/
+.openai/
+.env*
