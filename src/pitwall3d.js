@@ -504,7 +504,7 @@ function start() {
     camera.lookAt(target);
     const state = openingState(p);
     hinge.rotation.z = Math.PI * .985 * state.notebookOpen;
-    const ledOn = beat(p, .64, .7);
+    const ledOn = beat(p, .58, .63); // lights as "to build one myself" arrives
     ledMat.emissiveIntensity = 3 * ledOn; ledGlow.material.opacity = .9 * ledOn;
     if (Math.abs(p - lastP) > .002 || lastP < 0) { screens.forEach(s => drawScreen(s, p)); lastP = p; }
     frame.style.opacity = String(1 - state.pageFade);

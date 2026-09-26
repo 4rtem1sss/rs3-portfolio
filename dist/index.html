@@ -140,6 +140,48 @@
     .qrow p{margin:0;font-size:15px}
     .qrow.q3{background:#1c1838;box-shadow:0 0 0 1.5px var(--purple)}.qrow.q3 b{color:#d6b8ff}
     .quali .photo{--r:2.5deg;--ar:1600/1089}
+    /* Growth: an F1-style timing tower. The rows roll past while the team's row climbs from P62 to P8. */
+    .q-side{position:relative;padding-bottom:40px}
+    .tower{width:min(380px,70%);background:#06131f;border-radius:8px;box-shadow:0 0 0 1px #ffffff1f,0 30px 50px -25px #000c;overflow:hidden}
+    .tower-head{display:flex;justify-content:space-between;margin:0;padding:11px 16px;background:#0b1f33;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#cfe0ec}
+    .tower-head span:last-child{display:flex;align-items:center;gap:7px;color:#d6b8ff}.tower-head i{width:7px;height:7px;border-radius:50%;background:var(--purple)}
+    .tower-win{--row:38px;position:relative;height:calc(var(--row) * 11);overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+    .tower-list{list-style:none;margin:0;padding:0;will-change:transform}
+    .tower-list li,.tower-me{display:grid;grid-template-columns:44px 10px 1fr auto;align-items:center;gap:12px;height:var(--row);padding:0 16px}
+    .tower-list li{border-top:1px solid #ffffff0d;font:600 14px var(--mono);color:#a7bdcd}
+    .tower-list li i,.tower-me i{width:10px;height:10px;border-radius:2px;background:var(--c,#9ad7f2)}
+    .tower-list li span{height:8px;border-radius:4px;background:#ffffff1f;width:var(--w,60%)}
+    .tower-me{position:absolute;left:0;right:0;top:calc(var(--row) * 5);background:#2a1f55;box-shadow:inset 0 0 0 1.5px var(--purple);color:#fff;font:700 15px var(--mono)}
+    .tower-me i{--c:var(--purple)}
+    .tower-me span{font:600 15px var(--sans)}
+    .tower-me em{font:700 13px var(--mono);font-style:normal;color:#d6b8ff}
+    .q-side .photo{position:absolute;right:0;bottom:-64px;width:min(330px,56%);--r:4deg} /* sits below the team row so the +54 stays visible */
+    .film #quali .tower-me em{opacity:0;transform:translateX(10px);transition:opacity .4s,transform .5s cubic-bezier(.22,1,.36,1)}
+    .film #quali.climbed .tower-me em{opacity:1;transform:none}
+    .film #quali .qrow,.film #quali .tower,.film #quali .q-side .photo,.film #quali .telemetry{opacity:0;transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
+    .film #quali .qrow{transform:translateY(16px)}
+    .film #quali .q-side .photo{transform:translate(24px,-36px) rotate(12deg)}
+    .film #quali.in .qrow:first-child,.film #quali.climbed .qrow.q3{opacity:1;transform:none}
+    .film #quali.in .tower{opacity:1;transition-delay:.15s}
+    .film #quali.in .q-side .photo{opacity:1;transform:rotate(var(--r));transition-delay:.4s}
+    .film #quali.climbed .telemetry{opacity:1;transition-delay:.35s}
+    /* Origin: one scroll plays 01, 02, 03 in turn; each sketch draws itself */
+    .film #practice .lap{opacity:0;transform:translateY(22px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i) * 300ms + 150ms)}
+    .film #practice.in .lap{opacity:1;transform:none}
+    .film #practice .draw *{stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.65,0,.35,1);transition-delay:calc(var(--i) * 300ms + 350ms)}
+    .film #practice.in .draw *{stroke-dashoffset:0}
+    .film #practice .laps:before{transform-origin:left;transform:scaleX(0);transition:transform 1.3s cubic-bezier(.22,1,.36,1)}
+    .film #practice.in .laps:before{transform:none}
+    .film #practice .telemetry{opacity:0;transition:opacity .5s 1.35s}
+    .film #practice.in .telemetry{opacity:1}
+    /* Proof: one scroll, P1 rises first, then P2 and P3, then the awards, the +54 and the workbench */
+    .film #podium .block{transform:scaleY(0);transition:transform .75s cubic-bezier(.22,1,.36,1)}
+    .film #podium .step.p2 .block{transition-delay:.18s}.film #podium .step.p3 .block{transition-delay:.36s}
+    .film #podium .award{opacity:0;transform:translateY(-18px);transition:opacity .4s,transform .55s cubic-bezier(.22,1,.36,1);transition-delay:.5s}
+    .film #podium .step.p2 .award{transition-delay:.68s}.film #podium .step.p3 .award{transition-delay:.86s}
+    .film #podium .fastest,.film #podium .parc{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .65s cubic-bezier(.22,1,.36,1);transition-delay:1.05s}
+    .film #podium .parc{transition-delay:1.25s}
+    .film #podium.in .block,.film #podium.in .award,.film #podium.in .fastest,.film #podium.in .parc{opacity:1;transform:none}
 
     /* S3 Purpose: WordFlow drawn as a circuit. The car stops at each turn and that part of the system pops up big. */
     .next>div:first-child{display:contents}
@@ -182,6 +224,27 @@
     .film .wf-pop[data-side=right]{right:0;transform-origin:0 50%}
     .film .wf-pop[data-side=left]{left:0;transform-origin:100% 50%}
     .film .wf-pop.is-on{pointer-events:auto}
+    /* the finish: nearly full screen, the photo carries its own caption */
+    .film .wf-pop.wf-finish{position:fixed;top:calc(var(--head) + (100vh - var(--head)) / 2);left:50%;right:auto;translate:-50% -50%;width:min(1180px,92vw,calc((100vh - var(--head) - 48px) * 1.6));transform-origin:50% 50%;z-index:6}
+    .film .wf-finish .wf-text{position:absolute;left:0;right:0;bottom:0;padding:110px 36px 30px;background:linear-gradient(#06131f00,#06131ff2 58%)}
+    .film .wf-finish .wf-text h3{font-size:clamp(28px,2.8vw,44px)}
+    .film .wf-finish .wf-text p{max-width:62ch;font-size:18px}
+    .film #race .wf-head{opacity:calc(1 - var(--fin, 0))}
+    .wf-pops .wf-finish{grid-column:1/-1}
+    /* victory: a waving chequered flag and one shine across the photo when the finish lands (confetti is drawn in JS) */
+    .victory-flag{display:none}
+    .film .victory-flag{display:block;position:absolute;top:26px;right:34px;z-index:2;width:96px;height:92px;opacity:0;transform:translateY(-14px) rotate(-10deg);transform-origin:0 100%;transition:opacity .35s,transform .7s cubic-bezier(.22,1,.36,1);pointer-events:none}
+    .film .victory-flag:before{content:'';position:absolute;left:0;top:0;width:4px;height:92px;border-radius:2px;background:linear-gradient(#fff,#b8c4cc);box-shadow:0 4px 10px #0007}
+    .film .victory-flag i{position:absolute;left:4px;top:3px;width:88px;height:58px;overflow:hidden;background:conic-gradient(#0b0f14 25%,#fff 0 50%,#0b0f14 0 75%,#fff 0) 0 0/14.6px 14.6px;transform-origin:0 50%;animation:flag-wave 1s ease-in-out infinite alternate;box-shadow:0 8px 16px #0007}
+    .film .victory-flag i:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0000,#0006 28%,#fff4 52%,#0005 76%,#0000);background-size:220% 100%;animation:flag-shade 1s ease-in-out infinite alternate}
+    @keyframes flag-wave{from{transform:perspective(200px) rotateY(-14deg) skewY(5deg)}to{transform:perspective(200px) rotateY(10deg) skewY(-4deg)}}
+    @keyframes flag-shade{from{background-position:0 0}to{background-position:100% 0}}
+    .film .wf-finish.celebrate .victory-flag{opacity:1;transform:none}
+    .film .wf-finish .wf-shot:after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,#fff0 35%,#ffffff59 50%,#fff0 65%);transform:translateX(-100%);pointer-events:none}
+    .film .wf-finish.celebrate .wf-shot:after{animation:shine 1.2s .15s cubic-bezier(.22,1,.36,1) both}
+    @keyframes shine{to{transform:translateX(100%)}}
+    .confetti{position:fixed;inset:0;width:100%;height:100%;z-index:7;pointer-events:none}
+    .chq{display:inline-block;width:22px;height:15px;margin-right:10px;vertical-align:-2px;background:conic-gradient(#06131f 25%,#fff 0 50%,#06131f 0 75%,#fff 0) 0 0/7.5px 7.5px;border:1px solid #fff}
 
     /* S4 Pit wall */
     .pit-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:28px}
@@ -274,8 +337,6 @@
     .film .track-x{display:flex;gap:6vw;padding:0 max(56px,calc((100vw - 1128px) / 2));will-change:transform}
     .film .stop{flex:0 0 min(78vw,1040px)}
     .film .pit .wrap{max-width:none;padding:0}.film .pit-head{max-width:1240px;margin:0 auto 28px;padding:0 56px}
-    .film .flash{display:block;position:absolute;inset:0;background:#fff;opacity:0;z-index:5;pointer-events:none}
-    .film .block{transform:scaleY(var(--rise,1))}
 
     @media(max-width:1000px){
       .wrap{padding:0 30px}
@@ -390,7 +451,7 @@
     .cap-title:before{display:none}
     .cap:before{content:'';position:absolute;inset:-50% 6%;z-index:-1;background:radial-gradient(closest-side,#06121fc2,#06121f80 55%,transparent);pointer-events:none}
     @media(max-width:760px){.m2{display:none}.mon{width:38vw;bottom:33vh}.pw-headset{display:none}.pw-cup{left:auto;right:6vw;bottom:24vh}.pw-nb{left:74%;bottom:12vh;width:42vw}.cap{left:8vw;right:8vw;font-size:clamp(21px,6vw,34px)}.cap-title{font-size:clamp(48px,16vw,72px)}.pw-caps{bottom:52%}}
-    @media(prefers-reduced-motion:reduce){.trace,.mon .live,.m2 .cursor,.pw-hint i,.lightbox[open],.rc-live i,.ch::after{animation:none}}
+    @media(prefers-reduced-motion:reduce){.trace,.mon .live,.m2 .cursor,.pw-hint i,.lightbox[open],.rc-live i,.ch::after,.victory-flag i,.victory-flag i:after,.wf-shot:after{animation:none}}
   </style>
 </head>
 <body id="top">
@@ -430,6 +491,16 @@
       .has-3d .pw-vignette { opacity:.35; }
       .has-3d .pw-frame.shake { animation:none; }
       #pitwall { --len:420vh; }
+      /* p.01 sits under the opening's final screen: the notebook page dissolves into the profile in place */
+      .film #pitwall { z-index:2; pointer-events:none; } /* nothing in the opening is clickable; never block p.01 */
+      .film #driver { margin-top:-100vh; }
+      /* Story mode: p.01 builds itself once the notebook page has dissolved (the photo lands, then the words) */
+      .film #driver [data-in] { opacity:0; transform:translateY(16px); transition:opacity .45s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); transition-delay:calc(var(--d, 0) * 1ms); }
+      .film #driver .photo[data-in] { transform:translate(-18px,-30px) rotate(-8deg) scale(1.06); transition-duration:.35s,.7s; }
+      .film #driver .car-no[data-in] { transform:skewX(-8deg) scale(1.5); }
+      .film #driver.in [data-in] { opacity:1; transform:none; }
+      .film #driver.in .photo[data-in] { transform:rotate(var(--r, 0deg)); }
+      .film #driver.in .car-no[data-in] { transform:skewX(-8deg); }
       @media(max-width:700px) { #pitwall { --len:390vh; } }
       @supports(height:100svh) { @media(max-width:700px) { #pitwall { --len:390svh; } } }
       @media (prefers-reduced-motion:reduce) { .pw-canvas { display:none; } }
@@ -474,8 +545,9 @@
           <p class="cap cap-title" data-cap="0,0,.14,.18">CURIOSITY,</p>
           <p class="cap" data-cap=".17,.21,.34,.38">the need to look closer,</p>
           <p class="cap" data-cap=".38,.42,.56,.6">to understand how separate parts become one working system,</p>
-          <p class="cap" data-cap=".61,.65,.74,.78">and eventually, to build one myself.</p>
-          <p class="cap" data-cap=".81,.85,.92,.95">this is where the questions led.</p>
+          <p class="cap" data-cap=".58,.61,.66,.69">and eventually, to build one myself.</p>
+          <p class="cap" data-cap=".69,.72,.76,.78">this is where the questions led.</p>
+          <p class="cap cap-bridge" data-cap=".89,.9,.945,.962">I'm the one who kept asking.</p>
         </div>
         <p class="pw-hint" aria-hidden="true">scroll to explore<i></i></p>
       </div>
@@ -486,13 +558,13 @@
       <div class="frame">
         <div class="wrap">
           <div class="driver">
-            <figure class="photo tape"><img src="img/portrait-ign.jpg" alt="Portrait of Rapeepat Sawek in his school uniform, standing in front of his in-game name, 4rtem1sss" width="1000" height="1552" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/portrait-ign.jpg</span><figcaption>that's me · #RS3</figcaption></figure>
+            <figure class="photo tape" data-in style="--d:0"><img src="img/portrait-ign.jpg" alt="Portrait of Rapeepat Sawek in his school uniform, standing in front of his in-game name, 4rtem1sss" width="1000" height="1552" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/portrait-ign.jpg</span><figcaption>that's me · #RS3</figcaption></figure>
             <div>
-              <p class="session-tag"><b>p.01</b>about me</p>
-              <p class="car-no" aria-label="Driver tag RS3">#RS3</p>
-              <h1 id="name"><span>Rapeepat</span><span>Sawek.</span></h1>
-              <p class="one">I take things apart to see how they work. Now I build things <span class="mark">people rely on</span>.</p>
-              <dl class="meta"><dt>Team</dt><dd>Ratwinit Bangkaeo School · SMT programme</dd><dt>Focus</dt><dd>Networks · security · connected systems</dd><dt>Base</dt><dd>Bangkok, Thailand</dd></dl>
+              <p class="session-tag" data-in style="--d:200"><b>p.01</b>about me</p>
+              <p class="car-no" data-in style="--d:560" aria-label="Driver tag RS3">#RS3</p>
+              <h1 id="name"><span data-in style="--d:300">Rapeepat</span><span data-in style="--d:400">Sawek.</span></h1>
+              <p class="one" data-in style="--d:680">I take things apart to see how they work. Now I build things <span class="mark">people rely on</span>.</p>
+              <dl class="meta"><dt data-in style="--d:800">Team</dt><dd data-in style="--d:800">Ratwinit Bangkaeo School · SMT programme</dd><dt data-in style="--d:880">Focus</dt><dd data-in style="--d:880">Networks · security · connected systems</dd><dt data-in style="--d:960">Base</dt><dd data-in style="--d:960">Bangkok, Thailand</dd></dl>
             </div>
           </div>
         </div>
@@ -500,48 +572,57 @@
     </section>
 
     <!-- FP1 PRACTICE: why this field? -->
-    <section class="scene" id="practice" style="--len:220vh" data-title="Origin" aria-labelledby="fp1-title">
+    <section class="scene" id="practice" style="--len:150vh" data-title="Origin" aria-labelledby="fp1-title">
       <div class="frame">
         <div class="wrap">
           <p class="session-tag"><b>ORIGIN</b>p.02 · where curiosity started</p>
           <h2 class="big" id="fp1-title">Learning by taking things apart.</h2>
           <div class="laps">
-            <article class="lap" data-fx="rise" data-at=".08,.24">
+            <article class="lap" style="--i:0">
               <p class="lap-no"><span>01 · BEGINNING</span><b>look closer</b></p>
-              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true" data-fx="draw" data-at=".1,.3"><rect pathLength="1" x="40" y="50" width="140" height="74" rx="6"/><path pathLength="1" d="M34 40l150-20m-150 20 6 10m144-30-4 30"/><circle pathLength="1" cx="110" cy="87" r="20"/><circle pathLength="1" cx="110" cy="87" r="7"/></svg>
+              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true"><rect pathLength="1" x="40" y="50" width="140" height="74" rx="6"/><path pathLength="1" d="M34 40l150-20m-150 20 6 10m144-30-4 30"/><circle pathLength="1" cx="110" cy="87" r="20"/><circle pathLength="1" cx="110" cy="87" r="7"/></svg>
               <h3>Take it apart.</h3><p>Days spent opening things up to see how the parts worked together.</p>
             </article>
-            <article class="lap" data-fx="rise" data-at=".3,.46">
+            <article class="lap" style="--i:1">
               <p class="lap-no"><span>02 · DISCOVERY</span><b>ask why</b></p>
-              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true" data-fx="draw" data-at=".32,.52"><rect pathLength="1" x="50" y="22" width="120" height="78" rx="4"/><path pathLength="1" d="M90 118h40m-20-18v18M66 40h60M66 56h88M66 72h50"/></svg>
+              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true"><rect pathLength="1" x="50" y="22" width="120" height="78" rx="4"/><path pathLength="1" d="M90 118h40m-20-18v18M66 40h60M66 56h88M66 72h50"/></svg>
               <h3>Meet the computer.</h3><p>How do people build something this complex? I wanted to find out.</p>
             </article>
-            <article class="lap" data-fx="rise" data-at=".52,.68">
+            <article class="lap" style="--i:2">
               <p class="lap-no"><span>03 · FIRST TOOLS</span><b>try it</b></p>
-              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true" data-fx="draw" data-at=".54,.74"><path pathLength="1" d="M70 40 40 70l30 30m80-60 30 30-30 30M124 30 96 110"/></svg>
+              <svg class="sketch draw" viewBox="0 0 220 140" aria-hidden="true"><path pathLength="1" d="M70 40 40 70l30 30m80-60 30 30-30 30M124 30 96 110"/></svg>
               <h3>Write the code.</h3><p>Programming, then the SMT programme: real projects, real competitions.</p>
             </article>
           </div>
-          <details class="telemetry" data-fx="fade" data-at=".72,.8"><summary>Notebook note: why engineering</summary><p>Taking things apart taught me how parts work together. Programming and networks showed me how devices talk. WordFlow showed me that people depend on that data being right. Building systems where all three meet is what I want to keep learning.</p></details>
+          <details class="telemetry"><summary>Notebook note: why engineering</summary><p>Taking things apart taught me how parts work together. Programming and networks showed me how devices talk. WordFlow showed me that people depend on that data being right. Building systems where all three meet is what I want to keep learning.</p></details>
         </div>
       </div>
     </section>
 
     <!-- QUALIFYING: will they grow? -->
-    <section class="scene" id="quali" style="--len:240vh" data-title="Growth" aria-labelledby="q-title">
+    <section class="scene" id="quali" style="--len:150vh" data-title="Growth" aria-labelledby="q-title">
       <div class="frame">
         <div class="wrap">
           <div class="quali">
             <div>
               <p class="session-tag"><b>GROWTH</b>p.03 · <span id="q-title">learning from setbacks · TCTT</span></p>
-              <p class="pos" data-fx="count" data-from="62" data-to="8" data-prefix="P" data-at=".3,.66" data-best aria-label="From 62nd in 2025 to 8th in 2026">P8</p>
+              <p class="pos" aria-label="From 62nd in 2025 to 8th in 2026">P8</p>
               <div class="qrows">
-                <div class="qrow" data-fx="rise" data-at=".04,.16"><b>2025</b><p>P62. Out of my depth, with very little background.</p></div>
-                <div class="qrow q3" data-fx="rise" data-at=".62,.72"><b>2026</b><p>P8 after one focused week of prep. <strong>+54 places.</strong></p></div>
+                <div class="qrow"><b>2025</b><p>P62. Out of my depth, with very little background.</p></div>
+                <div class="qrow q3"><b>2026</b><p>P8 after one focused week of prep. <strong>+54 places.</strong></p></div>
               </div>
-              <details class="telemetry" data-fx="fade" data-at=".74,.82"><summary>Notebook note: what I do in the team</summary><p>Network, cryptography and web security challenges: packet captures (PCAP) and DNS data, encrypted messages, how websites send data and control access. When one of us is stuck, we swap problems for a fresh view. 2026: 8th nationally, 4th in the Central region (team qualifying round).</p></details>
+              <details class="telemetry"><summary>Notebook note: what I do in the team</summary><p>Network, cryptography and web security challenges: packet captures (PCAP) and DNS data, encrypted messages, how websites send data and control access. When one of us is stuck, we swap problems for a fresh view. 2026: 8th nationally, 4th in the Central region (team qualifying round).</p></details>
             </div>
-            <figure class="photo tape" data-fx="rise" data-at=".2,.34"><img src="img/tctt.jpg" alt="Thailand Cyber Top Talent 2026 junior scoreboard: team KKMtuajing ranked 4th in the Central, Eastern and Western region" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/tctt.jpg</span><figcaption>TCTT 2026 · our team, 4th in the region</figcaption></figure>
+            <div class="q-side">
+              <div class="tower" aria-hidden="true">
+                <p class="tower-head"><span>TCTT · national</span><span><i></i>final</span></p>
+                <div class="tower-win">
+                  <ol class="tower-list"></ol>
+                  <div class="tower-me"><b class="tower-pos">P62</b><i></i><span>KKMtuajing</span><em>▲ +54</em></div>
+                </div>
+              </div>
+              <figure class="photo tape"><img src="img/tctt.jpg" alt="Thailand Cyber Top Talent 2026 junior scoreboard: team KKMtuajing ranked 4th in the Central, Eastern and Western region" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/tctt.jpg</span><figcaption>TCTT 2026 · our team, 4th in the region</figcaption></figure>
+            </div>
           </div>
         </div>
       </div>
@@ -589,9 +670,10 @@
                   <figure class="wf-shot"><img src="img/wf-dashboard.jpg" alt="WordFlow doctor portal for a demo child: 62% average accuracy, 15.9 second response time, 50 sessions, and weekly accuracy and response-time charts" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/wf-dashboard.jpg</span></figure>
                   <div class="wf-text"><p class="wf-kicker">T5 · Dashboard<i>my part</i></p><h3>Doctors see progress over time.</h3><p>The Next.js doctor portal I built: accuracy and response time week by week, and which sounds still need work.</p></div>
                 </article>
-                <article class="wf-pop" data-side="right" data-pop="5">
+                <article class="wf-pop wf-finish" data-side="finish" data-pop="5">
+                  <div class="victory-flag" aria-hidden="true"><i></i></div>
                   <figure class="wf-shot"><img src="img/wordflow-game.jpg" alt="The WordFlow team presenting the project to judges at the National Software Contest 2026" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/wordflow-game.jpg</span></figure>
-                  <div class="wf-text"><p class="wf-kicker">Finish · NSC 28<i>result</i></p><h3>Funded at the National Software Contest.</h3><p>I led the team, and wrote end-to-end tests from starting a game to reading the results back.</p></div>
+                  <div class="wf-text"><p class="wf-kicker"><span class="chq" aria-hidden="true"></span>Finish · NSC 28<i>result</i></p><h3>Funded at the National Software Contest.</h3><p>I led the team, and wrote end-to-end tests from starting a game to reading the results back.</p></div>
                 </article>
             </div>
           </div>
@@ -602,7 +684,6 @@
     <!-- PIT WALL: my job on each crew -->
     <section class="scene pit" id="pit" style="--len:280vh" data-title="Team" aria-labelledby="pit-title">
       <div class="frame">
-        <div class="flash" aria-hidden="true"></div>
         <div class="wrap">
           <div class="pit-head">
             <div><p class="session-tag"><b>TEAM</b>p.05 · how I work with others</p><h2 class="big" id="pit-title" style="font-size:clamp(34px,4.4vw,60px)">I build better with other people.</h2></div>
@@ -627,22 +708,22 @@
     </section>
 
     <!-- PODIUM: results + setup -->
-    <section class="scene" id="podium" style="--len:200vh" data-title="Proof" aria-labelledby="podium-title">
+    <section class="scene" id="podium" style="--len:150vh" data-title="Proof" aria-labelledby="podium-title">
       <div class="frame">
         <div class="wrap">
           <div class="podium-wrap">
             <div>
               <p class="session-tag"><b>PROOF</b>p.06 · results and tools</p>
               <h2 class="big" id="podium-title" style="font-size:clamp(38px,5vw,72px)">What the work added up to.</h2>
-              <div class="podium" data-fx="podium" data-at=".1,.6">
+              <div class="podium">
                 <div class="step p2"><div class="award"><b>GOLD</b><span>SK Robotics 2025 · ZeiTop</span></div><div class="block">2</div></div>
                 <div class="step p1"><div class="award"><b>1ST</b><span>L@UNCHL4B Hackathon · SubTrack</span></div><div class="block">1</div></div>
                 <div class="step p3"><div class="award"><b>FUNDED</b><span>NSC 28 · WordFlow</span></div><div class="block">3</div></div>
               </div>
             </div>
-            <div class="fastest" data-fx="rise" data-at=".6,.7"><b>+54</b><div><em>Growth through reflection</em><span>TCTT: P62 (2025) → P8 nationally (2026)</span></div></div>
+            <div class="fastest"><b>+54</b><div><em>Growth through reflection</em><span>TCTT: P62 (2025) → P8 nationally (2026)</span></div></div>
           </div>
-          <div class="parc" data-fx="rise" data-at=".7,.82">
+          <div class="parc">
             <h3>Inside the workbench · tools I've actually used</h3>
             <div class="setup">
               <div><b>Web</b><ul><li>Next.js<small>WordFlow</small></li><li>HTML/CSS/JS<small>ZeiTop</small></li><li>UX/UI<small>DoCode</small></li></ul></div>
@@ -732,6 +813,51 @@
     }), 1];
     const wfCar = document.querySelector('.wf-map .car-g');
     const wfPops = [...document.querySelectorAll('.wf-pop')];
+    const wfFinish = document.querySelector('.wf-finish');
+    // Confetti for the finish: two party-popper bursts from the photo's bottom corners plus a sprinkle from
+    // above, in the site's colours and chequered black and white. Runs only while pieces are in the air.
+    const confetti = (() => {
+      let cv, ctx, parts = [], raf = 0, last = 0;
+      const colors = ['#ffd24a', '#9ad7f2', '#e0313b', '#b98bff', '#ffffff', '#0b0f14', '#ffffff', '#0b0f14'];
+      const add = (x, y, vx, vy, i) => parts.push({ x, y, vx, vy, rot: Math.random() * 6.3, vr: (Math.random() - .5) * 16, w: 6 + Math.random() * 6, h: 9 + Math.random() * 9, c: colors[i % colors.length], life: 0, ttl: 2.4 + Math.random() * 1.4, ph: Math.random() * 6.3 });
+      function frame(now) {
+        const dt = Math.min(.033, (now - (last || now)) / 1000); last = now;
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        parts = parts.filter(p => {
+          p.life += dt;
+          p.vx -= p.vx * 1.9 * dt; p.vy += 1500 * dt; p.vy -= p.vy * 2.4 * dt;
+          p.x += (p.vx + Math.sin(p.life * 7 + p.ph) * 40) * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+          if (p.life > p.ttl || p.y > innerHeight + 40) return false;
+          ctx.save(); ctx.globalAlpha = Math.min(1, (p.ttl - p.life) / .5);
+          ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.scale(1, Math.cos(p.life * 9 + p.ph));
+          ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+          return true;
+        });
+        raf = parts.length ? requestAnimationFrame(frame) : 0;
+        if (!raf) { ctx.clearRect(0, 0, innerWidth, innerHeight); last = 0; }
+      }
+      return {
+        fire(r) {
+          if (!cv) { cv = document.createElement('canvas'); cv.className = 'confetti'; cv.setAttribute('aria-hidden', 'true'); document.body.append(cv); ctx = cv.getContext('2d'); }
+          const d = Math.min(devicePixelRatio, 2); cv.width = innerWidth * d; cv.height = innerHeight * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+          for (let i = 0; i < 110; i++) for (const [x, dir] of [[r.left + 24, 1], [r.right - 24, -1]]) {
+            const a = -Math.PI / 2 + dir * (.12 + Math.random() * .5), sp = 900 + Math.random() * 800;
+            add(x, r.bottom - 16, Math.cos(a) * sp, Math.sin(a) * sp, i);
+          }
+          for (let i = 0; i < 70; i++) add(r.left + Math.random() * r.width, r.top - 30 - Math.random() * 120, (Math.random() - .5) * 120, Math.random() * 150, i);
+          if (!raf) raf = requestAnimationFrame(frame);
+        },
+        clear() { parts = []; }
+      };
+    })();
+    let celebrated = false;
+    function celebrate(on) {
+      if (on === celebrated) return;
+      celebrated = on;
+      wfFinish.classList.toggle('celebrate', on);
+      if (on && !matchMedia('(prefers-reduced-motion: reduce)').matches) confetti.fire(wfFinish.getBoundingClientRect());
+      if (!on) confetti.clear();
+    }
     const smooth = (a, b, v) => ease(clamp((v - a) / (b - a)));
     function wf(stage, p) {
       let k = 0;
@@ -741,8 +867,10 @@
       const pt = path.getPointAtLength(pathLen * along);
       wfCar.setAttribute('transform', `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)})`);
       let focus = 0;
+      // the finish card is fixed to the screen, so it also fades as the chapter itself scrolls away
+      const inView = clamp(stage.closest('.scene').getBoundingClientRect().bottom / innerHeight);
       wfPops.forEach((card, i) => {
-        const w = 1 - smooth(.022, .07, Math.abs(p - wfStops[i + 1]));
+        const w = (1 - smooth(.022, .07, Math.abs(p - wfStops[i + 1]))) * (card === wfFinish ? inView * inView : 1);
         focus = Math.max(focus, w);
         card.style.opacity = w.toFixed(3);
         card.style.transform = `scale(${(.7 + .3 * w).toFixed(4)})`;
@@ -751,6 +879,9 @@
       });
       turns.forEach((g, i) => g.classList.toggle('on', along >= wfAt[i + 1] - .002));
       stage.style.setProperty('--focus', focus.toFixed(3));
+      const fin = +wfFinish.style.opacity || 0;
+      stage.closest('.scene').style.setProperty('--fin', fin.toFixed(3));
+      if (fin > .75) celebrate(true); else if (fin < .15) celebrate(false); // victory each time the finish lands
     }
 
     function apply(fx, p) {
@@ -778,7 +909,7 @@
       }
     }
 
-    // PIT WALL: hold on each stop, then speed-ramp to the next with blur and a flash.
+    // TEAM: hold on each project, then speed-ramp to the next with a motion blur.
     function montage(track, t) {
       const stops = [...track.children], n = stops.length;
       const q = t * (n - 1), seg = Math.min(n - 2, Math.floor(q)), f = q - seg;
@@ -789,7 +920,6 @@
       track.style.transform = `translateX(${-pos * step}px) skewX(${-blur * 4}deg)`;
       track.style.filter = blur > .05 ? `blur(${(blur * 5).toFixed(1)}px)` : 'none';
       const frame = track.closest('.frame');
-      frame.querySelector('.flash').style.opacity = (Math.max(0, blur - .55) * 1.4).toFixed(3);
       const current = Math.round(pos);
       frame.querySelector('.count-now').textContent = current + 1;
       stops.forEach((stop, k) => {
@@ -823,7 +953,7 @@
       // then they all pull into the centre and become "curiosity,".
       const pre = [...scene.querySelectorAll('.pre')].map(el => ({ el, at: +el.dataset.pre, spot: el.dataset.spot.split(',').map(Number) }));
       const lerp = (a, b, t) => a + (b - a) * t;
-      let titleGate = 0;
+      let titleGate = 0, hintLevel = 1;
       // Each line types itself (time-based, with a human rhythm) once its scroll step lands, and un-types
       // if the reader scrolls back past it. Letters are pre-laid-out and only revealed, so nothing shifts.
       function typed(el, speed) {
@@ -849,8 +979,9 @@
         t.caret = show ? t.n : null;
         if (show) t.n ? t.chars[t.n - 1].classList.add('cr') : t.chars[0].classList.add('cl');
       }
-      const lines = pre.map(({ el }) => typed(el, 62));
-      const titleLine = typed(scene.querySelector('.cap-title'), 105);
+      const lines = pre.map(({ el }) => typed(el, 46));
+      const titleLine = typed(scene.querySelector('.cap-title'), 78);
+      const bridgeLine = typed(scene.querySelector('.cap-bridge'), 46);
       let firstType = true;
       function prelude(q) {
         const fw = frame.clientWidth, fh = frame.clientHeight, head = parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64;
@@ -879,11 +1010,16 @@
         lines.forEach((t, i) => { const want = i === newest && converge < .05; if ((t.caret !== null) !== want) caretAt(t, want); });
         type(titleLine, titleGate > .15, 120);
         if ((titleLine.caret !== null) !== (titleGate > .15)) caretAt(titleLine, titleGate > .15);
-        hint.style.opacity = (1 - clamp(q / .12)).toFixed(3);
+        hintLevel = Math.max(1 - clamp(q / .12), ease(clamp((q - .97) / .03)));
       }
       function update(p) {
+        hint.style.opacity = (hintLevel * (1 - clamp(p / .03))).toFixed(3);
         if (!m.V && !scene.classList.contains('has-3d')) measure();
         const state = OpeningSequence.openingState(p);
+        const bridgeOn = p >= .895;
+        type(bridgeLine, bridgeOn, 160);
+        if ((bridgeLine.caret !== null) !== bridgeOn) caretAt(bridgeLine, bridgeOn);
+        frame.style.visibility = state.pageFade >= 1 ? 'hidden' : '';
         curtain.style.opacity = (1 - state.sceneReveal).toFixed(3);
         // captions
         caps.forEach(({ el, t: [a, b, c, d] }) => {
@@ -910,7 +1046,12 @@
         frame.style.opacity = (1 - state.pageFade).toFixed(3);
       }
       addEventListener('resize', () => { m.V = null; });
-      return { scene, update, prelude };
+      // wipe every typed line so the opening types from scratch again (used by the logo replay)
+      function retype() {
+        [...lines, titleLine, bridgeLine].forEach(t => { type(t, false); caretAt(t, false); });
+        firstType = true;
+      }
+      return { scene, update, prelude, retype };
     })();
 
     // Read-as-page switch
@@ -935,6 +1076,7 @@
       modeBtn.setAttribute('aria-pressed', String(!film));
       try { localStorage.setItem('viewMode', film ? 'film' : 'page'); } catch (e) {}
       if (!film) { clearEffects(); root.classList.remove('in-notebook'); }
+      arrivals.forEach(a => { a.on = false; film ? a.leave(a.el) : (a.final || a.enter)(a.el); });
       mapSessions();
       snapNext = true;
       tick();
@@ -968,7 +1110,47 @@
     // Scrolling stays native; what's smoothed is each scene's *displayed* progress.
     // It glides toward the real scroll position with a 70ms time constant (frame-rate independent),
     // so wheel notches become short glides instead of jumps. Big jumps (links, scrollbar drags) cut instead of playing through.
+    // Chapters that build themselves once they arrive (one scroll each), and reset when the reader leaves.
+    const quali = document.getElementById('quali');
+    const towerList = quali.querySelector('.tower-list'), towerPos = quali.querySelector('.tower-pos'), bigPos = quali.querySelector('.pos');
+    const TOWER_ROW = 38;
+    for (let r = 1; r <= 70; r++) {
+      const li = document.createElement('li');
+      li.innerHTML = `<b>${r}</b><i style="--c:${['#e0313b', '#2fbf71', '#9ad7f2', '#ffd24a', '#f08a3c', '#b98bff', '#e6eef4'][r % 7]}"></i><span style="--w:${35 + (r * 37) % 50}%"></span>`;
+      towerList.append(li);
+    }
+    function setRank(pos) {
+      towerList.style.transform = `translateY(${((6 - pos) * TOWER_ROW).toFixed(1)}px)`;
+      towerPos.textContent = bigPos.textContent = 'P' + Math.round(pos);
+    }
+    let climbRaf = 0;
+    const arrivals = [
+      { el: document.getElementById('practice'), enter: el => el.classList.add('in'), leave: el => el.classList.remove('in') },
+      { el: document.getElementById('podium'), enter: el => el.classList.add('in'), leave: el => el.classList.remove('in') },
+      { el: quali,
+        enter: el => {
+          el.classList.add('in'); bigPos.classList.remove('best');
+          const t0 = performance.now() + 550, dur = 2300;
+          const frame = now => {
+            const t = clamp((now - t0) / dur), e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            setRank(62 - 54 * e);
+            if (t < 1) climbRaf = requestAnimationFrame(frame); else { el.classList.add('climbed'); bigPos.classList.add('best'); }
+          };
+          climbRaf = requestAnimationFrame(frame);
+        },
+        leave: el => { cancelAnimationFrame(climbRaf); el.classList.remove('in', 'climbed'); bigPos.classList.remove('best'); setRank(62); },
+        final: el => { cancelAnimationFrame(climbRaf); el.classList.add('in', 'climbed'); bigPos.classList.add('best'); setRank(8); } }
+    ];
+    function arrive() {
+      arrivals.forEach(a => {
+        const r = a.el.getBoundingClientRect();
+        const here = r.top <= innerHeight * .25 && r.bottom > innerHeight * .6;
+        if (here && !a.on) { a.on = true; a.enter(a.el); }
+        else if (!here && a.on && (r.top > innerHeight * .6 || r.bottom < 0)) { a.on = false; a.leave(a.el); }
+      });
+    }
     const SMOOTH_TAU = .07, JUMP = .25;
+    const profile = document.getElementById('driver');
     const shown = new Map();
     let queued = false, rafId = 0, lastFrame = 0, snapNext = true, lastInput = 0, lastDirection = 0;
     let openingWasActive = false;
@@ -1012,6 +1194,13 @@
           detail: { progress: OpeningSequence.storyProgress(sceneProgress(pw.scene)), active: false, film, reducedMotion, snap: true }
         }));
         root.classList.toggle('in-notebook', OpeningSequence.storyProgress(shown.get(pw.scene) ?? sceneProgress(pw.scene)) >= .97);
+        arrive();
+        // WordFlow's full-screen finish must never linger over another chapter
+        const rr = wfFinish.closest('.scene').getBoundingClientRect();
+        if (rr.bottom <= 0 || rr.top >= innerHeight) { wfFinish.style.opacity = '0'; wfFinish.classList.remove('is-on'); celebrate(false); }
+        const dr = profile.getBoundingClientRect();
+        if (dr.top <= innerHeight * .1 && dr.bottom > innerHeight * .5) profile.classList.add('in');
+        else if (dr.bottom < 0 || (dr.top > 0 && OpeningSequence.storyProgress(shown.get(pw.scene) ?? sceneProgress(pw.scene)) < .96)) profile.classList.remove('in'); // back in the opening: build it again next time
       } else {
         snapNext = true;
         dispatchEvent(new CustomEvent('portfolio:opening-frame', {
@@ -1075,11 +1264,11 @@
           ...[...pw.scene.querySelectorAll('.cap:not(.cap-title)')].map(el => { const [, b, c] = el.dataset.cap.split(',').map(Number); return story((b + c) / 2); })
         ],
         driver: [0],
-        practice: [0, .26, .48, .82],        // heading, then each step of the timeline, then the note
-        quali: [.18, .36, .74, .84],         // 2025, the photo, the count to P8, the note
-        race: wfStops,                       // the start, one turn of the data path per move, then the finish
+        practice: [.6],                      // one scroll: 01, 02, 03 build one after another
+        quali: [.6],                         // one scroll: the tower climbs from P62 to P8
+        race: wfStops.slice(1),              // arrive at T1, one turn per move, then the finish
         pit: [.178, .638, .96],              // one project per move (montage holds)
-        podium: [.05, .62, .84],             // heading, podium rises, workbench
+        podium: [.6],                        // one scroll: the podium builds, then the workbench
       };
       const docTop = el => el.getBoundingClientRect().top + scrollY;
       function stops() {
@@ -1096,10 +1285,10 @@
       let anim = 0, lastWheel = 0, lastAbs = 0, touchY = null;
       const active = () => isFilm() && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.querySelector('.lightbox[open]');
       const inOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      function glide(to, done) {
+      function glide(to, done, slow) {
         const from = scrollY, dist = to - from;
         if (Math.abs(dist) < 2) { done?.(); return; }
-        const dur = 650 + Math.min(650, Math.abs(dist) / innerHeight * 300), t0 = performance.now();
+        const dur = slow || 650 + Math.min(650, Math.abs(dist) / innerHeight * 300), t0 = performance.now();
         cancelAnimationFrame(anim);
         const frame = now => {
           const t = Math.min(1, (now - t0) / dur);
@@ -1109,10 +1298,18 @@
         };
         anim = requestAnimationFrame(frame);
       }
+      // the one scroll that opens the notebook plays slower, so the cover can be watched swinging open
+      function bookGlide(from, to) {
+        const top = docTop(pw.scene), travel = pw.scene.offsetHeight - innerHeight;
+        const lo = Math.min(from, to), hi = Math.max(from, to);
+        if (lo < top || hi > top + travel) return undefined;
+        const story = y => OpeningSequence.storyProgress((y - top) / travel);
+        return story(lo) < .92 && story(hi) > .78 ? 1700 : undefined;
+      }
       function step(dir) {
         const list = stops(), y = scrollY;
         const to = dir > 0 ? list.find(s => s > y + 2) : [...list].reverse().find(s => s < y - 2);
-        if (to !== undefined) glide(to);
+        if (to !== undefined) glide(to, null, bookGlide(y, to));
       }
       addEventListener('wheel', e => {
         if (!active() || e.ctrlKey || !e.deltaY) return;
@@ -1148,33 +1345,52 @@
       // grabbing the scrollbar or a link jump takes over from a running glide
       addEventListener('mousedown', () => { cancelAnimationFrame(anim); anim = 0; });
 
-      // First visit only: the opening questions play by themselves, ending on "CURIOSITY," where they
-      // wait for the reader. Any wheel, key, touch or click hands control back at once.
+      // First visit only: the questions play by themselves and stop on "CURIOSITY,"; from there the desk is
+      // scrolled by hand. Any wheel, key, touch or click hands control back at once.
       let auto = false, autoTimer = 0;
       function stopAuto() {
         if (!auto) return;
         auto = false; clearTimeout(autoTimer); cancelAnimationFrame(anim); anim = 0;
       }
       ['wheel', 'keydown', 'touchstart', 'mousedown'].forEach(t => addEventListener(t, stopAuto, { capture: true, passive: true }));
-      function autoplay() {
+      function autoplay(force) {
         let seen = false;
         try { seen = sessionStorage.getItem('openingPlayed') === '1'; } catch (e) {}
-        if (seen || !active() || scrollY > 4) return;
+        if ((seen && !force) || !active() || scrollY > 4) return;
         try { sessionStorage.setItem('openingPlayed', '1'); } catch (e) {}
         auto = true;
         const questions = [...pw.scene.querySelectorAll('.pre')];
+        // one entry per stop, in order: how long to hold once it lands (long enough to finish typing and be
+        // read), and how slowly to glide there. Stop 0 ("why?") is already on screen; the last is "CURIOSITY,",
+        // where the reader takes over (the "scroll to explore" cue comes back there).
+        const plan = [
+          null,
+          ...questions.slice(1).map(q => ({ hold: 380 + q.textContent.length * 40, slow: 620 })),
+          { slow: 700 }
+        ];
         const next = i => {
           if (!auto) return;
           if (i === 1 && scrollY > 4) { auto = false; return; } // the browser restored a scroll position: leave it
           glide(stops()[i], () => {
             if (!auto) return;
-            if (i >= questions.length) { auto = false; return; } // reached "CURIOSITY,"
-            // hold long enough for the line to finish typing and be read
-            autoTimer = setTimeout(() => next(i + 1), 900 + questions[i].textContent.length * 55);
-          });
+            if (i >= plan.length - 1) { auto = false; return; } // landed on p.01
+            autoTimer = setTimeout(() => next(i + 1), plan[i].hold);
+          }, plan[i].slow);
         };
-        autoTimer = setTimeout(() => next(1), 2000);
+        autoTimer = setTimeout(() => next(1), 1300);
       }
+      // The header logo replays the opening from the very top (Story mode only).
+      function replay() {
+        stopAuto(); cancelAnimationFrame(anim); anim = 0;
+        scrollTo(0, 0);
+        pw.retype(); snap(); // redraw even if we were already at the top
+        autoplay(true);
+      }
+      document.querySelector('.brand').addEventListener('click', e => {
+        if (!active()) return; // Read-as-page: an ordinary back-to-top link
+        e.preventDefault();
+        replay();
+      });
       return { stops, step, autoplay };
     })();
     window.portfolioStops = stepper.stops;
