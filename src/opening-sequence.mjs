@@ -22,7 +22,7 @@ export function openingState(progress) {
   const p = clamp(progress);
   return {
     sceneReveal: beat(p, .12, .5),
-    notebookOpen: beat(p, .78, .92),
+    notebookOpen: beat(p, .8, .92),
     pageFade: beat(p, .96, 1)
   };
 }

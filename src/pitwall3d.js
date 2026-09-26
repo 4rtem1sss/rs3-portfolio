@@ -484,7 +484,19 @@ function start() {
   void coverBoard;
 
   // ---------- render ----------
-  const target = new T.Vector3(), away = new T.Vector3();
+  const target = new T.Vector3(), away = new T.Vector3(), corner = new T.Vector3();
+  // "click to open": the page needs the notebook's on-screen box, and the cover lifts a little on hover
+  let peek = 0, peekTarget = 0, peekRaf = 0, lastRenderP = 0;
+  function peekStep() {
+    peek += (peekTarget - peek) * .22;
+    if (Math.abs(peekTarget - peek) < .01) peek = peekTarget;
+    renderAt(lastRenderP);
+    peekRaf = peek === peekTarget ? 0 : requestAnimationFrame(peekStep);
+  }
+  addEventListener('portfolio:notebook-peek', event => {
+    peekTarget = event.detail.on ? 1 : 0;
+    if (!peekRaf) peekRaf = requestAnimationFrame(peekStep);
+  });
   let width = 0, height = 0, lastP = -1, failed = false;
   screens.forEach(s => drawScreen(s, 0));
   function renderAt(p) {
@@ -503,7 +515,17 @@ function start() {
     if (narrow > 0) camera.position.add(away.subVectors(camera.position, target).multiplyScalar(.45 * narrow));
     camera.lookAt(target);
     const state = openingState(p);
-    hinge.rotation.z = Math.PI * .985 * state.notebookOpen;
+    hinge.rotation.z = Math.PI * .985 * state.notebookOpen + .2 * peek * (1 - state.notebookOpen);
+    lastRenderP = p;
+    camera.updateMatrixWorld();
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const [sx, sz] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+      corner.set(nbAnchor.x + sx * (NB.w / 2 + .006), deskTop + .02, nbAnchor.z + sz * (NB.d / 2 + .006)).project(camera);
+      const px = (corner.x + 1) / 2 * width, py = (1 - corner.y) / 2 * height;
+      x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py);
+    }
+    frame.style.setProperty('--nb-x', x0.toFixed(0) + 'px'); frame.style.setProperty('--nb-y', y0.toFixed(0) + 'px');
+    frame.style.setProperty('--nb-w', (x1 - x0).toFixed(0) + 'px'); frame.style.setProperty('--nb-h', (y1 - y0).toFixed(0) + 'px');
     const ledOn = beat(p, .58, .63); // lights as "to build one myself" arrives
     ledMat.emissiveIntensity = 3 * ledOn; ledGlow.material.opacity = .9 * ledOn;
     if (Math.abs(p - lastP) > .002 || lastP < 0) { screens.forEach(s => drawScreen(s, p)); lastP = p; }
