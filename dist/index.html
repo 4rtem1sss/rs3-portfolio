@@ -216,23 +216,23 @@
     .interests li b{font-weight:500}
     .interests li span{color:var(--muted);font-size:15px}
     /* Contact: an F1 broadcast team-radio panel. The message "transmits" once when it arrives on screen. */
-    .radio-card{position:relative;margin:0;background:linear-gradient(180deg,#0b1f33,#06131f 60%);border-radius:10px;color:#fff;box-shadow:0 0 0 1px #ffffff1c,0 34px 60px -28px #000d;overflow:hidden}
-    .rc-top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:16px 22px;background:#ffffff08;border-bottom:1px solid #ffffff14}
+    .radio-card{position:relative;margin:0;background:linear-gradient(180deg,#0d2742,#071829 70%);border-radius:10px;color:#fff;box-shadow:0 0 0 1.5px #9ad7f280,0 0 48px -12px #9ad7f24d,0 34px 60px -28px #000d;overflow:hidden}
+    .rc-top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:16px 22px;background:#9ad7f21a;border-bottom:1px solid #9ad7f240}
     .rc-no{display:grid;place-content:center;min-width:66px;height:50px;padding:0 10px;border-radius:4px;background:var(--ice);color:#0f2b47;font:italic 800 26px/1 var(--sans);letter-spacing:-.02em}
     .rc-label{margin:0;font:700 12px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--ice)}
-    .rc-name{margin:3px 0 0;font:700 25px/1.1 var(--sans);letter-spacing:.02em;text-transform:uppercase}
-    .rc-live{display:flex;align-items:center;gap:8px;margin:0;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#a7bdcd}
+    .rc-name{margin:3px 0 0;font:700 27px/1.1 var(--sans);letter-spacing:.02em;text-transform:uppercase}
+    .rc-live{display:flex;align-items:center;gap:8px;margin:0;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#d6e4ed}
     .rc-live i{width:9px;height:9px;border-radius:50%;background:var(--red);animation:rc-live 1.6s ease-out infinite}
     @keyframes rc-live{0%{box-shadow:0 0 0 0 #e0313bb0}70%,100%{box-shadow:0 0 0 9px #e0313b00}}
     .rc-body{padding:18px 24px 22px}
-    .rc-wave{display:flex;align-items:center;gap:3px;height:38px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 28%);mask-image:linear-gradient(90deg,transparent,#000 28%)}
+    .rc-wave{display:flex;align-items:center;gap:3px;height:38px;-webkit-mask-image:linear-gradient(90deg,#0003,#000 16%);mask-image:linear-gradient(90deg,#0003,#000 16%)}
     .rc-wave span{flex:1;height:100%;border-radius:2px;background:var(--ice);transform:scaleY(.06);transition:transform 80ms linear}
     .rc-quote{margin:14px 0 16px;font:600 clamp(20px,1.7vw,24px)/1.32 var(--sans);letter-spacing:-.01em;text-wrap:balance}
     .rc-quote p{margin:0}
-    .rc-quote .w{opacity:.14;transition:opacity .18s}.rc-quote .w.on{opacity:1}
+    .rc-quote .w{opacity:.24;transition:opacity .18s}.rc-quote .w.on{opacity:1}
     .rc-lines{margin:0}
-    .rc-lines div{display:grid;grid-template-columns:128px 1fr;align-items:center;gap:12px;min-height:46px;border-top:1px solid #ffffff17}
-    .rc-lines dt{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#a7bdcd}
+    .rc-lines div{display:grid;grid-template-columns:128px 1fr;align-items:center;gap:12px;min-height:46px;border-top:1px solid #9ad7f22e}
+    .rc-lines dt{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#cfe0ec}
     .rc-lines dt b{display:inline-block;min-width:38px;color:var(--ice);font-weight:600}
     .rc-lines dd{display:flex;align-items:baseline;gap:14px;margin:0;font:500 18px var(--sans);overflow-wrap:anywhere}
     .rc-lines a,.rc-email{color:#fff;text-decoration:none;background:linear-gradient(var(--ice),var(--ice)) 0 100%/100% 2px no-repeat;padding-bottom:2px;transition:color .2s,background-size .25s cubic-bezier(.22,1,.36,1)}
@@ -240,7 +240,7 @@
     /* the email address itself copies on click; the hint says so on hover and confirms after */
     .rc-email{border:0;margin:0;padding:0 0 2px;font:inherit;cursor:copy}
     .rc-email:focus-visible,.radio-card a:focus-visible{outline:2px solid var(--ice);outline-offset:3px}
-    .rc-hint{font:12px var(--mono);color:#a7bdcd;opacity:0;transition:opacity .2s;white-space:nowrap}
+    .rc-hint{font:12px var(--mono);color:#cfe0ec;opacity:0;transition:opacity .2s;white-space:nowrap}
     .rc-email:hover+.rc-hint,.rc-email:focus-visible+.rc-hint,.rc-hint.done{opacity:1}
     .rc-hint.done{color:var(--ice)}
     .footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 0 40px;border-top:1px solid var(--line);font:12px var(--mono);color:var(--muted)}
@@ -634,7 +634,7 @@
               </ul>
             </div>
             <div>
-              <aside class="radio-card" aria-labelledby="contact-title" data-fx="rise" data-at=".45,.95">
+              <aside class="radio-card" aria-labelledby="contact-title" data-fx="rise" data-at=".25,.7">
                 <header class="rc-top">
                   <span class="rc-no" aria-hidden="true">RS3</span>
                   <div><p class="rc-label">Team radio</p><h3 class="rc-name" id="contact-title">Rapeepat Sawek</h3></div>
@@ -1096,7 +1096,7 @@
         }
         return v * rand(.5, 1.12) + rand(0, .05); // voice jitter + a little line noise
       }
-      const paint = () => bars.forEach((b, i) => { b.style.transform = `scaleY(${Math.max(.06, Math.min(1, level[i])).toFixed(3)})`; });
+      const paint = () => bars.forEach((b, i) => { b.style.transform = `scaleY(${Math.max(.1, Math.min(1, level[i])).toFixed(3)})`; });
       function loop(now) {
         acc += now - (last || now); last = now;
         while (acc >= STEP) { acc -= STEP; level.shift(); level.push(envelope(now)); }
