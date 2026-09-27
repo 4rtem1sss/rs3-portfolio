@@ -512,7 +512,10 @@ function start() {
     sampleOpeningCamera(p, camera.position, target);
     // Narrow screens: step back along the view line so the desk stays readable until the notebook close-up.
     const narrow = (1 - beat(camera.aspect, .6, 1.2)) * (1 - beat(p, .7, .9));
-    if (narrow > 0) camera.position.add(away.subVectors(camera.position, target).multiplyScalar(.45 * narrow));
+    if (narrow > 0) {
+      camera.position.add(away.subVectors(camera.position, target).multiplyScalar(.3 * narrow));
+      target.y += .16 * narrow; // aim higher: the desk sits lower in the frame, window and shelf above it
+    }
     camera.lookAt(target);
     const state = openingState(p);
     hinge.rotation.z = Math.PI * .985 * state.notebookOpen + .2 * peek * (1 - state.notebookOpen);

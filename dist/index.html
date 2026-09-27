@@ -56,6 +56,12 @@
     .sessions a:focus-visible{outline-offset:6px}
     .view-mode{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px;font:12px var(--mono);cursor:pointer;color:var(--ink);white-space:nowrap}
     .view-mode:hover{border-color:var(--blue);color:var(--blue)}
+    .hdr-tools{display:flex;align-items:center;gap:8px}
+    .sound-toggle{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px 5px 9px;font:12px var(--mono);cursor:pointer;color:var(--ink);white-space:nowrap}
+    .sound-toggle:hover{border-color:var(--blue);color:var(--blue)}
+    .sound-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .sound-toggle .wv{display:none}.sfx-on .sound-toggle .wv{display:inline}.sfx-on .sound-toggle .mute{display:none}
+    .sfx-on .sound-toggle{border-color:#ffd24a80;color:var(--blue)}
     .toast{position:fixed;left:50%;top:calc(var(--head) + 14px);z-index:48;transform:translate(-50%,-20px);opacity:0;padding:8px 16px;border-radius:4px;background:var(--panel2);color:#fff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;transition:opacity .3s,transform .4s cubic-bezier(.3,1.5,.5,1);pointer-events:none;display:flex;gap:10px;align-items:center}
     .toast:before{content:'';width:10px;height:10px;border-radius:2px;background:var(--purple)}
     .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -154,13 +160,13 @@
     .tower{width:min(380px,70%);background:#06131f;border-radius:8px;box-shadow:0 0 0 1px #ffffff1f,0 30px 50px -25px #000c;overflow:hidden}
     .tower-head{display:flex;justify-content:space-between;margin:0;padding:11px 16px;background:#0b1f33;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#cfe0ec}
     .tower-head span:last-child{display:flex;align-items:center;gap:7px;color:#d6b8ff}.tower-head i{width:7px;height:7px;border-radius:50%;background:var(--purple)}
-    .tower-win{--row:38px;position:relative;height:calc(var(--row) * 11);overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+    .tower-win{--row:38px;--rows:11;--mid:5;position:relative;height:calc(var(--row) * var(--rows));overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
     .tower-list{list-style:none;margin:0;padding:0;will-change:transform}
     .tower-list li,.tower-me{display:grid;grid-template-columns:44px 10px 1fr auto;align-items:center;gap:12px;height:var(--row);padding:0 16px}
     .tower-list li{border-top:1px solid #ffffff0d;font:600 14px var(--mono);color:#a7bdcd}
     .tower-list li i,.tower-me i{width:10px;height:10px;border-radius:2px;background:var(--c,#9ad7f2)}
     .tower-list li span{height:8px;border-radius:4px;background:#ffffff1f;width:var(--w,60%)}
-    .tower-me{position:absolute;left:0;right:0;top:calc(var(--row) * 5);background:#2a1f55;box-shadow:inset 0 0 0 1.5px var(--purple);color:#fff;font:700 15px var(--mono)}
+    .tower-me{position:absolute;left:0;right:0;top:calc(var(--row) * var(--mid));background:#2a1f55;box-shadow:inset 0 0 0 1.5px var(--purple);color:#fff;font:700 15px var(--mono)}
     .tower-me i{--c:var(--purple)}
     .tower-me span{font:600 15px var(--sans)}
     .tower-me em{font:700 13px var(--mono);font-style:normal;color:#d6b8ff}
@@ -180,7 +186,7 @@
     .film #practice .draw *{stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.65,0,.35,1);transition-delay:calc(var(--i) * 300ms + 350ms)}
     .film #practice.in .draw *{stroke-dashoffset:0}
     .film #practice .laps:before{transform-origin:left;transform:scaleX(0);transition:transform 1.3s cubic-bezier(.22,1,.36,1)}
-    .film #practice.in .laps:before{transform:none}
+    .film #practice.in .laps:before{transform:none!important}
     .film #practice .telemetry{opacity:0;transition:opacity .5s 1.35s}
     .film #practice.in .telemetry{opacity:1}
     /* Proof: one scroll, P1 rises first, then P2 and P3, then the awards, the +54 and the workbench */
@@ -229,7 +235,7 @@
     .film .wf-stage{flex:1;min-height:0}
     .film .wf-map{position:absolute;inset:0;width:100%;height:100%}
     .film .wf-pops{position:absolute;inset:0;display:block;margin:0;pointer-events:none}
-    .film .wf-pop{position:absolute;top:50%;width:min(540px,46%);translate:0 -50%;opacity:0;will-change:transform,opacity}
+    .film .wf-pop{position:absolute;top:50%;width:min(540px,46%,calc((100vh - var(--head) - 430px) * 1.6));translate:0 -50%;opacity:0;will-change:transform,opacity}
     .film .wf-pop[data-side=right]{right:0;transform-origin:0 50%}
     .film .wf-pop[data-side=left]{left:0;transform-origin:100% 50%}
     .film .wf-pop.is-on{pointer-events:auto}
@@ -367,39 +373,100 @@
     .film .stop{flex:0 0 min(78vw,1040px)}
     .film .pit .wrap{max-width:none;padding:0}.film .pit-head{max-width:1240px;margin:0 auto 28px;padding:0 56px}
 
+    /* Tablet: same structure as desktop, single columns where two would crowd */
     @media(max-width:1000px){
       .wrap{padding:0 30px}
       .grid-card,.driver,.quali,.next,.podium-wrap{grid-template-columns:1fr;gap:28px}
       .next{grid-template-rows:none}.next>div:last-child{grid-column:auto;grid-row:auto}
       .wf-pops{grid-template-columns:1fr}
-      .laps{grid-template-columns:1fr;gap:14px}
       .setup{grid-template-columns:1fr 1fr}
       .stop{grid-template-columns:1fr;gap:18px}
       .film .pit-head{padding:0 30px}
       .sessions a:not([aria-current=true]){display:none}
-      .film .laps{gap:10px;margin-top:18px}.film .lap{padding:12px 16px;display:grid;grid-template-columns:90px 1fr;gap:4px 14px;align-items:center}.film .lap svg{grid-row:span 3;height:70px;margin:0}.film .lap h3{font-size:19px}.film .lap p{font-size:13.5px}
-      .film .driver .photo{max-width:170px}.film .driver{gap:16px}
+      .laps{gap:28px}.lap svg{width:150px}
+      .film .driver{grid-template-columns:auto 1fr;gap:36px}
       .film .quali .photo{display:none}
       .film .stop .photo{max-width:420px}
       .film .podium-wrap{gap:18px}.film .block{font-size:26px}.film .step.p1 .block{height:120px}.film .step.p2 .block{height:90px}.film .step.p3 .block{height:66px}
     }
-    @media(max-width:640px){
-      :root{--head:96px}
-      .wrap{padding:0 20px}
-      .header .wrap{flex-wrap:wrap;align-content:center;gap:8px 12px}
-      .brand{font-size:15px}.ticker{order:3;flex-basis:100%;max-width:none}
-      .margin-line{left:9px}
-      .gantry{gap:8px;padding:10px 12px}.gantry i{width:34px;height:34px}
-      .film .driver h1{font-size:46px}.film .driver .photo{max-width:130px;padding:6px 6px 22px}.film .meta{font-size:13.5px;margin-top:12px}.film .one{font-size:16px}
-      .film .pos{font-size:110px}.film .qrow{padding:9px 12px;grid-template-columns:50px 1fr}.film .qrow p{font-size:13.5px}
-      .film .stop{flex-basis:86vw;padding:18px}.film .track-x{padding:0 7vw;gap:4vw}.stop h3{font-size:36px}.film .stop .job{font-size:15px}.film .pit-head{padding:0 20px;margin-bottom:14px}
-      .step .award span{font-size:12px}.step .award b{font-size:18px}
-      .setup{grid-template-columns:1fr}
-      .film .big{font-size:40px}
+    /* Phone: purpose-built layouts that fit one screen per stop */
+    @media(max-width:700px){
+      :root{--head:56px}
+      .wrap{padding:0 18px 0 40px} /* clear of the notebook's binding rings */
+      .header .wrap{gap:10px;padding:0 14px}
+      .brand{font-size:15px;gap:8px}.brand svg{width:20px;height:20px}
+      .ticker{min-width:0}
+      .sound-toggle{padding:6px 7px}.sound-toggle span{display:none}
+      .view-mode{padding:5px 10px;font-size:11px}
+      .margin-line{display:none}
+      .big,.film .big{font-size:clamp(30px,9vw,40px);line-height:1.02}
+      .session-tag{font-size:10.5px;letter-spacing:.08em;gap:8px;margin-bottom:8px}
+      .one,.film .one{font-size:15px}
       .film .telemetry{display:none}
+      /* profile */
+      .film .driver{grid-template-columns:1fr;gap:14px;justify-items:start}
+      .film .driver .photo{width:min(60vw,calc((100vh - 470px) / 1.6))}
+      .film .driver h1{font-size:44px}.film .meta{font-size:13.5px;margin-top:10px}.car-no{font-size:28px}
+      /* origin: a vertical timeline, sketch beside each step */
+      .laps{grid-template-columns:1fr;gap:18px;margin-top:22px}
+      .laps:before{left:7px;right:auto;top:8px;bottom:8px;width:1.5px;height:auto;background:linear-gradient(var(--blue),#ffd24a33)}
+      .lap{display:grid;grid-template-columns:1fr 64px;column-gap:12px;padding:0 0 0 30px}
+      .lap:before{top:2px}
+      .lap-no{grid-column:1/-1}
+      .lap svg{grid-column:2;grid-row:2/span 2;width:64px;margin:0;align-self:center}
+      .lap h3{font-size:19px;grid-column:1}.lap p{font-size:14px;grid-column:1;max-width:none}
+      .film #practice .laps:before{transform-origin:top;transform:scaleY(0)}
+      /* growth: a shorter tower */
+      .film .pos{font-size:88px}.film .qrow{padding:9px 12px;grid-template-columns:50px 1fr}.film .qrow p{font-size:13.5px}.film .qrow b{font-size:17px}
+      .film .quali{gap:16px}.film .qrows{margin-top:12px}
+      .tower{width:100%}.tower-win{--row:30px;--rows:7;--mid:3}
+      .tower-list li,.tower-me{font-size:13px}
+      /* purpose: the map on top, each part slides up as a full-width sheet */
+      .film #race .wf-head h2{font-size:clamp(28px,8vw,36px)}
+      .film #race .wf-head .one{font-size:14px;margin-top:6px}
+      .film .wf-map{inset:0 0 auto 0;height:auto;aspect-ratio:520/300}
+      .film .wf-pop,.film .wf-pop[data-side=left],.film .wf-pop[data-side=right]{top:auto;bottom:0;left:0;right:0;width:auto;translate:none;transform-origin:50% 100%}
+      .wf-text{padding:12px 16px 14px}.wf-text h3{font-size:19px}.wf-text p{font-size:14px}
+      .wf-kicker{font-size:11px}
+      .film .wf-pop.wf-finish{top:auto;bottom:14px;left:3vw;right:3vw;width:auto;translate:none}
+      .film .wf-finish .wf-text{position:static;padding:14px 16px 16px;background:none}
+      .film .wf-finish .wf-text h3{font-size:21px}.film .wf-finish .wf-text p{font-size:14px}
+      .film .award-badge{width:52px;height:52px;margin-left:-26px;top:14px}.film .award-badge svg{width:28px;height:28px}
+      .fin-flag{transform:scale(.62)}
+      /* team */
+      .film .stop{flex-basis:86vw;padding:18px}.film .track-x{padding:0 7vw;gap:4vw}.stop h3{font-size:36px}.film .stop .job{font-size:15px}.film .pit-head{padding:0 20px 0 40px;margin-bottom:14px}
+      /* proof */
+      .step .award span{font-size:12px}.step .award b{font-size:18px}
       .film .parc{margin-top:16px}.film .parc h3{margin-bottom:8px;font-size:10.5px}.film .setup{grid-template-columns:1fr 1fr;gap:8px}.film .setup div{padding:8px 10px}.film .setup b{font-size:9.5px;margin-bottom:5px}.film .setup li{font-size:11.5px;padding:2px 6px}
       .film .setup li small{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-      .film .podium{margin-top:14px}.film .fastest{padding:12px 14px}.film .fastest b{font-size:26px}
+      .film .podium{margin-top:14px}.film .fastest{padding:12px 14px}.film .fastest b{font-size:30px}
+      /* future */
+      .next{gap:14px}.film .scene.free .frame{padding:calc(var(--head) + 24px) 0 32px}
+      .pw-prelude .pre{font-size:clamp(26px,8vw,40px)}
+      .interests{margin-top:14px}.interests li{padding:9px 0;font-size:15px}.interests li span{font-size:14px}
+      .rc-top{padding:12px 14px;gap:12px}.rc-no{min-width:52px;height:40px;font-size:21px}.rc-name{font-size:19px}.rc-live{display:none}
+      .rc-body{padding:12px 16px 14px}.rc-wave{height:26px}.rc-quote{font-size:17px;margin:10px 0 12px}
+      .rc-lines div{grid-template-columns:96px 1fr;min-height:38px}.rc-lines dd{font-size:15px}.rc-hint{display:none}
+    }
+    /* Short phones: the WordFlow intro gives its room to the map and cards; the team cards tighten */
+    @media(max-width:700px) and (max-height:760px){
+      .film #race .wf-head .one{display:none}
+      .film .pit-head h2{font-size:28px!important}
+      .film .stop{gap:10px;padding:14px}.film .stop .photo{width:78%;justify-self:center}
+      .stop h3{font-size:30px;margin:4px 0 6px}.film .stop .job{font-size:14px}.stop .stamp{margin-top:8px;font-size:18px}
+    }
+    /* Short landscape screens: everything a notch smaller so each stop still fits */
+    @media(min-width:701px) and (max-height:700px){
+      .film .big{font-size:clamp(34px,4.6vw,60px)}
+      .film .pos{font-size:clamp(90px,14vw,180px)}
+      .tower-win{--row:32px}
+      .film .laps{margin-top:24px}.lap svg{height:auto;width:150px;margin:8px 0 6px}
+      /* the last page keeps to one screen: a compact team radio */
+      .film .scene.free .frame{padding:calc(var(--head) + 28px) 0 32px}
+      .rc-top{padding:10px 18px}.rc-no{height:42px;min-width:58px;font-size:22px}.rc-name{font-size:22px}
+      .rc-body{padding:12px 20px 14px}.rc-wave{height:26px}.rc-quote{font-size:19px;margin:10px 0 12px}
+      .rc-lines div{min-height:38px}.rc-lines dd{font-size:16px}
+      .interests li{padding:9px 0}
     }
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.speed{display:none}}
     /* OPENING: a quiet question reveals a bedroom study desk, then moves into the notebook. */
@@ -513,7 +580,10 @@
           <li><a href="#next" title="Future: where curiosity leads">Future<span class="tab-p" aria-hidden="true"></span></a></li>
         </ol>
       </nav>
-      <button class="view-mode" type="button" aria-pressed="false">Page view</button>
+      <div class="hdr-tools">
+        <button class="sound-toggle" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path class="wv" d="M15.5 9.5a3.5 3.5 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/><path class="mute" d="M16 10l5 5m0-5-5 5"/></svg><span>Sound off</span></button>
+        <button class="view-mode" type="button" aria-pressed="false">Page view</button>
+      </div>
     </div>
   </header>
 
@@ -784,14 +854,14 @@
               <p class="session-tag"><b>FUTURE</b>p.07 · where curiosity leads</p>
               <h2 class="big" id="next-title">Bigger systems. <span class="mark">Same curiosity.</span></h2>
               <p class="one">Devices, the networks between them, and the people who rely on them. That's where I'm heading next.</p>
-              <ul class="interests" aria-label="What I do for fun">
+              <ul class="interests" data-stop aria-label="What I do for fun">
                 <li><b>Formula 1</b><span>the engineering: thousands of parts working as one machine</span></li>
                 <li><b>CTF puzzles</b><span>how networks behave, and how they break</span></li>
                 <li><b>Taking things apart</b><span>if it works, I want to know how</span></li>
               </ul>
             </div>
             <div>
-              <aside class="radio-card" aria-labelledby="contact-title" data-fx="rise" data-at=".25,.7">
+              <aside class="radio-card" data-stop aria-labelledby="contact-title" data-fx="rise" data-at=".25,.7">
                 <header class="rc-top">
                   <span class="rc-no" aria-hidden="true">RS3</span>
                   <div><p class="rc-label">Team radio</p><h3 class="rc-name" id="contact-title">Rapeepat Sawek</h3></div>
@@ -818,6 +888,120 @@
   <div class="wrap"><footer class="footer"><span>Rapeepat Sawek · curiosity in motion</span><span>#RS3</span><a href="#top">Back to curiosity ↑</a></footer></div>
 
   <script>
+    // Sound: every effect is synthesised with Web Audio (no audio files). Off by default and remembered;
+    // browsers only start audio after a click or key press, so a remembered "on" wakes on the first one.
+    const sfx = (() => {
+      let ctx = null, master = null, noiseBuf = null, lastKey = 0;
+      let on = false;
+      try { on = localStorage.getItem('sfx') === 'on'; } catch (e) {}
+      function init() {
+        if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        ctx = new AC();
+        master = ctx.createGain(); master.gain.value = .6;
+        const comp = ctx.createDynamicsCompressor();
+        master.connect(comp); comp.connect(ctx.destination);
+        noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+        const d = noiseBuf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      }
+      function noise(t, dur, { type = 'bandpass', f = 1200, f2, q = 1, gain = .3, attack = .005 } = {}) {
+        const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+        const filter = ctx.createBiquadFilter(); filter.type = type; filter.Q.value = q;
+        filter.frequency.setValueAtTime(f, t); if (f2) filter.frequency.exponentialRampToValueAtTime(f2, t + dur);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(gain, t + attack); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+        src.connect(filter); filter.connect(g); g.connect(master);
+        src.start(t, Math.random() * .5); src.stop(t + dur + .05);
+        return g;
+      }
+      function tone(t, freq, dur, { type = 'sine', gain = .2, attack = .004, f2 } = {}) {
+        const o = ctx.createOscillator(); o.type = type;
+        o.frequency.setValueAtTime(freq, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(gain, t + attack); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+        o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + .05);
+      }
+      const sounds = {
+        key(t) { if (t - lastKey < .025) return; lastKey = t; noise(t, .035, { f: 2400 + Math.random() * 1800, q: 2.5, gain: .11, attack: .001 }); tone(t, 170 + Math.random() * 60, .03, { type: 'triangle', gain: .045, attack: .001 }); },
+        whoosh(t, k = 1) { noise(t, .45 + .25 * k, { f: 360, f2: 1800, q: .8, gain: .028 * k, attack: .18 }); },
+        // the questions: a mechanical typewriter (sharp strike, body thump, short metal ring), bell at line end
+        typewriter(t) {
+          if (t - lastKey < .03) return; lastKey = t;
+          noise(t, .028, { type: 'highpass', f: 2800, q: .7, gain: .16, attack: .0008 });
+          noise(t + .004, .05, { f: 1100 + Math.random() * 500, q: 1.4, gain: .1, attack: .001 });
+          tone(t, 95 + Math.random() * 25, .06, { type: 'triangle', gain: .09, attack: .001, f2: 60 });
+          tone(t + .002, 2600 + Math.random() * 500, .035, { gain: .018, attack: .001 });
+        },
+        bell(t) { tone(t, 2093, .9, { gain: .045, attack: .002 }); tone(t, 4186, .5, { gain: .012, attack: .002 }); },
+        // "CURIOSITY,": each letter lands like a hammer, the comma ends on a deep boom
+        impact(t, i = 0, n = 1) {
+          const last = i >= n - 1;
+          noise(t, .07, { type: 'highpass', f: 1600, q: .6, gain: .2, attack: .0008 });
+          tone(t, 70 - i * 2, last ? 1.6 : .32, { gain: last ? .42 : .26, attack: .002, f2: last ? 32 : 48 });
+          noise(t, last ? 1.4 : .25, { type: 'lowpass', f: last ? 420 : 260, q: .6, gain: last ? .2 : .1, attack: .003 });
+          if (last) { tone(t + .02, 140, 1.8, { type: 'triangle', gain: .06, attack: .01, f2: 90 }); noise(t + .05, 1.6, { f: 700, f2: 180, q: .5, gain: .05, attack: .2 }); }
+        },
+        // after "CURIOSITY," the words are written on the notebook page: a pen, not keys
+        pen(t) { if (t - lastKey < .03) return; lastKey = t; noise(t, .07 + Math.random() * .04, { f: 3800 + Math.random() * 1500, f2: 2600, q: 2.2, gain: .05, attack: .012 }); },
+        // opening the notebook: the cover swings, the pages riffle, the book settles
+        bookflip(t) {
+          noise(t, .5, { f: 500, f2: 1600, q: .6, gain: .08, attack: .15 });
+          for (let i = 0; i < 9; i++) { const d = .18 + i * (.055 - i * .0035); noise(t + d, .045, { type: 'highpass', f: 2600 + i * 180, q: .8, gain: .07 - i * .004, attack: .002 }); }
+          noise(t + .78, .22, { type: 'lowpass', f: 480, q: .7, gain: .16, attack: .004 }); tone(t + .78, 110, .2, { gain: .08, f2: 70 });
+        },
+        // a rubber stamp landing on paper
+        stamp(t) {
+          tone(t, 120, .18, { gain: .3, attack: .001, f2: 55 });
+          noise(t, .09, { type: 'lowpass', f: 900, q: .8, gain: .22, attack: .001 });
+          noise(t + .01, .05, { type: 'highpass', f: 3000, q: .7, gain: .06, attack: .001 });
+        },
+        page(t) { noise(t, .7, { type: 'highpass', f: 1800, f2: 5000, q: .5, gain: .1, attack: .12 }); [.08, .24, .4].forEach(d => noise(t + d, .06, { f: 3000, q: 3, gain: .05, attack: .002 })); noise(t + .6, .2, { type: 'lowpass', f: 520, q: .7, gain: .15, attack: .004 }); },
+        pop(t) { tone(t, 620, .16, { gain: .11, f2: 930 }); tone(t + .05, 930, .18, { gain: .06 }); },
+        blip(t, i = 0) { tone(t, 520 + i * 130, .12, { gain: .07 }); },
+        tick(t, n) { tone(t, 900 + (62 - n) * 16, .035, { type: 'square', gain: .02, attack: .001 }); },
+        thud(t, i = 0) { tone(t, 92 - i * 10, .35, { gain: .28, f2: 44 }); noise(t, .12, { type: 'lowpass', f: 320, gain: .1, attack: .002 }); },
+        drop(t) { noise(t, .09, { type: 'lowpass', f: 700, gain: .14, attack: .002 }); tone(t, 140, .18, { gain: .1, f2: 80 }); },
+        radioIn(t) { tone(t, 1250, .08, { gain: .1 }); tone(t + .12, 1250, .08, { gain: .1 }); noise(t + .2, .35, { f: 2600, q: .6, gain: .045, attack: .02 }); },
+        radioOut(t) { noise(t, .18, { f: 2400, q: .6, gain: .045 }); tone(t + .18, 950, .11, { gain: .09 }); },
+        flags(t) {
+          noise(t, .35, { f: 280, f2: 1800, q: .7, gain: .11, attack: .1 });
+          const g = noise(t + .25, 1.05, { f: 900, q: .9, gain: .08, attack: .05 });
+          const lfo = ctx.createOscillator(), depth = ctx.createGain(); lfo.frequency.value = 13; depth.gain.value = .05;
+          lfo.connect(depth); depth.connect(g.gain); lfo.start(t + .25); lfo.stop(t + 1.35);
+          noise(t + 1.1, .4, { f: 1600, f2: 300, q: .7, gain: .09, attack: .03 });
+        },
+        trophy(t) {
+          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => { tone(t + i * .09, f, 1.2 - i * .1, { type: 'triangle', gain: .085, attack: .006 }); tone(t + i * .09, f * 2, .6, { gain: .022 }); });
+          for (let i = 0; i < 9; i++) noise(t + .35 + Math.random() * .6, .05, { f: 2500 + Math.random() * 3000, q: 4, gain: .06, attack: .001 });
+        },
+        copy(t) { tone(t, 880, .08, { gain: .07 }); tone(t + .07, 1320, .1, { gain: .06 }); },
+        toggle(t) { tone(t, 740, .1, { gain: .09 }); tone(t + .08, 1110, .14, { gain: .07 }); }
+      };
+      ['pointerdown', 'keydown', 'touchend'].forEach(type => addEventListener(type, () => { if (on) init(); }, { passive: true }));
+      return {
+        get on() { return on; },
+        set(value) {
+          on = value;
+          try { localStorage.setItem('sfx', on ? 'on' : 'off'); } catch (e) {}
+          if (on) init();
+          document.documentElement.classList.toggle('sfx-on', on);
+        },
+        play(name, ...args) {
+          if (!on || !ctx || ctx.state !== 'running' || document.hidden) return;
+          try { sounds[name](ctx.currentTime, ...args); } catch (e) {}
+        }
+      };
+    })();
+    window.portfolioSfx = sfx;
+    {
+      const toggle = document.querySelector('.sound-toggle'), label = toggle.querySelector('span');
+      const show = () => { toggle.setAttribute('aria-pressed', String(sfx.on)); label.textContent = sfx.on ? 'Sound on' : 'Sound off'; document.documentElement.classList.toggle('sfx-on', sfx.on); };
+      toggle.addEventListener('click', () => { sfx.set(!sfx.on); show(); if (sfx.on) setTimeout(() => sfx.play('toggle'), 80); });
+      show();
+    }
+
     /* ---------- Scroll-played personal story ---------- */
     const root = document.documentElement;
     const clamp = v => Math.min(1, Math.max(0, v));
@@ -913,9 +1097,11 @@
       clearTimeout(awardTimer);
       if (!on) { wfFinish.classList.remove('awarded'); finFlags.stop(); confetti.clear(); return; }
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) { wfFinish.classList.add('awarded'); return; }
-      finFlags.wave(wfFinish.getBoundingClientRect());           // 1. the flags swoosh over the line
+      finFlags.wave(wfFinish.getBoundingClientRect());
+      sfx.play('flags');           // 1. the flags swoosh over the line
       awardTimer = setTimeout(() => {                             // 2. then the trophy: frame, badge, confetti
         wfFinish.classList.add('awarded');
+        sfx.play('trophy');
         confetti.fire(wfFinish.getBoundingClientRect());
       }, 1350);
     }
@@ -935,6 +1121,7 @@
         focus = Math.max(focus, w);
         card.style.opacity = w.toFixed(3);
         card.style.transform = `scale(${(.7 + .3 * w).toFixed(4)})`;
+        if (w > .5 && !card.classList.contains('is-on') && card !== wfFinish) sfx.play('pop');
         card.classList.toggle('is-on', w > .5);
         turns[i]?.classList.toggle('active', w > .5);
       });
@@ -988,6 +1175,9 @@
         const hold = k === seg + (ramp > .5 ? 1 : 0) ? (k === seg ? clamp(f / .22) : 1) : (k < current ? 1 : 0);
         const e = ease(hold);
         stamp.style.opacity = e > .05 ? 1 : 0;
+        const landed = e > .9;
+        if (landed && stamp.dataset.landed !== '1') sfx.play('stamp');
+        stamp.dataset.landed = landed ? '1' : '0';
         stamp.style.transform = `rotate(-8deg) scale(${1 + (1 - e) * 2.4})`;
         stop.style.opacity = 1 - Math.min(.55, Math.abs(pos - k) * .55);
       });
@@ -1017,17 +1207,17 @@
       let titleGate = 0, hintLevel = 1;
       // Each line types itself (time-based, with a human rhythm) once its scroll step lands, and un-types
       // if the reader scrolls back past it. Letters are pre-laid-out and only revealed, so nothing shifts.
-      function typed(el, speed) {
+      function typed(el, speed, voice = 'typewriter') {
         const chars = [...el.textContent].map(c => { const sp = document.createElement('span'); sp.className = 'ch'; sp.textContent = c; return sp; });
         el.textContent = ''; el.append(...chars);
-        return { el, chars, speed, n: 0, on: false, timer: 0, caret: null };
+        return { el, chars, speed, voice, n: 0, on: false, timer: 0, caret: null };
       }
       function type(t, want, delay) {
         if (want && !t.on) {
           t.on = true; t.el.classList.add('typing');
           const next = () => {
-            if (t.n < t.chars.length) { t.chars[t.n++].classList.add('on'); caretAt(t, t.caret !== null); t.timer = setTimeout(next, t.speed * (.6 + Math.random() * .8)); }
-            else t.el.classList.remove('typing');
+            if (t.n < t.chars.length) { const ch = t.chars[t.n++]; ch.classList.add('on'); if (ch.textContent.trim()) sfx.play(t.voice, t.n - 1, t.chars.length); caretAt(t, t.caret !== null); t.timer = setTimeout(next, t.speed * (.6 + Math.random() * .8)); }
+            else { t.el.classList.remove('typing'); if (t.voice === 'typewriter') sfx.play('bell'); }
           };
           t.timer = setTimeout(next, delay);
         } else if (!want && t.on) {
@@ -1041,8 +1231,8 @@
         if (show) t.n ? t.chars[t.n - 1].classList.add('cr') : t.chars[0].classList.add('cl');
       }
       const lines = pre.map(({ el }) => typed(el, 46));
-      const titleLine = typed(scene.querySelector('.cap-title'), 78);
-      const bridgeLine = typed(scene.querySelector('.cap-bridge'), 46);
+      const titleLine = typed(scene.querySelector('.cap-title'), 78, 'impact');
+      const bridgeLine = typed(scene.querySelector('.cap-bridge'), 46, 'pen');
       let firstType = true;
       function prelude(q) {
         const fw = frame.clientWidth, fh = frame.clientHeight, head = parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64;
@@ -1184,14 +1374,19 @@
       li.innerHTML = `<b>${r}</b><i style="--c:${['#e0313b', '#2fbf71', '#9ad7f2', '#ffd24a', '#f08a3c', '#b98bff', '#e6eef4'][r % 7]}"></i><span style="--w:${35 + (r * 37) % 50}%"></span>`;
       towerList.append(li);
     }
+    let lastRank = 62;
     function setRank(pos) {
-      towerList.style.transform = `translateY(${((6 - pos) * TOWER_ROW).toFixed(1)}px)`;
-      towerPos.textContent = bigPos.textContent = 'P' + Math.round(pos);
+      const win = getComputedStyle(towerList.parentElement), row = parseFloat(win.getPropertyValue('--row')) || TOWER_ROW, mid = +win.getPropertyValue('--mid') || 5;
+      towerList.style.transform = `translateY(${((mid + 1 - pos) * row).toFixed(1)}px)`;
+      const rank = Math.round(pos);
+      if (rank !== lastRank && quali.classList.contains('in') && !quali.classList.contains('climbed')) sfx.play('tick', rank);
+      lastRank = rank;
+      towerPos.textContent = bigPos.textContent = 'P' + rank;
     }
     let climbRaf = 0;
     const arrivals = [
-      { el: document.getElementById('practice'), enter: el => el.classList.add('in'), leave: el => el.classList.remove('in') },
-      { el: document.getElementById('podium'), enter: el => el.classList.add('in'), leave: el => el.classList.remove('in') },
+      { el: document.getElementById('practice'), enter: el => { el.classList.add('in'); [150, 450, 750].forEach((d, i) => setTimeout(() => sfx.play('blip', i), d)); }, leave: el => el.classList.remove('in') },
+      { el: document.getElementById('podium'), enter: el => { el.classList.add('in'); [0, 180, 360].forEach((d, i) => setTimeout(() => sfx.play('thud', i), d + 120)); }, leave: el => el.classList.remove('in') },
       { el: quali,
         enter: el => {
           el.classList.add('in'); bigPos.classList.remove('best');
@@ -1264,7 +1459,7 @@
         const rr = wfFinish.closest('.scene').getBoundingClientRect();
         if (rr.bottom <= 0 || rr.top >= innerHeight) { wfFinish.style.opacity = '0'; wfFinish.classList.remove('is-on'); celebrate(false); }
         const dr = profile.getBoundingClientRect();
-        if (dr.top <= innerHeight * .1 && dr.bottom > innerHeight * .5) profile.classList.add('in');
+        if (dr.top <= innerHeight * .1 && dr.bottom > innerHeight * .5) { if (!profile.classList.contains('in')) sfx.play('drop'); profile.classList.add('in'); }
         else if (dr.bottom < 0 || (dr.top > 0 && OpeningSequence.storyProgress(shown.get(pw.scene) ?? sceneProgress(pw.scene)) < .96)) profile.classList.remove('in'); // back in the opening: build it again next time
       } else {
         snapNext = true;
@@ -1341,11 +1536,24 @@
         scenes.forEach(sc => {
           const top = docTop(sc), travel = sc.offsetHeight - innerHeight;
           if (beats[sc.id]) beats[sc.id].forEach(p => list.push(top + p * Math.max(0, travel)));
-          else for (let y = top; y < top + sc.offsetHeight - innerHeight * .5; y += innerHeight * .85) list.push(y);
+          else {
+            // free-flowing chapters stop at their top, then at each marked block (so a block lands whole under the header)
+            list.push(top);
+            const head = parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64;
+            sc.querySelectorAll('[data-stop]').forEach(el => {
+              // the block above leaves the screen entirely, never half under the header
+              let prev = el.previousElementSibling || el.parentElement.previousElementSibling;
+              while (prev && getComputedStyle(prev).display === 'contents') prev = prev.lastElementChild;
+              list.push(prev ? docTop(prev) + prev.offsetHeight - head + 1 : docTop(el) - head - 20);
+            });
+          }
         });
-        list.push(max);
-        return list.map(y => Math.round(Math.min(max, Math.max(0, y)))).sort((a, b) => a - b)
-          .filter((y, i, a) => !i || y - a[i - 1] > 8);
+        // the page end is a stop only if the last stop before it does not already show the whole last chapter
+        const last = scenes[scenes.length - 1].querySelector('.wrap'), lastBottom = docTop(last) + last.offsetHeight; // its content, not its padding
+        if (Math.max(...list) + innerHeight < lastBottom - 4) list.push(max);
+        const sorted = list.map(y => Math.round(Math.min(max, Math.max(0, y)))).sort((a, b) => a - b);
+        // a stop that would only nudge the page a little further is dropped: the chapter's own stop wins
+        return sorted.reduce((kept, y) => (!kept.length || y - kept[kept.length - 1] > innerHeight * .12 ? [...kept, y] : kept), []);
       }
       let anim = 0, lastWheel = 0, lastAbs = 0, touchY = null;
       const active = () => isFilm() && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.querySelector('.lightbox[open]');
@@ -1354,6 +1562,7 @@
         const from = scrollY, dist = to - from;
         if (Math.abs(dist) < 2) { done?.(); return; }
         const dur = slow || 650 + Math.min(650, Math.abs(dist) / innerHeight * 300), t0 = performance.now();
+        if (Math.abs(dist) > innerHeight * .95) sfx.play('whoosh', Math.min(1.2, Math.abs(dist) / innerHeight)); // only real jumps, never every step
         cancelAnimationFrame(anim);
         const frame = now => {
           const t = Math.min(1, (now - t0) / dur);
@@ -1405,6 +1614,7 @@
       nbButton.addEventListener('click', () => {
         if (!active()) return;
         stopAuto();
+        sfx.play('bookflip');
         glide(stops()[capStop(4)], null, 1700);
       });
       ['pointerenter', 'focus'].forEach(t => nbButton.addEventListener(t, () => dispatchEvent(new CustomEvent('portfolio:notebook-peek', { detail: { on: true } }))));
@@ -1558,7 +1768,9 @@
         if (!entries[0].isIntersecting) return;
         obs.disconnect();
         const t0 = performance.now() + 350;
-        speak(words, t0).forEach((at, i) => setTimeout(() => spans[i].classList.add('on'), at - performance.now()));
+        sfx.play('radioIn');
+        speak(words, t0 + 250).forEach((at, i) => setTimeout(() => spans[i].classList.add('on'), at - performance.now()));
+        setTimeout(() => sfx.play('radioOut'), talkUntil - performance.now() + 150);
         run();
       }, { threshold: .6 }).observe(card);
     })();
@@ -1581,7 +1793,7 @@
     // Clicking the email address copies it.
     document.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', async () => {
       const hint = btn.nextElementSibling, note = btn.closest('.radio-card').querySelector('[role=status]');
-      try { await navigator.clipboard.writeText(btn.dataset.copy); hint.textContent = 'copied ✓'; note.textContent = 'Email address copied'; }
+      try { await navigator.clipboard.writeText(btn.dataset.copy); sfx.play('copy'); hint.textContent = 'copied ✓'; note.textContent = 'Email address copied'; }
       catch (e) { hint.textContent = 'select to copy'; getSelection().selectAllChildren(btn); }
       hint.classList.add('done');
       clearTimeout(btn.reset);
