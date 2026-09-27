@@ -888,12 +888,12 @@
   <div class="wrap"><footer class="footer"><span>Rapeepat Sawek · curiosity in motion</span><span>#RS3</span><a href="#top">Back to curiosity ↑</a></footer></div>
 
   <script>
-    // Sound: every effect is synthesised with Web Audio (no audio files). Off by default and remembered;
+    // Sound: every effect is synthesised with Web Audio (no audio files). On by default (the header switch turns it off, and that is remembered);
     // browsers only start audio after a click or key press, so a remembered "on" wakes on the first one.
     const sfx = (() => {
       let ctx = null, master = null, noiseBuf = null, lastKey = 0;
-      let on = false;
-      try { on = localStorage.getItem('sfx') === 'on'; } catch (e) {}
+      let on = true;
+      try { on = localStorage.getItem('sfx') !== 'off'; } catch (e) {}
       function init() {
         if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
         const AC = window.AudioContext || window.webkitAudioContext;
