@@ -26,7 +26,3 @@ export function openingState(progress) {
     pageFade: beat(p, .96, 1)
   };
 }
-
-export function shouldAnnounceChapter(index, chapterCount, storyMode) {
-  return Boolean(storyMode && index > 0 && index < chapterCount - 1);
-}

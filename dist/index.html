@@ -62,9 +62,6 @@
     .sound-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
     .sound-toggle .wv{display:none}.sfx-on .sound-toggle .wv{display:inline}.sfx-on .sound-toggle .mute{display:none}
     .sfx-on .sound-toggle{border-color:#ffd24a80;color:var(--blue)}
-    .toast{position:fixed;left:50%;top:calc(var(--head) + 14px);z-index:48;transform:translate(-50%,-20px);opacity:0;padding:8px 16px;border-radius:4px;background:var(--panel2);color:#fff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;transition:opacity .3s,transform .4s cubic-bezier(.3,1.5,.5,1);pointer-events:none;display:flex;gap:10px;align-items:center}
-    .toast:before{content:'';width:10px;height:10px;border-radius:2px;background:var(--purple)}
-    .toast.show{opacity:1;transform:translate(-50%,0)}
 
     /* Shared bits */
     .session-tag{display:inline-flex;align-items:center;gap:10px;margin:0 0 12px;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
@@ -145,7 +142,27 @@
     .lap p{margin:6px 0 0;color:var(--muted);font-size:15px;max-width:34ch}
 
     /* S2 Qualifying */
-    .quali{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:center}
+    .quali{display:grid;grid-template-columns:.85fr 1.15fr;gap:26px 64px;align-items:center}
+    /* Growth opens by saying what TCTT is: a big name, a highlighted core, one plain line on how it works */
+    .q-head{grid-column:1/-1;grid-row:1}
+    .q-main{grid-column:1;grid-row:2}
+    .q-side{grid-column:2;grid-row:2}
+    .q-name{margin:0;font-size:clamp(34px,4.3vw,62px);line-height:1.02;letter-spacing:-.035em;text-wrap:balance}
+    .q-name mark{color:inherit;padding:0 .06em;margin:0 -.06em;background:linear-gradient(transparent 60%,#b98bff80 60% 92%,transparent 92%) 0 0/100% 100% no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size .8s cubic-bezier(.65,0,.35,1) .35s}
+    .q-name abbr{display:inline-block;vertical-align:.5em;padding:.3em .55em;border-radius:4px;background:var(--purple);color:#1c1838;font:700 max(11px,.26em) var(--mono);letter-spacing:.14em;text-decoration:none}
+    .q-what{margin:12px 0 0;max-width:62ch;font-size:clamp(15px,1.25vw,18px);line-height:1.5;color:var(--text)}
+    .q-what em{font-style:normal;font-family:var(--mono);color:#d6b8ff}
+    /* the notebook note: what the work actually was. Its own stop in Story mode, a closing block in Page view */
+    .q-note{grid-column:1/-1;grid-row:3;position:relative;max-width:560px;padding:22px 26px 20px 50px;border-radius:3px;color:#10263d;background:linear-gradient(90deg,transparent 34px,#e0313b55 34px 35.5px,transparent 35.5px),#fbf8ef;box-shadow:0 26px 50px -24px #000d,0 0 0 1px #0000001a}
+    .q-note:before{content:'';position:absolute;top:-12px;left:50%;width:110px;height:24px;translate:-50% 0;rotate:-2deg;background:#e8dfb8cc;box-shadow:0 1px 2px #0003}
+    .q-note-title{margin:0 0 8px;font:italic 600 19px/30px var(--hand);color:#6a3fc0}
+    .q-note ol{margin:0;padding:0;list-style:none;counter-reset:n}
+    .q-note li{display:grid;grid-template-columns:auto 1fr;column-gap:10px;padding:0 0 8px;counter-increment:n}
+    .q-note li:before{content:counter(n);grid-row:span 2;width:20px;height:20px;margin-top:4px;border-radius:50%;background:#1c1838;color:#fff;font:700 11px/20px var(--mono);text-align:center}
+    .q-note li b{font:700 16px/1.6 var(--sans);color:#10263d}
+    .q-note li span{font-size:15px;line-height:1.45;color:#2a3f55}
+    .q-note-result{margin:6px 0 0;padding-top:8px;border-top:1.5px dashed #10263d40;font:600 13px/1.5 var(--mono);color:#10263d}
+    .q-note-result b{color:#6a3fc0}
     .pos{font:700 clamp(110px,17vw,240px)/.85 var(--mono);letter-spacing:-.07em;margin:0;color:var(--ink);transition:color .3s}
     .pos.best{color:var(--purple)}
     .pos-label{font:12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -160,7 +177,7 @@
     .tower{width:min(380px,70%);background:#06131f;border-radius:8px;box-shadow:0 0 0 1px #ffffff1f,0 30px 50px -25px #000c;overflow:hidden}
     .tower-head{display:flex;justify-content:space-between;margin:0;padding:11px 16px;background:#0b1f33;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#cfe0ec}
     .tower-head span:last-child{display:flex;align-items:center;gap:7px;color:#d6b8ff}.tower-head i{width:7px;height:7px;border-radius:50%;background:var(--purple)}
-    .tower-win{--row:38px;--rows:11;--mid:5;position:relative;height:calc(var(--row) * var(--rows));overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+    .tower-win{--row:36px;--rows:9;--mid:4;position:relative;height:calc(var(--row) * var(--rows));overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
     .tower-list{list-style:none;margin:0;padding:0;will-change:transform}
     .tower-list li,.tower-me{display:grid;grid-template-columns:44px 10px 1fr auto;align-items:center;gap:12px;height:var(--row);padding:0 16px}
     .tower-list li{border-top:1px solid #ffffff0d;font:600 14px var(--mono);color:#a7bdcd}
@@ -170,7 +187,7 @@
     .tower-me i{--c:var(--purple)}
     .tower-me span{font:600 15px var(--sans)}
     .tower-me em{font:700 13px var(--mono);font-style:normal;color:#d6b8ff}
-    .q-side .photo{position:absolute;right:0;bottom:-64px;width:min(330px,56%);--r:4deg} /* sits below the team row so the +54 stays visible */
+    .q-side .photo{position:absolute;right:0;bottom:-40px;width:min(330px,56%);--r:4deg} /* sits below the team row so the +54 stays visible */
     .film #quali .tower-me em{opacity:0;transform:translateX(10px);transition:opacity .4s,transform .5s cubic-bezier(.22,1,.36,1)}
     .film #quali.climbed .tower-me em{opacity:1;transform:none}
     .film #quali .qrow,.film #quali .tower,.film #quali .q-side .photo,.film #quali .telemetry{opacity:0;transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1),rotate .45s cubic-bezier(.22,1,.36,1),translate .45s cubic-bezier(.22,1,.36,1),scale .45s cubic-bezier(.22,1,.36,1),box-shadow .45s}
@@ -179,7 +196,14 @@
     .film #quali.in .qrow:first-child,.film #quali.climbed .qrow.q3{opacity:1;transform:none}
     .film #quali.in .tower{opacity:1;transition-delay:.15s}
     .film #quali.in .q-side .photo{opacity:1;transform:rotate(var(--r));transition-delay:.4s,.4s,0s,0s,0s,0s}
-    .film #quali.climbed .telemetry{opacity:1;transition-delay:.35s}
+    /* Story mode: the heading's highlight draws once the chapter arrives; one more scroll lays the note over the scoreboard */
+    .film #quali:not(.in) .q-name mark{background-size:0% 100%;transition:none}
+    .film #quali .q-note{grid-column:2;grid-row:2;align-self:center;justify-self:center;width:100%;z-index:3;opacity:0;transform:translateY(48px) rotate(4deg);pointer-events:none;transition:opacity .4s,transform .75s cubic-bezier(.22,1,.36,1)}
+    .film #quali.noted .q-note{opacity:1;transform:rotate(-1.2deg);pointer-events:auto}
+    .film #quali .q-note li{opacity:0;transform:translateX(-10px);transition:opacity .4s,transform .5s cubic-bezier(.22,1,.36,1)}
+    .film #quali.noted .q-note li{opacity:1;transform:none;transition-delay:calc(var(--i) * 110ms + 250ms)}
+    .film #quali .q-side{transition:opacity .5s,filter .5s,scale .6s cubic-bezier(.22,1,.36,1)}
+    .film #quali.noted .q-side{opacity:.14;filter:blur(3px);scale:.96}
     /* Origin: one scroll plays 01, 02, 03 in turn; each sketch draws itself */
     .film #practice .lap{opacity:0;transform:translateY(22px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i) * 300ms + 150ms)}
     .film #practice.in .lap{opacity:1;transform:none}
@@ -218,6 +242,40 @@
     .wf-map .car-tag,.wf-map .car-tag-t{opacity:calc(1 - var(--focus))} /* the lit turn label takes over at a stop */
     .wf-pops{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:28px}
     .wf-pop{margin:0;background:var(--panel2);border-radius:10px;box-shadow:0 0 0 1.5px #9ad7f266,0 40px 70px -30px #000e;overflow:hidden;color:#fff}
+    /* WordFlow, first page: what it is, who it is for, and one spell from start to finish */
+    .wi{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:28px 56px;align-items:center;margin-top:clamp(20px,3.5vh,36px)}
+    .wi-name{display:flex;align-items:center;gap:12px;margin:0;font:700 clamp(30px,3vw,44px)/1 var(--sans);letter-spacing:-.03em;color:#fff}
+    .wi-name svg{width:1em;height:1em;fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linejoin:round}
+    .wi-q{margin:14px 0 0;font:600 clamp(18px,1.5vw,21px)/1.3 var(--sans);color:#9ad7f2}
+    .wi-head .one{margin-top:8px}
+    .wi-why{margin:18px 0 0;max-width:46ch;font-size:16px;line-height:1.6;color:var(--muted)}
+    .wi-why b{font:700 1.2em var(--mono);color:#fff}
+    .wi-map{--r:1.6deg;--ar:1083/566}
+    .wi-steps{margin-top:clamp(40px,7vh,72px)}
+    .film .wi-page{min-height:calc(100vh - var(--head) - 40px)}
+    .wi-steps-title{margin:0;font:600 clamp(22px,2vw,28px)/1.2 var(--sans);letter-spacing:-.02em}
+    .wi-steps ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin:18px 0 0;padding:0;list-style:none;counter-reset:step}
+    .wi-steps li{counter-increment:step}
+    .wi-steps li .photo{--ar:16/9;--r:-1deg}.wi-steps li:nth-child(2) .photo{--r:.8deg}.wi-steps li:nth-child(3) .photo{--r:-.6deg}
+    .wi-steps li>div>b{display:block;margin-top:14px;font:600 19px/1.3 var(--sans);color:#fff}
+    .wi-steps li>div>b:before{content:counter(step);display:inline-grid;place-items:center;width:24px;height:24px;margin-right:9px;border-radius:50%;background:var(--blue);color:#0f2b47;font:700 12px var(--mono);vertical-align:2px}
+    .wi-steps li p{margin:6px 0 0;font-size:15px;line-height:1.55;color:var(--muted)}
+    .wi-next{margin:26px 0 0;max-width:60ch;font:italic 17px/1.5 var(--hand);color:var(--text)}
+    /* step 2 has no screenshot: a small drawing of what the speech model hears */
+    .wi-mic{aspect-ratio:16/9;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:0 18px;background:radial-gradient(circle at 18% 50%,#3b2372,#0b1f33 60%)}
+    .wi-mic-btn{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#2a1f55;box-shadow:0 0 0 2px #b98bff,0 0 22px #b98bff99}
+    .wi-mic-btn svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round}
+    .wi-mic-btn rect{fill:#fff;stroke:none}
+    .wi-wave{display:flex;align-items:center;gap:3px;height:56px}
+    .wi-wave i{flex:1;height:100%;border-radius:2px;background:#9ad7f2;transform:scaleY(calc(.18 + .5 * (1 - (var(--i) - 8.5) * (var(--i) - 8.5) / 80)));animation:wi-talk 1.1s ease-in-out infinite alternate;animation-delay:calc(var(--i) * -97ms)}
+    @keyframes wi-talk{to{transform:scaleY(.14)}}
+    .wi-ipa{display:grid;justify-items:center;gap:5px}
+    .wi-ipa b{font:600 26px/1 var(--sans);color:#fff}
+    .wi-ipa em{padding:3px 8px;border-radius:4px;background:#1c3a57;font:600 13px var(--mono);font-style:normal;color:#9ad7f2}
+    @media(prefers-reduced-motion:reduce){.wi-wave i{animation:none}}
+    /* Story mode: the three steps land one after another the first time they come into view */
+    .film .wi-steps li{opacity:0;translate:0 18px;transition:opacity .5s,translate .6s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--n,0) * 160ms)}
+    .film .wi-steps.seen li{opacity:1;translate:none}
     .wf-shot{position:relative;margin:0;aspect-ratio:16/10;background:#0b1f33;overflow:hidden}
     .wf-shot img{display:block;width:100%;height:100%;object-fit:cover}
     .wf-shot.empty img{display:none}
@@ -287,9 +345,34 @@
     .stop .job{margin:0;font-size:17px;line-height:1.5}
     .stop .job b{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
     .stop .stamp{margin-top:18px}
+    /* hover (or the "What is it?" button) turns the text side over to what the project actually is */
+    .stop-text{display:grid}
+    .stop-front,.stop-about{grid-area:1/1;transition:opacity .3s,translate .45s cubic-bezier(.22,1,.36,1)}
+    .stop-about{align-self:center;opacity:0;translate:0 12px;pointer-events:none}
+    .stop.about .stop-front{opacity:0;translate:0 -12px;pointer-events:none}
+    .stop.about .stop-about{opacity:1;translate:none;pointer-events:auto}
+    @media(hover:hover){.stop:hover .stop-front{opacity:0;translate:0 -12px}.stop:hover .stop-about{opacity:1;translate:none}}
+    .about-t{margin:0 0 10px;font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+    .stop-about p:not(.about-t){margin:0;max-width:44ch;font-size:clamp(16px,1.35vw,19px);line-height:1.6;color:var(--text)}
+    .stop-more{display:inline-flex;align-items:center;gap:7px;margin:18px 0 0 16px;padding:6px 12px;border:1px solid #ffd24a66;border-radius:20px;background:none;color:var(--blue);font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;vertical-align:middle;cursor:pointer}
+    .stop-more:before{content:'↺';font-size:13px}
+    .stop-more:hover,.stop-more:focus-visible{background:#ffd24a1f}
     .flash{display:none}
 
     /* S5 Results + workbench */
+    /* Startup: DoCode, a business at 18 */
+    .venture{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+    .v-earned{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;margin-top:26px}
+    .v-label{display:block;margin-bottom:6px;font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .v-amount{display:block;font:700 clamp(56px,7vw,104px)/1 var(--mono);letter-spacing:-.04em;color:var(--green);font-variant-numeric:tabular-nums}
+    .v-paid{margin-bottom:12px;border-color:var(--green);color:var(--green)}
+    .v-rows{grid-template-columns:auto 1fr;margin-top:24px}
+    .v-shot{--ar:16/10;--r:2deg}
+    .film #venture .v-paid{opacity:0;transform:rotate(-8deg) scale(2.6);transition:opacity .15s,transform .35s cubic-bezier(.3,1.5,.6,1)}
+    .film #venture.paid .v-paid{opacity:1;transform:rotate(-8deg)}
+    .film #venture .v-rows,.film #venture .v-shot{opacity:0;translate:0 18px;transition:opacity .5s,translate .6s cubic-bezier(.22,1,.36,1)}
+    .film #venture .v-shot{transition-delay:.25s}
+    .film #venture.in .v-rows,.film #venture.in .v-shot{opacity:1;translate:none}
     .podium-wrap{display:grid;grid-template-columns:1.35fr .65fr;gap:48px;align-items:end}
     .podium{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;gap:10px;margin-top:30px}
     .step{display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -299,23 +382,25 @@
     .block{width:100%;display:grid;place-content:center;background:#1d4a73;border:1px solid #ffffff40;border-bottom:0;color:var(--ink);font:700 38px var(--mono);border-radius:6px 6px 0 0;transform-origin:bottom}
     .step.p1 .block{height:190px;background:linear-gradient(#2a6395,#1d4a73)}.step.p2 .block{height:140px}.step.p3 .block{height:100px}
     .step.p1 .award b{color:var(--yellow)}
-    .fastest{display:flex;flex-direction:column;gap:10px;align-items:flex-start;padding:24px 26px;background:var(--panel2);border-radius:6px;color:#fff;box-shadow:inset 0 0 0 1.5px var(--purple)}
-    .fastest b{font:700 64px/1 var(--mono);letter-spacing:-.04em;color:#d6b8ff}
+    .fastest{display:flex;flex-direction:column;gap:10px;align-items:flex-start;padding:0 0 4px;color:#fff}
+    .fastest b{font:700 clamp(56px,6vw,84px)/1 var(--mono);letter-spacing:-.04em;color:#d6b8ff}
     .fastest span{font-size:15px;color:#c3d3dc}
     .fastest em{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#d6b8ff;font-style:normal}
     .parc{margin-top:64px}
     .parc h3{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
-    .setup{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-    .setup div{padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+    .setup{display:grid;grid-template-columns:repeat(4,1fr);gap:0 36px;padding-top:16px;border-top:1px solid var(--line)}
+    .setup div{padding:0}
     .setup b{display:block;font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-    .setup ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
-    .setup li{padding:3px 8px;border-radius:3px;background:#ffffff14;font-size:13.5px;transition:opacity .25s,background .25s,box-shadow .25s}
+    .setup ul{list-style:none;margin:0;padding:0}
+    .setup li{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #ffffff12;font-size:15px;transition:opacity .25s,color .25s}
+    .setup li:last-child{border-bottom:0}
     /* hover a tool: every tool from the same project lights up, the rest step back */
     .setup.focus li{opacity:.32}
-    .setup.focus li.match{opacity:1;background:#ffd24a24;box-shadow:0 0 0 1px #ffd24a80}
+    .setup.focus li.match{opacity:1;color:var(--blue)}
+    .setup.focus li.match small{color:var(--blue)}
     .setup-note{margin-left:14px;color:var(--text);letter-spacing:.08em;opacity:0;transition:opacity .25s}
     .setup-note.on{opacity:1}
-    .setup li small{font:12px var(--mono);color:#c2d3de;margin-left:7px}
+    .setup li small{font:12px var(--mono);color:#8fa9bb;white-space:nowrap}
 
     /* S6 Next season */
     .next{display:grid;grid-template-columns:1fr 1.05fr;grid-template-rows:repeat(5,auto) 1fr;column-gap:56px;align-items:start}
@@ -386,6 +471,16 @@
       .laps{gap:28px}.lap svg{width:150px}
       .film .driver{grid-template-columns:auto 1fr;gap:36px}
       .film .quali .photo{display:none}
+      .venture{grid-template-columns:1fr;gap:26px}.v-shot{max-width:460px}
+      .wi{grid-template-columns:1fr}
+      .wi-steps ol{grid-template-columns:1fr;gap:18px}
+      .wi-steps li{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:18px;align-items:center}
+      .wi-steps li>div>b{margin-top:0}
+      .q-main,.q-side{grid-column:1}.q-side{grid-row:3}.q-note{grid-row:4}
+      .film .quali{grid-template-columns:1fr;row-gap:22px}
+      .film #quali .q-note{grid-column:1;grid-row:2/4;align-self:start}
+      .film #quali.noted .q-main{opacity:.14;filter:blur(3px)}
+      .film #quali .q-main{transition:opacity .5s,filter .5s}
       .film .stop .photo{max-width:420px}
       .film .podium-wrap{gap:18px}.film .block{font-size:26px}.film .step.p1 .block{height:120px}.film .step.p2 .block{height:90px}.film .step.p3 .block{height:66px}
     }
@@ -405,7 +500,7 @@
       .film .telemetry{display:none}
       /* profile */
       .film .driver{grid-template-columns:1fr;gap:14px;justify-items:start}
-      .film .driver .photo{width:min(60vw,calc((100vh - 470px) / 1.6))}
+      .film .driver .photo{width:min(60vw,calc((100vh - 500px) / 1.6))}
       .film .driver h1{font-size:44px}.film .meta{font-size:13.5px;margin-top:10px}.car-no{font-size:28px}
       /* origin: a vertical timeline, sketch beside each step */
       .laps{grid-template-columns:1fr;gap:18px;margin-top:22px}
@@ -418,8 +513,26 @@
       .film #practice .laps:before{transform-origin:top;transform:scaleY(0)}
       /* growth: a shorter tower */
       .film .pos{font-size:88px}.film .qrow{padding:9px 12px;grid-template-columns:50px 1fr}.film .qrow p{font-size:13.5px}.film .qrow b{font-size:17px}
-      .film .quali{gap:16px}.film .qrows{margin-top:12px}
+      .film .quali{row-gap:14px}.film .qrows{margin-top:12px}
+      .v-amount{font-size:52px}.v-earned{margin-top:14px;gap:14px}.v-paid{font-size:18px;margin-bottom:8px}.v-rows{margin-top:14px}.venture{gap:18px}.v-shot{width:78%;justify-self:center}.v-label{font-size:10.5px}
+      .wi-why{font-size:14px;margin-top:10px}
+      .wi-name{font-size:28px}.wi-q{font-size:16px;margin-top:10px}
+      .wi-map{--r:.8deg}
+      .wi-steps{margin-top:28px}.wi-steps-title{font-size:20px}
+      .wi-steps ol{gap:14px;margin-top:12px}
+      .wi-steps li{grid-template-columns:42% 1fr;gap:12px;align-items:start}
+      .wi-steps li .photo{padding:5px 5px 4px}
+      .wi-steps li>div>b{font-size:15.5px}.wi-steps li>div>b:before{width:20px;height:20px;margin-right:6px;font-size:11px}
+      .wi-steps li p{font-size:13px;line-height:1.45;margin-top:4px}
+      .wi-mic{gap:6px;padding:0 8px}.wi-mic-btn{width:30px;height:30px}.wi-mic-btn svg{width:15px;height:15px}.wi-wave{height:30px;gap:2px}.wi-ipa b{font-size:15px}.wi-ipa em{font-size:9.5px;padding:1px 4px}.wi-ipa{gap:2px}
+      .wi-next{font-size:15px;margin-top:16px}
+      .q-name{font-size:clamp(28px,8.4vw,36px)}.q-what{font-size:14px;margin-top:8px}
+      .q-note{padding:16px 16px 14px 42px;background:linear-gradient(90deg,transparent 28px,#e0313b55 28px 29.5px,transparent 29.5px),#fbf8ef}
+      .q-note-title{font-size:16px;line-height:26px;margin-bottom:6px}
+      .q-note li{padding-bottom:6px}.q-note li b{font-size:14.5px}.q-note li span{font-size:13.5px;line-height:1.4}
+      .q-note-result{font-size:11.5px}
       .tower{width:100%}.tower-win{--row:30px;--rows:7;--mid:3}
+      .film .pos{font-size:76px}
       .tower-list li,.tower-me{font-size:13px}
       /* purpose: the map on top, each part slides up as a full-width sheet */
       .film #race .wf-head h2{font-size:clamp(28px,8vw,36px)}
@@ -439,7 +552,8 @@
       .step .award span{font-size:12px}.step .award b{font-size:18px}
       .film .parc{margin-top:16px}.film .parc h3{margin-bottom:8px;font-size:10.5px}.film .setup{grid-template-columns:1fr 1fr;gap:8px}.film .setup div{padding:8px 10px}.film .setup b{font-size:9.5px;margin-bottom:5px}.film .setup li{font-size:11.5px;padding:2px 6px}
       .film .setup li small{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-      .film .podium{margin-top:14px}.film .fastest{padding:12px 14px}.film .fastest b{font-size:30px}
+      .film .podium{margin-top:14px}.film .fastest{padding:0;gap:6px}.film .fastest b{font-size:38px}
+      .film .setup{gap:12px 18px;padding-top:10px}.film .setup div{padding:0}.film .setup li{padding:4px 0;font-size:12.5px}
       /* future */
       .next{gap:14px}.film .scene.free .frame{padding:calc(var(--head) + 24px) 0 32px}
       .pw-prelude .pre{font-size:clamp(26px,8vw,40px)}
@@ -450,11 +564,19 @@
     }
     /* Short phones: the WordFlow intro gives its room to the map and cards; the team cards tighten */
     @media(max-width:700px) and (max-height:760px){
+      .tower-win{--rows:5;--mid:2}.film .pos{font-size:60px}
+      .film #quali .q-note{grid-row:1/4;margin-top:10px}
+      .film #venture .v-shot{display:none}
+      .wi-map{width:82%;justify-self:center}.wi-steps li{grid-template-columns:36% 1fr}.wi-steps li p{font-size:12.5px}.wi-steps ol{gap:10px}.film #quali.noted .q-head{opacity:.14;filter:blur(3px)}.film #quali .q-head{transition:opacity .5s,filter .5s}
+    }
+    @media(max-width:700px) and (max-height:760px){
       .film #race .wf-head .one{display:none}
       .film .pit-head h2{font-size:28px!important}
       .film .stop{gap:10px;padding:14px}.film .stop .photo{width:78%;justify-self:center}
+      .stop-about p:not(.about-t){font-size:13.5px;line-height:1.5}.about-t{font-size:10.5px;margin-bottom:6px}.stop-more{margin:8px 0 0 10px;padding:4px 9px;font-size:10px}
       .stop h3{font-size:30px;margin:4px 0 6px}.film .stop .job{font-size:14px}.stop .stamp{margin-top:8px;font-size:18px}
     }
+    @media(min-width:1001px) and (max-height:820px){.tower-win{--rows:7;--mid:3}.q-side .photo{bottom:-24px}}
     /* Short landscape screens: everything a notch smaller so each stop still fits */
     @media(min-width:701px) and (max-height:700px){
       .film .big{font-size:clamp(34px,4.6vw,60px)}
@@ -569,7 +691,6 @@
   <div class="margin-line" aria-hidden="true"></div>
   <div class="binding" aria-hidden="true"></div>
   <div class="speed" aria-hidden="true"></div>
-  <p class="toast" role="status" aria-live="polite"></p>
 
   <header class="header">
     <div class="wrap">
@@ -579,7 +700,8 @@
           <li><a href="#pitwall" data-page-href="#driver" title="Curiosity: the opening question">Curiosity<span class="tab-p" aria-hidden="true"></span></a></li>
           <li><a href="#practice" title="Origin: where curiosity started">Origin<span class="tab-p" aria-hidden="true"></span></a></li>
           <li><a href="#quali" title="Growth: learning from setbacks">Growth<span class="tab-p" aria-hidden="true"></span></a></li>
-          <li><a href="#race" title="Purpose: building WordFlow">Purpose<span class="tab-p" aria-hidden="true"></span></a></li>
+          <li><a href="#venture" title="Startup: DoCode, a business that gets paid">Startup<span class="tab-p" aria-hidden="true"></span></a></li>
+          <li><a href="#wf-intro" title="Purpose: building WordFlow">Purpose<span class="tab-p" aria-hidden="true"></span></a></li>
           <li><a href="#pit" title="Team: how I work with others">Team<span class="tab-p" aria-hidden="true"></span></a></li>
           <li><a href="#podium" title="Proof: results and tools">Proof<span class="tab-p" aria-hidden="true"></span></a></li>
           <li><a href="#next" title="Future: where curiosity leads">Future<span class="tab-p" aria-hidden="true"></span></a></li>
@@ -676,8 +798,8 @@
               <p class="session-tag" data-in style="--d:200"><b>p.01</b>about me</p>
               <p class="car-no" data-in style="--d:560" aria-label="Driver tag RS3">#RS3</p>
               <h1 id="name"><span data-in style="--d:300">Rapeepat</span><span data-in style="--d:400">Sawek.</span></h1>
-              <p class="one" data-in style="--d:680">I take things apart to see how they work. Now I build things <span class="mark">people rely on</span>.</p>
-              <dl class="meta"><dt data-in style="--d:800">Team</dt><dd data-in style="--d:800">Ratwinit Bangkaeo School · SMT programme</dd><dt data-in style="--d:880">Focus</dt><dd data-in style="--d:880">Networks · security · connected systems</dd><dt data-in style="--d:960">Base</dt><dd data-in style="--d:960">Bangkok, Thailand</dd></dl>
+              <p class="one" data-in style="--d:680">I take things apart to see how they work. At 18, I build things people rely on, and I already run a small startup that <span class="mark">gets paid for it</span>.</p>
+              <dl class="meta"><dt data-in style="--d:800">Team</dt><dd data-in style="--d:800">Ratwinit Bangkaeo School · SMT programme</dd><dt data-in style="--d:880">Focus</dt><dd data-in style="--d:880">Networks · security · connected systems</dd><dt data-in style="--d:960">Startup</dt><dd data-in style="--d:960">Co-founder, DoCode (web &amp; SEO)</dd><dt data-in style="--d:1040">Base</dt><dd data-in style="--d:1040">Bangkok, Thailand</dd></dl>
             </div>
           </div>
         </div>
@@ -713,19 +835,32 @@
     </section>
 
     <!-- QUALIFYING: will they grow? -->
-    <section class="scene" id="quali" style="--len:150vh" data-title="Growth" aria-labelledby="q-title">
+    <section class="scene" id="quali" style="--len:230vh" data-title="Growth" aria-labelledby="q-title">
       <div class="frame">
         <div class="wrap">
           <div class="quali">
-            <div>
-              <p class="session-tag"><b>GROWTH</b>p.03 · <span id="q-title">learning from setbacks · TCTT</span></p>
+            <header class="q-head">
+              <p class="session-tag"><b>GROWTH</b>p.03 · learning from setbacks</p>
+              <h2 class="q-name" id="q-title">Thailand <mark>Cyber Top Talent</mark> <abbr title="Thailand Cyber Top Talent">TCTT</abbr></h2>
+              <p class="q-what">Thailand's national cybersecurity competition. Each challenge hides a secret code, the <em>flag</em>, inside network traffic, a cipher or a website. Find it and your team scores.</p>
+            </header>
+            <div class="q-main">
               <p class="pos" aria-label="From 62nd in 2025 to 8th in 2026">P8</p>
               <div class="qrows">
                 <div class="qrow"><b>2025</b><p>P62. Out of my depth, with very little background.</p></div>
                 <div class="qrow q3"><b>2026</b><p>P8 after one focused week of prep. <strong>+54 places.</strong></p></div>
               </div>
-              <details class="telemetry"><summary>Notebook note: what I do in the team</summary><p>Network, cryptography and web security challenges: packet captures (PCAP) and DNS data, encrypted messages, how websites send data and control access. When one of us is stuck, we swap problems for a fresh view. 2026: 8th in the national qualifying round, 4th in the Central region.</p></details>
             </div>
+            <aside class="q-note" aria-labelledby="q-note-title">
+              <p class="q-note-title" id="q-note-title">Notebook note · what I did on the team</p>
+              <ol>
+                <li><b>Network forensics</b><span>Dug through packet captures (PCAP) and DNS records to trace what happened on a network and pull the flag out of the traffic.</span></li>
+                <li><b>Cryptography</b><span>Turned encrypted and encoded messages back into readable text.</span></li>
+                <li><b>Web security</b><span>Worked out how a site sends data and checks who is allowed in, then found where that check breaks.</span></li>
+                <li><b>Teamwork</b><span>When one of us got stuck, we swapped problems for a fresh pair of eyes.</span></li>
+              </ol>
+              <p class="q-note-result">2026: <b>8th</b> in the national qualifying round · <b>4th</b> in the Central region</p>
+            </aside>
             <div class="q-side">
               <div class="tower" aria-hidden="true">
                 <p class="tower-head"><span>TCTT · national qualifier</span><span><i></i>2026</span></p>
@@ -742,13 +877,64 @@
     </section>
 
     <!-- RACE: what have they built? -->
+    <section class="scene" id="venture" style="--len:150vh" data-title="Startup" aria-labelledby="venture-title">
+      <div class="frame">
+        <div class="wrap">
+          <div class="venture">
+            <div class="v-text">
+              <p class="session-tag"><b>STARTUP</b>p.04 · DoCode</p>
+              <h2 class="big" id="venture-title">18, and already getting paid.</h2>
+              <p class="one">I co-founded DoCode, a small web and SEO studio. Real businesses hire us to build their websites, and they pay real money for it.</p>
+              <div class="v-earned">
+                <div><span class="v-label">Earned from paying clients</span><b class="v-amount" aria-label="10,000 baht">฿<span class="v-count">10,000</span></b></div>
+                <span class="stamp v-paid">Paid</span>
+              </div>
+              <dl class="meta v-rows"><dt>My role</dt><dd>Co-founder and frontend: page structure and UX/UI</dd><dt>What we sell</dt><dd>Websites that customers can actually find on search</dd></dl>
+            </div>
+            <figure class="photo tape v-shot"><img src="img/docode.jpg" alt="Homepage of a client website built by DoCode for S.R. Service Express, a crane and hoist service company" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/docode.jpg</span><figcaption>One of our client sites: a crane and hoist service company</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene free" id="wf-intro" data-title="Purpose" data-through="#race" aria-labelledby="wi-title">
+      <div class="frame">
+        <div class="wrap">
+          <div class="wi-page">
+          <header class="wi-top">
+            <p class="session-tag"><b>PURPOSE</b>p.05 · team lead</p>
+            <h2 class="big" id="wi-title">Building something people need.</h2>
+          </header>
+          <div class="wi">
+            <div class="wi-head">
+              <p class="wi-name"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 7c4-1.6 8-1.6 12 1v18c-4-2.6-8-2.6-12-1zM28 7c-4-1.6-8-1.6-12 1v18c4-2.6 8-2.6 12-1z"/></svg>WordFlow</p>
+              <h3 class="wi-q">What is WordFlow?</h3>
+              <p class="one">A mobile game that helps children with a reading disability learn to read Thai, and shows their doctor how each child is doing.</p>
+              <p class="wi-why"><b>1 in 14</b> Thai children aged 5 to 14 has a learning disorder, and for over 80% of them the struggle is reading. Time with a specialist is hard to get: there are too few of them, and every session costs time and money.</p>
+            </div>
+            <figure class="photo tape wi-map" data-stop><img src="img/wf-islands.jpg" alt="WordFlow's world map: five floating islands, a forest, a snowy mountain, a castle town, a farm village and the player's home island, most still locked" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/wf-islands.jpg</span><figcaption>Five islands, easiest Thai spelling first. Each is under a "Curse of Silence" that only reading can lift.</figcaption></figure>
+          </div>
+          </div>
+          <div class="wi-steps" data-stop>
+            <h3 class="wi-steps-title">How one spell works</h3>
+            <ol>
+              <li data-stop><figure class="photo"><img src="img/wf-build.jpg" alt="WordFlow tutorial: a spellbook combines the Thai letters ป and า into the word ปา while the owl guide reads it out" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/wf-build.jpg</span></figure><div><b>Build the word</b><p>Drag letter stones together: ป + า makes ปา, "throw". The owl guide reads it out first.</p></div></li>
+              <li data-stop><figure class="photo wi-voice" aria-hidden="true"><div class="wi-mic"><span class="wi-mic-btn"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg></span><span class="wi-wave"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i></span><span class="wi-ipa"><b lang="th">ปา</b><em>/p/</em><em>/aː/</em></span></div></figure><div><b>Say it aloud</b><p>Hold the mic and read. Our speech model splits the recording into its sounds and scores each one in the background, so the child never sees a red cross.</p></div></li>
+              <li data-stop><figure class="photo"><img src="img/wf-cast.jpg" alt="WordFlow in first person: the player's hands cast the spell ปา and a rock flies at a bear, which turns away; three gold stars are earned" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/wf-cast.jpg</span></figure><div><b>Watch it happen</b><p>The spell does what the word means. ปา throws a rock, the bear backs off, and the stars fill up.</p></div></li>
+            </ol>
+            <p class="wi-next">Each spell then takes one lap through five systems on its way to the doctor. That lap is the circuit on the next page.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="scene" id="race" style="--len:440vh" data-title="Purpose" aria-labelledby="race-title">
       <div class="frame">
         <div class="wrap">
           <header class="wf-head">
-            <p class="session-tag"><b>PURPOSE</b>p.04 · WordFlow · team lead</p>
-            <h2 class="big" id="race-title">Building something people rely on.</h2>
-            <p class="one">Thai reading practice for children with learning disabilities. Every score has to reach their doctor, correct.</p>
+            <p class="session-tag"><b>PURPOSE</b>p.05 · WordFlow, lap by lap</p>
+            <h2 class="big" id="race-title">One spell, one lap.</h2>
+            <p class="one">From a child's voice to the doctor's screen, through five systems. Every score has to arrive, correct.</p>
           </header>
           <div class="wf-stage" data-fx="wf" data-at="0,1">
             <svg class="wf-map" viewBox="0 0 520 300" aria-label="WordFlow's data path drawn as a race circuit with five turns: game app, speech model, backend API, database and dashboard">
@@ -800,21 +986,17 @@
       <div class="frame">
         <div class="wrap">
           <div class="pit-head">
-            <div><p class="session-tag"><b>TEAM</b>p.05 · how I work with others</p><h2 class="big" id="pit-title" style="font-size:clamp(34px,4.4vw,60px)">I build better with other people.</h2></div>
-            <p class="counter" aria-hidden="true">PROJECT <b class="count-now">1</b> / 3</p>
+            <div><p class="session-tag"><b>TEAM</b>p.06 · how I work with others</p><h2 class="big" id="pit-title" style="font-size:clamp(34px,4.4vw,60px)">I build better with other people.</h2></div>
+            <p class="counter" aria-hidden="true">PROJECT <b class="count-now">1</b> / <span class="count-all">3</span></p>
           </div>
           <div class="track-x" data-fx="montage" data-at=".04,.96">
             <article class="stop" id="zeitop">
               <figure class="photo tape"><img src="img/zeitop.jpg" alt="The ZeiTop team on stage with their medals at SK Robotics Playground 2025" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/zeitop.jpg</span><figcaption>ZeiTop · SK Robotics 2025</figcaption></figure>
-              <div><span class="kind">Open-source app · SK Robotics Playground 2025</span><h3>ZeiTop</h3><p class="muted">Old Android phone → PC control surface.</p><p class="job"><b>My job</b>UX/UI and the interactive web controller.</p><span class="stamp">Gold<small>3rd runner-up</small></span></div>
+              <div class="stop-text"><div class="stop-front"><span class="kind">Open-source app · SK Robotics Playground 2025</span><h3>ZeiTop</h3><p class="muted">Old Android phone → PC control surface.</p><p class="job"><b>My job</b>UX/UI and the interactive web controller.</p><span class="stamp">Gold<small>3rd runner-up</small></span><button class="stop-more" type="button" aria-expanded="false" aria-controls="about-zeitop">What is it?</button></div><div class="stop-about" id="about-zeitop"><p class="about-t">ZeiTop, in short</p><p>An open-source app that gives an old Android phone a second life as a control surface for a PC. The phone runs a web controller and talks to the computer over WebSocket, so a tap on the phone happens on the PC right away.</p></div></div>
             </article>
             <article class="stop" id="subtrack">
               <figure class="photo tape"><img src="img/subtrack.jpg" alt="The SubTrack team on stage at the L@UNCHL4B AI startup hackathon" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/subtrack.jpg</span><figcaption>SubTrack · 12 hours, 1st place</figcaption></figure>
-              <div><span class="kind">L@UNCHL4B AI Startup Hackathon · 12 hours</span><h3>SubTrack</h3><p class="muted">Finds forgotten subscriptions in your inbox.</p><p class="job"><b>My job</b>Solution design, user flow, and the pitch.</p><span class="stamp">1st<small>10,000 THB</small></span></div>
-            </article>
-            <article class="stop" id="docode">
-              <figure class="photo tape"><img src="img/docode.jpg" alt="Homepage of a client website built by DoCode for S.R. Service Express, a crane and hoist service company" onerror="this.parentNode.classList.add('empty')"><span class="slot">img/docode.jpg</span><figcaption>DoCode · a client site</figcaption></figure>
-              <div><span class="kind">Co-founded web &amp; SEO service</span><h3>DoCode</h3><p class="muted">Websites for real clients.</p><p class="job"><b>My job</b>Co-founder and frontend: page structure and UX/UI.</p><span class="stamp">Live<small>real clients</small></span></div>
+              <div class="stop-text"><div class="stop-front"><span class="kind">L@UNCHL4B AI Startup Hackathon · 12 hours</span><h3>SubTrack</h3><p class="muted">Finds forgotten subscriptions in your inbox.</p><p class="job"><b>My job</b>Solution design, user flow, and the pitch.</p><span class="stamp">1st<small>10,000 THB</small></span><button class="stop-more" type="button" aria-expanded="false" aria-controls="about-subtrack">What is it?</button></div><div class="stop-about" id="about-subtrack"><p class="about-t">SubTrack, in short</p><p>Built in 12 hours at an AI startup hackathon. SubTrack looks through your inbox for the subscriptions you forgot you were still paying for and puts them in one list, so you can see what to cancel.</p></div></div>
             </article>
           </div>
         </div>
@@ -827,7 +1009,7 @@
         <div class="wrap">
           <div class="podium-wrap">
             <div>
-              <p class="session-tag"><b>PROOF</b>p.06 · results and tools</p>
+              <p class="session-tag"><b>PROOF</b>p.07 · results and tools</p>
               <h2 class="big" id="podium-title" style="font-size:clamp(38px,5vw,72px)">What the work added up to.</h2>
               <div class="podium">
                 <div class="step p2"><div class="award"><b>GOLD</b><span>SK Robotics 2025 · ZeiTop</span></div><div class="block">2</div></div>
@@ -856,7 +1038,7 @@
         <div class="wrap">
           <div class="next">
             <div>
-              <p class="session-tag"><b>FUTURE</b>p.07 · where curiosity leads</p>
+              <p class="session-tag"><b>FUTURE</b>p.08 · where curiosity leads</p>
               <h2 class="big" id="next-title">Bigger systems. <span class="mark">Same curiosity.</span></h2>
               <p class="one">Devices, the networks between them, and the people who rely on them. That's where I'm heading next.</p>
               <ul class="interests" data-stop aria-label="What I do for fun">
@@ -988,6 +1170,7 @@
         page(t) { noise(t, .7, { type: 'highpass', f: 1800, f2: 5000, q: .5, gain: .1, attack: .12 }); [.08, .24, .4].forEach(d => noise(t + d, .06, { f: 3000, q: 3, gain: .05, attack: .002 })); noise(t + .6, .2, { type: 'lowpass', f: 520, q: .7, gain: .15, attack: .004 }); },
         pop(t) { tone(t, 620, .16, { gain: .11, f2: 930 }); tone(t + .05, 930, .18, { gain: .06 }); },
         blip(t, i = 0) { tone(t, 520 + i * 130, .12, { gain: .07 }); },
+        coin(t) { tone(t, 1568, .18, { gain: .07, attack: .002 }); tone(t + .07, 2093, .5, { gain: .07, attack: .002 }); tone(t + .07, 4186, .3, { gain: .015, attack: .002 }); },
         tick(t, n) { tone(t, 900 + (62 - n) * 16, .035, { type: 'square', gain: .02, attack: .001 }); },
         thud(t, i = 0) { tone(t, 92 - i * 10, .35, { gain: .28, f2: 44 }); noise(t, .12, { type: 'lowpass', f: 320, gain: .1, attack: .002 }); },
         drop(t) { noise(t, .09, { type: 'lowpass', f: 700, gain: .14, attack: .002 }); tone(t, 140, .18, { gain: .1, f2: 80 }); },
@@ -1396,7 +1579,7 @@
       if (anchor) anchor.scrollIntoView({ behavior: 'instant' });
     });
 
-    // Session ticker, sector toasts and speed lines
+    // Session ticker and speed lines
     const sessionLinks = [...document.querySelectorAll('.sessions a')];
     let sessionScenes = [];
     function mapSessions() {
@@ -1405,15 +1588,8 @@
       sessionScenes = sessionLinks.map(a => document.querySelector(a.getAttribute('href')));
     }
     const header = document.querySelector('.header');
-    const toast = document.querySelector('.toast');
     const speed = document.querySelector('.speed');
-    const doneSet = new Set();
-    let toastTimer, lastY = scrollY, lastT = performance.now(), speedLevel = 0;
-    function sectorToast(i) {
-      toast.textContent = `Chapter ${i + 1} complete · ${sessionScenes[i].dataset.title}`;
-      toast.classList.add('show'); clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
-    }
+    let lastY = scrollY, lastT = performance.now(), speedLevel = 0;
 
     // Scrolling stays native; what's smoothed is each scene's *displayed* progress.
     // It glides toward the real scroll position with a 70ms time constant (frame-rate independent),
@@ -1437,7 +1613,24 @@
       towerPos.textContent = bigPos.textContent = 'P' + rank;
     }
     let climbRaf = 0;
+    const venture = document.getElementById('venture'), vCount = venture.querySelector('.v-count');
+    let vRaf = 0;
+    const showBaht = n => { vCount.textContent = Math.round(n).toLocaleString('en-US'); };
     const arrivals = [
+      { el: venture,
+        enter: el => {
+          el.classList.add('in'); el.classList.remove('paid');
+          const t0 = performance.now() + 350, dur = 1400; let lastStep = -1;
+          const frame = now => {
+            const t = clamp((now - t0) / dur), e = 1 - Math.pow(1 - t, 3);
+            showBaht(10000 * e);
+            const step = Math.floor(e * 12); if (step !== lastStep && t > 0 && t < 1) { sfx.play('tick', 40 - step * 3); lastStep = step; }
+            if (t < 1) vRaf = requestAnimationFrame(frame); else { el.classList.add('paid'); sfx.play('coin'); setTimeout(() => sfx.play('stamp'), 120); }
+          };
+          showBaht(0); vRaf = requestAnimationFrame(frame);
+        },
+        leave: el => { cancelAnimationFrame(vRaf); el.classList.remove('in', 'paid'); showBaht(0); },
+        final: el => { cancelAnimationFrame(vRaf); el.classList.add('in', 'paid'); showBaht(10000); } },
       { el: document.getElementById('practice'), enter: el => { el.classList.add('in'); [150, 450, 750].forEach((d, i) => setTimeout(() => sfx.play('blip', i), d)); }, leave: el => el.classList.remove('in') },
       { el: document.getElementById('podium'), enter: el => { el.classList.add('in'); [0, 180, 360].forEach((d, i) => setTimeout(() => sfx.play('thud', i), d + 120)); }, leave: el => el.classList.remove('in') },
       { el: quali,
@@ -1454,7 +1647,25 @@
         leave: el => { cancelAnimationFrame(climbRaf); el.classList.remove('in', 'climbed'); bigPos.classList.remove('best'); setRank(62); },
         final: el => { cancelAnimationFrame(climbRaf); el.classList.add('in', 'climbed'); bigPos.classList.add('best'); setRank(8); } }
     ];
+    quali.querySelectorAll('.q-note li').forEach((li, i) => li.style.setProperty('--i', i));
+    // Team cards: the button turns a card over for touch and keyboard readers (hover does it with a mouse)
+    document.querySelectorAll('.stop').forEach(stop => {
+      const btn = stop.querySelector('.stop-more');
+      const set = on => { stop.classList.toggle('about', on); btn.setAttribute('aria-expanded', String(on)); };
+      btn.addEventListener('click', () => { set(true); sfx.play('page'); });
+      stop.addEventListener('click', e => { if (stop.classList.contains('about') && !e.target.closest('.stop-more, img')) set(false); });
+      stop.addEventListener('mouseleave', () => set(false));
+    });
+    // WordFlow's three steps land in turn the first time they are on screen
+    {
+      const steps = document.querySelector('.wi-steps');
+      steps.querySelectorAll('li').forEach((li, i) => li.style.setProperty('--n', i));
+      new IntersectionObserver((entries, io) => entries.forEach(e => { if (e.isIntersecting) { steps.classList.add('seen'); [0, 160, 320].forEach((d, i) => setTimeout(() => sfx.play('blip', i), d + 100)); io.disconnect(); } }), { threshold: .35 }).observe(steps);
+    }
     function arrive() {
+      const qr = quali.getBoundingClientRect(), qp = -qr.top / Math.max(1, quali.offsetHeight - innerHeight);
+      const noted = isFilm() && qp > .6 && qr.bottom > innerHeight * .5;
+      if (noted !== quali.classList.contains('noted')) { quali.classList.toggle('noted', noted); if (noted) sfx.play('page'); }
       arrivals.forEach(a => {
         const r = a.el.getBoundingClientRect();
         const here = r.top <= innerHeight * .25 && r.bottom > innerHeight * .6;
@@ -1523,17 +1734,13 @@
       openingWasActive = openingActive;
       let current = 0;
       sessionScenes.forEach((s, i) => {
-        const r = s.getBoundingClientRect();
+        const a = s.getBoundingClientRect(), b = s.dataset.through ? document.querySelector(s.dataset.through).getBoundingClientRect() : a;
+        const r = { top: a.top, height: b.bottom - a.top };
         const atEnd = innerHeight + scrollY >= root.scrollHeight - 4;
         const p = atEnd ? 1 : r.height > innerHeight ? clamp(-r.top / (r.height - innerHeight)) : clamp((innerHeight * .5 - r.top) / r.height);
         sessionLinks[i].style.setProperty('--p', p.toFixed(3));
         if (r.top <= innerHeight * .45) current = i;
         const done = p >= .999;
-        if (done && !doneSet.has(i)) {
-          doneSet.add(i);
-          if (OpeningSequence.shouldAnnounceChapter(i, sessionScenes.length, film)) sectorToast(i);
-        }
-        if (!done) doneSet.delete(i);
         sessionLinks[i].classList.toggle('done', done);
       });
       // mark the current chapter only once it is known (the loop above finds it as it goes)
@@ -1568,6 +1775,11 @@
     // One scroll, one move (Story mode). A wheel gesture, swipe or key press glides to the next resting
     // point of the story instead of scrubbing a few pixels. Resting points are where each beat has
     // fully arrived; the glide between them plays the animation. Read-as-page keeps native scrolling.
+    // Team: one hold per project card, however many there are (the montage runs over .04–.96 of the chapter)
+    const pitCards = document.querySelectorAll('#pit .stop').length;
+    document.getElementById('pit').style.setProperty('--len', (pitCards * 90 + 10) + 'vh');
+    document.querySelector('#pit .count-all').textContent = pitCards;
+    function pitBeats() { return Array.from({ length: pitCards }, (_, k) => k < pitCards - 1 ? .04 + .92 * (k + .3) / (pitCards - 1) : .96); }
     const stepper = (() => {
       const PRE = OpeningSequence.PRELUDE, story = p => PRE + p * (1 - PRE);
       const beats = {
@@ -1578,9 +1790,10 @@
         ],
         driver: [0],
         practice: [.6],                      // one scroll: 01, 02, 03 build one after another
-        quali: [.6],                         // one scroll: the tower climbs from P62 to P8
+        venture: [.6],                       // one scroll: the earnings count up and get stamped PAID
+        quali: [.28, .88],                   // one scroll: the tower climbs from P62 to P8; the next lays the notebook note over it
         race: wfStops.slice(1),              // arrive at T1, one turn per move, then the finish
-        pit: [.178, .638, .96],              // one project per move (montage holds)
+        pit: pitBeats(),                     // one project per move (montage holds)
         podium: [.6],                        // one scroll: the podium builds, then the workbench
       };
       const docTop = el => el.getBoundingClientRect().top + scrollY;
@@ -1589,7 +1802,9 @@
       function blockStop(el, head) {
         let prev = el.previousElementSibling || el.parentElement.previousElementSibling; // the block above leaves the screen entirely
         while (prev && getComputedStyle(prev).display === 'contents') prev = prev.lastElementChild;
-        return prev ? docTop(prev) + prev.offsetHeight - head + 1 : docTop(el) - head - 20;
+        if (!prev) return docTop(el) - head - 20;
+        const bottom = Math.max(docTop(prev) + prev.offsetHeight, ...[...prev.querySelectorAll('.photo')].map(p => p.getBoundingClientRect().bottom + scrollY));
+        return bottom - head + 1;
       }
       // a marked block adds a stop only if the previous stop does not already show all of it
       function blockStops(sc, head) {

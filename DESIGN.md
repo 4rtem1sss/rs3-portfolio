@@ -28,10 +28,11 @@ Then p.01 introduces Rapeepat. Every chapter keeps a notebook page number. The o
 |---|---|---|
 | CURIOSITY · Opening + p.01 | Who is this? | A quiet question becomes his bedroom desk and notebook, then the personal introduction. |
 | ORIGIN | Where did it start? | Take things apart → meet the computer → write the code. |
-| GROWTH | How do they respond to difficulty? | TCTT P62 becomes P8 through reflection, preparation and teamwork. |
-| PURPOSE | Why build? | WordFlow drawn as a circuit that fills the screen. One scroll per turn: the car stops at T1 Game app, T2 Speech model, T3 Backend API, T4 Database, T5 Dashboard, then the finish (funded at NSC 28); at each stop the map dims and a large image card with that part pops up beside the turn. |
-| TEAM | How do they work with others? | ZeiTop, SubTrack and DoCode show the role Rapeepat took in different teams. |
-| PROOF | What supports the story? | Results and tools provide concise evidence without interrupting the narrative. |
+| GROWTH | How do they respond to difficulty? | A big "Thailand Cyber Top Talent" header and one line on what a CTF is, then TCTT P62 becomes P8; one more scroll lays a notebook note over the scoreboard listing what he did on the team. |
+| STARTUP | Can a teenager run a business? | DoCode on its own page: "18, and already getting paid." Earnings count up to ฿10,000 from paying clients and get stamped PAID (tick, coin, stamp sounds). |
+| PURPOSE | Why build? | First page: "Building something people need.", the WordFlow name, what it is and who it is for (1 in 14 Thai children, from the NSC report), the island map, and "How one spell works" in three steps (images cropped from the NSC report's game screenshots: wf-islands, wf-build, wf-cast). Then WordFlow drawn as a circuit that fills the screen. One scroll per turn: the car stops at T1 Game app, T2 Speech model, T3 Backend API, T4 Database, T5 Dashboard, then the finish (funded at NSC 28); at each stop the map dims and a large image card with that part pops up beside the turn. |
+| TEAM | How do they work with others? | Project cards (ZeiTop, SubTrack); hovering a card, or its "What is it?" button, turns the text side to a short "in short" description. The chapter length, holds and counter follow the number of cards. |
+| PROOF | What supports the story? | The podium is the only picture; +54 and the workbench are plain type under one hairline, no boxes inside boxes. |
 | FUTURE | Where does this lead, and how do I reach him? | Connected systems, what he does for fun, and the contact card. |
 
 ## HUD and energy (each has a job)
@@ -102,3 +103,5 @@ The shorter opening, shared damped timeline, continuous Hermite camera path, cap
 ## Mechanics & accessibility
 
 The scroll engine uses `data-fx` with `data-at`/`data-out` windows plus the WordFlow data-path animation, project montage and result blocks. Read-as-page and reduced-motion modes show content statically. The final interactive 3D car loads only near the last chapter.
+
+No "chapter complete" toast (user request, 2026-09-27): the header tab's progress line already shows where the reader is. A chapter tab can span two scenes with `data-through` (Purpose: #wf-intro through #race).
