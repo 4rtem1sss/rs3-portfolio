@@ -554,9 +554,14 @@
     .margin-line{transition:opacity .8s}.film:not(.in-notebook) .margin-line{opacity:0}
     .cap{isolation:isolate}
     .cap-title:before{display:none}
+    /* the reveal line: words pull into focus one by one, then a highlighter marks what matters */
+    .cap-bridge .w{display:inline-block;opacity:0;filter:blur(12px);transform:translateY(.3em) scale(1.06);transition:opacity .55s,filter .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+    .cap-bridge .w.on{opacity:1;filter:none;transform:none}
+    .cap-bridge mark{color:inherit;background:linear-gradient(100deg,transparent .2em,#ffd24aa6 .2em calc(100% - .15em),transparent calc(100% - .15em)) 0 90%/0% 46% no-repeat;padding:0 .12em;margin:0 -.12em;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size .55s cubic-bezier(.65,0,.35,1)}
+    .cap-bridge.marked mark{background-size:100% 46%}
     .cap:before{content:'';position:absolute;inset:-50% 6%;z-index:-1;background:radial-gradient(closest-side,#06121fc2,#06121f80 55%,transparent);pointer-events:none}
     @media(max-width:760px){.m2{display:none}.mon{width:38vw;bottom:33vh}.pw-headset{display:none}.pw-cup{left:auto;right:6vw;bottom:24vh}.pw-nb{left:74%;bottom:12vh;width:42vw}.cap{left:8vw;right:8vw;font-size:clamp(21px,6vw,34px)}.cap-title{font-size:clamp(48px,16vw,72px)}.pw-caps{bottom:52%}}
-    @media(prefers-reduced-motion:reduce){.pw-open:before,.trace,.mon .live,.m2 .cursor,.pw-hint i,.lightbox[open],.rc-live i,.ch::after,.fin-flag .cloth b,.wf-shot:after{animation:none}}
+    @media(prefers-reduced-motion:reduce){.pw-open:before,.trace,.mon .live,.m2 .cursor,.pw-hint i,.lightbox[open],.rc-live i,.ch::after,.fin-flag .cloth b,.wf-shot:after{animation:none}.cap-bridge .w,.cap-bridge mark{transition:none}}
   </style>
 </head>
 <body id="top">
@@ -655,7 +660,7 @@
           <p class="cap" data-cap=".38,.42,.56,.6">to understand how separate parts become one working system,</p>
           <p class="cap" data-cap=".58,.61,.66,.69">and eventually, to build one myself.</p>
           <p class="cap" data-cap=".72,.76,.82,.84">this is where the questions led.</p>
-          <p class="cap cap-bridge" data-cap=".89,.9,.945,.962">I'm the one who kept asking.</p>
+          <p class="cap cap-bridge" data-cap=".89,.9,.945,.962">I'm the one who <mark>kept asking.</mark></p>
         </div>
         <p class="pw-hint" aria-hidden="true">scroll to explore<i></i></p>
       </div>
@@ -943,8 +948,31 @@
           noise(t, last ? 1.4 : .25, { type: 'lowpass', f: last ? 420 : 260, q: .6, gain: last ? .2 : .1, attack: .003 });
           if (last) { tone(t + .02, 140, 1.8, { type: 'triangle', gain: .06, attack: .01, f2: 90 }); noise(t + .05, 1.6, { f: 700, f2: 180, q: .5, gain: .05, attack: .2 }); }
         },
-        // after "CURIOSITY," the words are written on the notebook page: a pen, not keys
-        pen(t) { if (t - lastKey < .03) return; lastKey = t; noise(t, .07 + Math.random() * .04, { f: 3800 + Math.random() * 1500, f2: 2600, q: 2.2, gain: .05, attack: .012 }); },
+        // after the notebook opens: a riser swells under the words, each word lands on a kick that builds
+        // like a heartbeat, and the last word drops a deep boom with a bright open chord on top
+        reveal(t, i = 0, n = 1) {
+          const last = i >= n - 1, gap = .15;
+          if (i === 0) {
+            const rise = gap * (n - 1) + .03;
+            noise(t, rise, { f: 400, f2: 4200, q: 1.1, gain: .09, attack: rise - .02 });
+            tone(t, 90, rise, { type: 'sawtooth', gain: .018, attack: rise - .02, f2: 360 });
+          }
+          if (!last) {
+            tone(t, 150, .24, { gain: .15 + .035 * i, attack: .002, f2: 46 });
+            noise(t, .03, { type: 'lowpass', f: 900, q: .7, gain: .08, attack: .001 });
+            return;
+          }
+          tone(t, 62, 2.2, { gain: .45, attack: .003, f2: 28 });
+          noise(t, .08, { type: 'highpass', f: 1800, q: .6, gain: .16, attack: .001 });
+          noise(t, 1.6, { type: 'lowpass', f: 320, q: .6, gain: .18, attack: .004 });
+          [196, 392, 493.88, 587.33, 783.99].forEach((f, k) => tone(t + .01 * k, f, 2.6, { type: 'triangle', gain: .034, attack: .012 }));
+          noise(t + .02, 1.8, { type: 'highpass', f: 6000, q: .4, gain: .03, attack: .03 });
+        },
+        // a felt-tip highlighter dragged across paper
+        marker(t) {
+          noise(t, .42, { f: 1500, f2: 2600, q: 1.6, gain: .1, attack: .05 });
+          noise(t, .42, { type: 'highpass', f: 5200, q: .5, gain: .02, attack: .08 });
+        },
         // opening the notebook: the cover swings, the pages riffle, the book settles
         bookflip(t) {
           noise(t, .5, { f: 500, f2: 1600, q: .6, gain: .08, attack: .15 });
@@ -1232,7 +1260,32 @@
       }
       const lines = pre.map(({ el }) => typed(el, 46));
       const titleLine = typed(scene.querySelector('.cap-title'), 78, 'impact');
-      const bridgeLine = typed(scene.querySelector('.cap-bridge'), 46, 'pen');
+      // the reveal line is not typed: its words pull into focus, then a highlighter marks "kept asking."
+      const bridgeLine = (() => {
+        const el = scene.querySelector('.cap-bridge'), words = [];
+        const wrap = node => [...node.childNodes].forEach(n => {
+          if (n.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            n.textContent.split(/(\s+)/).forEach(part => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) { frag.append(part); return; }
+              const w = document.createElement('span'); w.className = 'w'; w.textContent = part; words.push(w); frag.append(w);
+            });
+            n.replaceWith(frag);
+          } else wrap(n);
+        });
+        wrap(el);
+        let on = false, timers = [];
+        return {
+          set(want) {
+            if (want === on) return;
+            on = want; timers.forEach(clearTimeout); timers = [];
+            if (!want) { words.forEach(w => w.classList.remove('on')); el.classList.remove('marked'); return; }
+            words.forEach((w, i) => timers.push(setTimeout(() => { w.classList.add('on'); sfx.play('reveal', i, words.length); }, 120 + i * 150)));
+            timers.push(setTimeout(() => { el.classList.add('marked'); sfx.play('marker'); }, 120 + words.length * 150 + 260));
+          }
+        };
+      })();
       let firstType = true;
       function prelude(q) {
         const fw = frame.clientWidth, fh = frame.clientHeight, head = parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64;
@@ -1269,8 +1322,7 @@
         if (!m.V && !scene.classList.contains('has-3d')) measure();
         const state = OpeningSequence.openingState(p);
         const bridgeOn = p >= .895;
-        type(bridgeLine, bridgeOn, 160);
-        if ((bridgeLine.caret !== null) !== bridgeOn) caretAt(bridgeLine, bridgeOn);
+        bridgeLine.set(bridgeOn);
         frame.style.visibility = state.pageFade >= 1 ? 'hidden' : '';
         curtain.style.opacity = (1 - state.sceneReveal).toFixed(3);
         // captions
@@ -1303,7 +1355,8 @@
       addEventListener('resize', () => { m.V = null; });
       // wipe every typed line so the opening types from scratch again (used by the logo replay)
       function retype() {
-        [...lines, titleLine, bridgeLine].forEach(t => { type(t, false); caretAt(t, false); });
+        [...lines, titleLine].forEach(t => { type(t, false); caretAt(t, false); });
+        bridgeLine.set(false);
         firstType = true;
       }
       return { scene, update, prelude, retype };
