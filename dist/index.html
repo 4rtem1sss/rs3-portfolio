@@ -449,6 +449,7 @@
     .film .scene{height:var(--len,100vh)}
     .film .frame{position:sticky;top:0;height:100vh;padding:var(--head) 0 0;overflow:hidden;border:0!important;display:flex;align-items:center}
     .film .frame>.wrap{width:100%}
+    @supports(height:100svh){.film .frame{height:100svh}}
     .film .scene.free{height:auto}
     .film .scene.free .frame{position:relative;height:auto;overflow:visible;display:block;padding:calc(var(--head) + 40px) 0 48px}
     /* S0 layers: gantry then driver card */
@@ -737,7 +738,7 @@
       .film #driver.in .photo[data-in] { transform:rotate(var(--r, 0deg)); }
       .film #driver.in .car-no[data-in] { transform:skewX(-8deg); }
       @media(max-width:700px) { #pitwall { --len:390vh; } }
-      @supports(height:100svh) { @media(max-width:700px) { #pitwall { --len:390svh; } } }
+      @supports(height:100svh) { #pitwall { --len:420svh; } .film #driver { margin-top:-100svh; } @media(max-width:700px) { #pitwall { --len:390svh; } } }
       @media (prefers-reduced-motion:reduce) { .pw-canvas { display:none; } }
     </style>
     <!-- OPENING: curiosity reveals a personal bedroom desk, then the notebook. -->
@@ -1835,10 +1836,10 @@
       }
       function stops() {
         fitEnd(parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64);
-        const max = root.scrollHeight - innerHeight, list = [];
+        const max = root.scrollHeight - innerHeight, list = [], starts = new Set();
         scenes.forEach(sc => {
           const top = docTop(sc), travel = sc.offsetHeight - innerHeight;
-          if (beats[sc.id]) beats[sc.id].forEach(p => list.push(top + p * Math.max(0, travel)));
+          if (beats[sc.id]) beats[sc.id].forEach(p => { const y = top + p * Math.max(0, travel); list.push(y); if (p === 0) starts.add(Math.round(Math.min(max, Math.max(0, y)))); });
           else {
             // free-flowing chapters stop at their top, then at each marked block (so a block lands whole under the header)
             list.push(top);
@@ -1851,7 +1852,12 @@
         if (Math.max(...list) + innerHeight < lastBottom - 4) list.push(max);
         const sorted = list.map(y => Math.round(Math.min(max, Math.max(0, y)))).sort((a, b) => a - b);
         // a stop that would only nudge the page a little further is dropped: the chapter's own stop wins
-        return sorted.reduce((kept, y) => (!kept.length || y - kept[kept.length - 1] > innerHeight * .12 ? [...kept, y] : kept), []);
+        return sorted.reduce((kept, y) => {
+          const prev = kept[kept.length - 1];
+          if (!kept.length || y - prev > innerHeight * .12) kept.push(y);
+          else if (starts.has(y) && !starts.has(prev)) kept[kept.length - 1] = y;
+          return kept;
+        }, []);
       }
       let anim = 0, lastWheel = 0, lastAbs = 0, touchY = null;
       const active = () => isFilm() && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.querySelector('.lightbox[open]');
