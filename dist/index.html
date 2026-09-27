@@ -382,7 +382,7 @@
       .setup{grid-template-columns:1fr 1fr}
       .stop{grid-template-columns:1fr;gap:18px}
       .film .pit-head{padding:0 30px}
-      .sessions a:not([aria-current=true]){display:none}
+      .sessions li:not(:has(a[aria-current=true])){display:none}
       .laps{gap:28px}.lap svg{width:150px}
       .film .driver{grid-template-columns:auto 1fr;gap:36px}
       .film .quali .photo{display:none}
@@ -1531,7 +1531,33 @@
         podium: [.6],                        // one scroll: the podium builds, then the workbench
       };
       const docTop = el => el.getBoundingClientRect().top + scrollY;
+      // a block marked data-stop can only land under the header if the page scrolls that far,
+      // so the last chapter gets exactly the bottom room its final block needs (none on most screens)
+      function blockStop(el, head) {
+        let prev = el.previousElementSibling || el.parentElement.previousElementSibling; // the block above leaves the screen entirely
+        while (prev && getComputedStyle(prev).display === 'contents') prev = prev.lastElementChild;
+        return prev ? docTop(prev) + prev.offsetHeight - head + 1 : docTop(el) - head - 20;
+      }
+      // a marked block adds a stop only if the previous stop does not already show all of it
+      function blockStops(sc, head) {
+        let prevY = docTop(sc); const out = [];
+        sc.querySelectorAll('[data-stop]').forEach(el => {
+          if (docTop(el) + el.offsetHeight <= prevY + innerHeight - 8) return;
+          prevY = blockStop(el, head); out.push(prevY);
+        });
+        return out;
+      }
+      function fitEnd(head) {
+        const last = scenes[scenes.length - 1];
+        last.style.paddingBottom = '';
+        if (!isFilm()) return;
+        const marks = blockStops(last, head);
+        if (!marks.length) return;
+        const need = Math.max(...marks) + innerHeight - root.scrollHeight;
+        if (need > 1) last.style.paddingBottom = Math.ceil(need) + 'px';
+      }
       function stops() {
+        fitEnd(parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64);
         const max = root.scrollHeight - innerHeight, list = [];
         scenes.forEach(sc => {
           const top = docTop(sc), travel = sc.offsetHeight - innerHeight;
@@ -1540,12 +1566,7 @@
             // free-flowing chapters stop at their top, then at each marked block (so a block lands whole under the header)
             list.push(top);
             const head = parseFloat(getComputedStyle(root).getPropertyValue('--head')) || 64;
-            sc.querySelectorAll('[data-stop]').forEach(el => {
-              // the block above leaves the screen entirely, never half under the header
-              let prev = el.previousElementSibling || el.parentElement.previousElementSibling;
-              while (prev && getComputedStyle(prev).display === 'contents') prev = prev.lastElementChild;
-              list.push(prev ? docTop(prev) + prev.offsetHeight - head + 1 : docTop(el) - head - 20);
-            });
+            list.push(...blockStops(sc, head));
           }
         });
         // the page end is a stop only if the last stop before it does not already show the whole last chapter
